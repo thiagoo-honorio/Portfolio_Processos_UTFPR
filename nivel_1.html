@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Portfólio de Processos UTFPR</title>
+
+<style>
+:root {
+    --bg-light: #f8f9fa;
+    --gray-light: #f1f3f5;
+    --gray-medium: #e9ecef;
+    --gray-dark: #21262c;
+    --black-accent: #212529;
+    --yellow-soft: #eecb40;
+    --text-color: #343a40;
+    --card-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+    
+    /* Escala de Cinzas Neutros Elegantes */
+    --bg-estrategico: #474a4e;       
+    --bg-finalistico: #f1f3f5;       
+    --bg-suporte: #474a4e;           
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body { 
+    font-family: 'Segoe UI', -apple-system, Arial, sans-serif; 
+    background-color: var(--bg-light);
+    color: var(--text-color);
+    padding: 0;
+    line-height: 1.5;
+}
+
+.portfolio-container {
+    width: 100%;
+    max-width: 100%;
+    margin: 0;
+    background: #ffffff;
+    border-radius: 0;
+    overflow: hidden;
+    box-shadow: none;
+}
+
+/* --- HEADER PROPORCIONAL --- */
+.header {
+    background: var(--gray-medium);
+    padding: 2px 30px; 
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 4px solid var(--bg-estrategico);
+}
+.logo-utfpr,
+.logo-escritorio { 
+    max-height: 65px; 
+    display: block;
+    object-fit: contain;
+}
+.header h1 { 
+    font-size: 17px; 
+    font-weight: 700; 
+    color: var(--black-accent);
+}
+
+/* --- MENU SUPERIOR --- */
+.top-menu { 
+    display: flex; 
+    background: #ffffff; 
+    padding: 15px 30px; 
+    gap: 12px; 
+    align-items: center;
+}
+.menu-item { 
+    background: var(--bg-estrategico); 
+    color: #ffffff; 
+    padding: 12px 20px; 
+    display: flex; 
+    align-items: center; 
+    justify-content: space-between; 
+    font-size: 13px; 
+    font-weight: 600; 
+    border-radius: 8px;
+    flex: 1; 
+}
+.menu-item .icon { 
+    opacity: 1;
+    padding-left: 10px; 
+    font-size: 26px; 
+}
+.help-icon { 
+    background: var(--bg-estrategico); 
+    color: #ffffff; 
+    width: 52px; 
+    height: 52px; 
+    border-radius: 50%; 
+    display: flex; 
+    align-items: center; 
+    justify-content: center; 
+    font-weight: bold; 
+    font-size: 28px; 
+    margin-left: auto; 
+}
+
+/* --- SEÇÃO COLETIVA DE TÍTULOS --- */
+.section-title { 
+    font-size: 18px; 
+    font-weight: 800; 
+    text-transform: uppercase;
+    letter-spacing: 2.5px;
+    margin-bottom: 22px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+.section-title::after {
+    content: "";
+    flex: 1;
+    height: 1px;
+}
+
+.row-boxes { 
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+    gap: 12px; 
+}
+.box { 
+    background: #ffffff; 
+    padding: 15px; 
+    text-align: center; 
+    font-size: 13.5px; 
+    font-weight: 600; 
+    border-radius: 8px; 
+    display: flex; 
+    align-items: center; 
+    justify-content: center; 
+    min-height: 55px; 
+    box-shadow: var(--card-shadow);
+    color: var(--black-accent);
+    border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+/* ========================================================
+   1. MACROPROCESSOS ESTRATÉGICOS
+   ======================================================== */
+.estrategico-wrapper {
+    background: var(--bg-estrategico); 
+    padding: 30px 30px 65px 30px; 
+    position: relative;
+    z-index: 3;
+    clip-path: polygon(0% 0%, 100% 0%, 100% calc(100% - 30px), 50% 100%, 0% calc(100% - 30px));
+}
+.estrategico-wrapper .section-title {
+    color: #ffffff;
+    opacity: 0.95;
+}
+.estrategico-wrapper .section-title::after {
+    background: rgba(29, 28, 28, 0.2);
+}
+
+/* ========================================================
+   2. NÚCLEO CENTRAL INTEGRADO
+   ======================================================== */
+.core-flow-container {
+    background: #ffffff;
+    padding: 0 30px; 
+    display: grid;
+    grid-template-columns: 1fr 340px; 
+    gap: 0; 
+    margin-top: -30px; 
+    position: relative;
+    z-index: 2;
+    clip-path: polygon(0% 0%, 100% 0%, 100% calc(100% - 30px), 50% calc(100% - 60px), 0% calc(100% - 30px));
+    padding-bottom: 75px; 
+}
+
+/* Painel Esquerdo: Finalísticos */
+.finalisticos-wrapper {
+    background: var(--bg-finalistico);
+    padding: 65px 60px 65px 30px; 
+    border-radius: 14px 0 0 14px;
+    position: relative;
+    clip-path: polygon(0% 0%, calc(100% - 30px) 0%, 100% 50%, calc(100% - 30px) 100%, 0% 100%);
+}
+.finalisticos-wrapper .section-title {
+    color: var(--text-color);
+}
+.finalisticos-wrapper .section-title::after {
+    background: rgba(0, 0, 0, 0.08);
+}
+
+.finalisticos-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    justify-content: center;
+}
+
+.process-card {
+    background: #ffffff;
+    padding: 24px 20px;
+    border-radius: 12px;
+    border: 1px solid rgba(0,0,0,0.04);
+    box-shadow: var(--card-shadow);
+    display: flex;
+    flex-direction: column;
+    align-items: center; 
+    text-align: center;  
+}
+
+.card-ensino {
+    grid-column: 1 / span 2;
+    max-width: 450px;
+    justify-self: center;
+    width: 100%;
+}
+
+.process-badge {
+    background: var(--bg-estrategico);
+    color: #ffffff;
+    padding: 12px 16px;
+    border-radius: 8px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center; 
+    gap: 14px;
+    font-weight: 800;
+    font-size: 16px; 
+    letter-spacing: 1px;
+    margin-bottom: 16px;
+    width: 100%; 
+    max-width: 220px; 
+}
+.process-badge span {
+    font-size: 36px; 
+}
+
+.process-info strong {
+    color: var(--black-accent);
+    display: block;
+    font-size: 15px; 
+    margin-bottom: 8px;
+    line-height: 1.3;
+}
+.process-info span {
+    font-size: 13px; 
+    color: #555;
+    display: block;
+    line-height: 1.4;
+}
+
+/* Painel Direito: Resultados para a Sociedade */
+.results-wrapper {
+    background: var(--yellow-soft);
+    padding: 65px 30px 65px 50px; 
+    border-radius: 0 14px 14px 0;
+    box-shadow: 0 5px 15px rgba(255, 224, 102, 0.1);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.results-wrapper h2 {
+    font-size: 18px; 
+    font-weight: 800;
+    letter-spacing: 2.5px;
+    margin-bottom: 25px;
+    color: var(--black-accent);
+    text-transform: uppercase;
+    border-bottom: 1px solid rgba(0,0,0,0.1);
+    padding-bottom: 8px;
+}
+
+.result-topic {
+    margin-bottom: 18px;
+}
+.result-topic:last-child {
+    margin-bottom: 0;
+}
+.result-topic strong {
+    display: block;
+    font-size: 12px;
+    color: var(--black-accent);
+    margin-bottom: 4px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+.result-items {
+    font-size: 12.5px;
+    color: #444;
+    line-height: 1.4;
+    font-weight: 500;
+}
+
+/* ========================================================
+   3. MACROPROCESSOS DE SUPORTE
+   ======================================================== */
+.suporte-wrapper {
+    background: var(--bg-suporte); 
+    padding: 65px 30px 45px 30px; 
+    position: relative;
+    z-index: 1;
+    margin-top: -60px;
+    clip-path: polygon(0% 30px, 50% 0%, 100% 30px, 100% 100%, 0% 100%);
+    padding-top: 75px; 
+}
+.suporte-wrapper .section-title {
+    color: #ffffff;
+    opacity: 0.95;
+}
+.suporte-wrapper .section-title::after {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+.suporte-row-single {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    width: 100%;
+    overflow-x: auto; 
+    padding-bottom: 5px;
+}
+.suporte-row-single .box {
+    flex: 1;
+    min-width: 130px; 
+    padding: 10px;
+    font-size: 12.5px; 
+}
+
+.suporte-row-single::-webkit-scrollbar {
+    height: 6px;
+}
+.suporte-row-single::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 4px;
+}
+
+/* ========================================================
+   EFEITOS INTERATIVOS (INTERAÇÃO JS & CURSOR)
+   ======================================================== */
+.menu-item, 
+.box, 
+.process-card, 
+.help-icon {
+    cursor: pointer;
+    transition: transform 0.25s ease, box-shadow 0.25s ease, background-color 0.25s ease;
+    user-select: none;
+}
+
+/* Classe ativada via JS ao passar o mouse */
+.active-hover {
+    transform: scale(1.05) translateY(-2px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15) !important;
+    z-index: 10;
+}
+
+/* Mobile */
+@media (max-width: 992px) {
+    .header {
+        padding: 6px 15px;
+    }
+    .logo-utfpr, .logo-escritorio {
+        max-height: 45px;
+    }
+    .header h1 {
+        font-size: 13px;
+    }
+    .estrategico-wrapper, .suporte-wrapper, .core-flow-container {
+        padding: 25px 20px;
+        clip-path: none; 
+        margin-top: 0;
+    }
+    .core-flow-container {
+        grid-template-columns: 1fr;
+    }
+    .finalisticos-wrapper {
+        border-radius: 14px 14px 0 0;
+        padding: 30px 20px;
+        clip-path: none;
+    }
+    .finalisticos-grid {
+        grid-template-columns: 1fr;
+    }
+    .card-ensino {
+        grid-column: unset;
+        max-width: 100%;
+    }
+    .results-wrapper {
+        border-radius: 0 0 14px 14px;
+        padding: 30px 20px;
+    }
+    .suporte-wrapper {
+        padding-top: 25px;
+    }
+    .suporte-row-single {
+        flex-wrap: nowrap; 
+    }
+}
+</style>
+</head>
+<body>
+
+<div class="portfolio-container">
+
+    <div class="header">
+        <img src="LOGO_UTFPR.png" alt="Logo UTFPR" class="logo-utfpr">
+        <h1>PORTFÓLIO DE PROCESSOS DA UTFPR</h1>
+        <img src="logo_escritorio_processos.png" alt="Escritório de Processos" class="logo-escritorio">
+    </div>
+
+    <div class="top-menu">
+        <div class="menu-item" data-link="glossario.html"><span>Glossário de termos de negócio</span><span class="icon">📋</span></div>
+        <div class="menu-item" data-link="paineis.html"><span>Painéis Institucionais</span><span class="icon">📈</span></div>
+        <div class="menu-item" data-link="automacao.html"><span>Automação de processos</span><span class="icon">🧠</span></div>
+        <div class="help-icon" data-link="ajuda.html">?</div>
+    </div>
+
+    <div class="estrategico-wrapper">
+        <div class="section-title">Macroprocessos Estratégicos</div>
+        <div class="row-boxes">
+            <div class="box" data-link="planejamento.html">Planejamento Institucional</div>
+            <div class="box" data-link="relacionamentos.html">Relacionamentos Interinstitucionais</div>
+            <div class="box" data-link="desempenho.html">Desempenho Institucional</div>
+            <div class="box" data-link="governanca.html">Governança, Riscos e Integridade</div>
+        </div>
+    </div>
+
+    <div class="core-flow-container">
+        
+        <div class="finalisticos-wrapper">
+            <div class="section-title">Macroprocessos Finalísticos</div>
+            <div class="finalisticos-grid">
+                
+                <div class="process-card card-ensino" data-link="ensino.html">
+                    <div class="process-badge"><span>🎓</span>ENSINO</div>
+                    <div class="process-info">
+                        <strong>Graduação & Pós-Graduação</strong>
+                        <span>Técnico, profissionalizante, presencial e EaD.</span>
+                    </div>
+                </div>
+
+                <div class="process-card" data-link="pesquisa.html">
+                    <div class="process-badge"><span>⚛️</span>PESQUISA</div>
+                    <div class="process-info">
+                        <strong>Científica & Aplicada</strong>
+                        <span>Fomento à descoberta, ciência e publicações.</span>
+                    </div>
+                </div>
+
+                <div class="process-card" data-link="extensao.html">
+                    <div class="process-badge"><span>💡</span>EXTENSÃO</div>
+                    <div class="process-info">
+                        <strong>Inovação & Comunidade</strong>
+                        <span>Empreendedorismo e integração com a sociedade.</span>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="results-wrapper">
+            <h2>Resultados para a Sociedade</h2>
+            
+            <div class="result-topic">
+                <strong>Formação Acadêmica</strong>
+                <div class="result-items">Graduados • Especialistas • Mestres • Doutores • Profissionais</div>
+            </div>
+
+            <div class="result-topic">
+                <strong>Conhecimento Científico</strong>
+                <div class="result-items">Pesquisadores ativos • Novas publicações</div>
+            </div>
+
+            <div class="result-topic">
+                <strong>Soluções Inovadoras</strong>
+                <div class="result-items">Programas • Projetos • Cursos • Eventos • Services técnicos</div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="suporte-wrapper">
+        <div class="section-title">Macroprocessos de Suporte</div>
+        <div class="suporte-row-single">
+            <div class="box" data-link="pessoas.html">Gestão de Pessoas</div>
+            <div class="box" data-link="administracao.html">Administração</div>
+            <div class="box" data-link="comunicacao.html">Gestão da Informação e Comunicação</div>
+            <div class="box" data-link="ti.html">Gestão da Tecnologia da Informação</div>
+            <div class="box" data-link="financas.html">Orçamento e Finanças</div>
+            <div class="box" data-link="estudantis.html">Assuntos Estudantis</div>
+            <div class="box" data-link="infraestrutura.html">Infraestrutura e Serviços</div>
+        </div>
+    </div>
+
+</div>
+
+<!-- SCRIPT DE INTERAÇÃO JAVASCRIPT -->
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    // Seleciona todos os botões e elementos interativos da página
+    const interactiveElements = document.querySelectorAll('.menu-item, .box, .process-card, .help-icon');
+
+    interactiveElements.forEach(element => {
+        // Evento de entrada do cursor: Adiciona a animação de aumento
+        element.addEventListener('mouseenter', () => {
+            element.classList.add('active-hover');
+        });
+
+        // Evento de saída do cursor: Retorna ao tamanho normal
+        element.addEventListener('mouseleave', () => {
+            element.classList.remove('active-hover');
+        });
+
+        // Evento de clique preparado para navegação futura
+        element.addEventListener('click', () => {
+            const targetPage = element.getAttribute('data-link');
+            if (targetPage) {
+                console.log(`Navegando para: ${targetPage}`);
+                // Para ativar o redirecionamento futuro, basta descomentar a linha abaixo:
+                // window.location.href = targetPage;
+            }
+        });
+    });
+});
+</script>
+
+</body>
+</html>

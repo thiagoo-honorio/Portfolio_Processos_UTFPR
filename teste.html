@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ensino: Conclusão e Egresso - UTFPR</title>
+
+<style>
+:root {
+    --bg-light: #f8f9fa;
+    --text-color: #343a40;
+    
+    /* Cores fiéis ao diagrama */
+    --color-title: #a2c4fc;
+    --color-conclusao: #19385c;
+    --color-egresso: #969a9e;
+    
+    /* Linha 1 - Laranjas */
+    --color-formatura: #d85a20;
+    --color-diplomacao-grad: #d17034; 
+    
+    /* Linha 2 - Verde */
+    --color-certificacao: #417e2e;
+    
+    /* Linha 3 - Azuis */
+    --color-titulacao: #23497d;
+    --color-diplomacao-stricto: #4175c5; 
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Segoe UI', -apple-system, Arial, sans-serif;
+    background-color: var(--bg-light);
+    color: var(--text-color);
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+}
+
+.diagram-container {
+    width: 100%;
+    max-width: 1100px;
+    background: #ffffff;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+}
+
+/* --- TÍTULO SUPERIOR --- */
+.main-title {
+    background-color: var(--color-title);
+    color: #000000;
+    text-align: center;
+    padding: 14px 20px;
+    border-radius: 12px;
+    font-size: 22px;
+    font-weight: 700;
+    font-style: italic;
+    margin-bottom: 30px;
+}
+
+/* --- NÍVEL 1: MACRO FLUXO --- */
+.level-1-flow {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    margin-bottom: 25px;
+}
+
+/* Estilo de Chevron (Seta) */
+.chevron-box {
+    padding: 16px 20px 16px 35px;
+    color: #ffffff;
+    font-size: 13px;
+    position: relative;
+    clip-path: polygon(0% 0%, calc(100% - 20px) 0%, 100% 50%, calc(100% - 20px) 100%, 0% 100%, 20px 50%);
+    cursor: pointer;
+    transition: transform 0.2s ease, filter 0.2s ease;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    min-height: 75px;
+}
+
+.chevron-box:first-child {
+    clip-path: polygon(0% 0%, calc(100% - 20px) 0%, 100% 50%, calc(100% - 20px) 100%, 0% 100%);
+    padding-left: 20px;
+    border-radius: 6px 0 0 6px;
+}
+
+.chevron-box:hover {
+    transform: translateY(-2px) scale(1.01);
+    filter: brightness(1.1);
+}
+
+.chevron-box strong {
+    font-size: 16px;
+    display: block;
+    margin-bottom: 4px;
+}
+
+.chevron-box span {
+    font-size: 11px;
+    opacity: 0.9;
+}
+
+/* --- ESTRUTURA RAMIFICADA (NÍVEL 2) --- */
+.tree-structure {
+    display: grid;
+    grid-template-columns: 40px 1fr;
+    gap: 10px;
+}
+
+.tree-lines {
+    position: relative;
+}
+
+.tree-lines::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    bottom: 12%;
+    left: 20px;
+    width: 2px;
+    background-color: #666;
+}
+
+.branch-line {
+    position: absolute;
+    left: 20px;
+    width: 20px;
+    height: 2px;
+    background-color: #666;
+}
+
+.branch-line::after {
+    content: "▶";
+    position: absolute;
+    right: -4px;
+    top: -5px;
+    font-size: 9px;
+    color: #666;
+}
+
+.line-1 { top: 12%; }
+.line-2 { top: 50%; }
+.line-3 { bottom: 12%; }
+
+/* Raias de Subprocessos */
+.sub-flows-container {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+.sub-row {
+    display: grid;
+}
+
+.row-double {
+    grid-template-columns: 1fr 1fr;
+}
+
+.row-single {
+    grid-template-columns: 1fr;
+}
+
+/* Mapeamento de Classes Individuais de Cores */
+.bg-conclusao { background-color: var(--color-conclusao); }
+.bg-egresso { background-color: var(--color-egresso); }
+.bg-formatura { background-color: var(--color-formatura); }
+.bg-diplomacao-grad { background-color: var(--color-diplomacao-grad); }
+.bg-certificacao { background-color: var(--color-certificacao); }
+.bg-titulacao { background-color: var(--color-titulacao); }
+.bg-diplomacao-stricto { background-color: var(--color-diplomacao-stricto); }
+
+/* --- MODAL DE DETALHES --- */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+    z-index: 100;
+}
+
+.modal-overlay.active {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.modal-card {
+    background: #ffffff;
+    width: 90%;
+    max-width: 550px;
+    border-radius: 12px;
+    padding: 25px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    transform: translateY(20px);
+    transition: transform 0.3s ease;
+}
+
+.modal-overlay.active .modal-card {
+    transform: translateY(0);
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 2px solid var(--bg-light);
+    padding-bottom: 12px;
+    margin-bottom: 15px;
+}
+
+.modal-header h3 {
+    font-size: 18px;
+    color: var(--text-color);
+}
+
+.close-btn {
+    background: none;
+    border: none;
+    font-size: 22px;
+    cursor: pointer;
+    color: #888;
+}
+
+.modal-body ul {
+    margin-top: 10px;
+    padding-left: 20px;
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+    .level-1-flow, .row-double {
+        grid-template-columns: 1fr;
+    }
+    .tree-structure {
+        grid-template-columns: 1fr;
+    }
+    .tree-lines {
+        display: none;
+    }
+    .chevron-box {
+        clip-path: none !important;
+        border-radius: 8px !important;
+        padding: 15px !important;
+    }
+}
+</style>
+</head>
+<body>
+
+<div class="diagram-container">
+
+    <div class="main-title">Ensino: Conclusão</div>
+
+    <!-- Nível 1: Macroprocessos -->
+    <div class="level-1-flow">
+        <div class="chevron-box bg-conclusao" data-title="Conclusão de Curso" data-details="Procedimentos finais de consolidação da vida acadêmica do estudante.|Verificação de pendências bibliotecárias e acadêmicas.|Emissão de histórico final integralizado.">
+            <strong>Conclusão</strong>
+            <span>(Formatura, Certificação, Titulação, Diplomação)</span>
+        </div>
+        <div class="chevron-box bg-egresso" data-title="Acompanhamento de Egresso" data-details="Manutenção do vínculo institucional com ex-alunos.|Pesquisas de empregabilidade e satisfação do perfil formado.|Acesso à rede de networking e eventos de ex-alunos.">
+            <strong>Egresso</strong>
+            <span>(Acompanhamento, Perfil, Networking, Interação)</span>
+        </div>
+    </div>
+
+    <!-- Nível 2: Ramificações -->
+    <div class="tree-structure">
+        <div class="tree-lines">
+            <div class="branch-line line-1"></div>
+            <div class="branch-line line-2"></div>
+            <div class="branch-line line-3"></div>
+        </div>
+
+        <div class="sub-flows-container">
+            
+            <!-- Linha 1: Formatura & Diplomação-Grad -->
+            <div class="sub-row row-double">
+                <div class="chevron-box bg-formatura" data-title="Formatura" data-details="Organização da Cerimônia Solene e Colação de Grau em Gabinete.|Inscrição e validação de alunos aptos.|Assinatura da Ata de Colação de Grau.">
+                    <strong>Formatura</strong>
+                    <span>(Cerimônia, Inscrição, Validação, Colação de Grau, Diplomação-Grad)</span>
+                </div>
+                <!-- CLASSE EXCLUSIVA: bg-diplomacao-grad (Laranja) -->
+                <div class="chevron-box bg-diplomacao-grad" data-title="Diplomação - Graduação" data-details="Encaminhamento do processo de registro do diploma digital.|Emissão e disponibilização no portal do aluno.|Registro nos sistemas MEC.">
+                    <strong>Diplomação-Grad</strong>
+                    <span>(Encaminhamento, Registro, Emissão, Disponibilização)</span>
+                </div>
+            </div>
+
+            <!-- Linha 2: Certificação -->
+            <div class="sub-row row-single">
+                <div class="chevron-box bg-certificacao" data-title="Certificação" data-details="Solicitação e emissão de certificados de cursos técnicos e de extensão.|Assinatura digital e validação de autenticidade.|Disponibilização do documento oficial.">
+                    <strong>Certificação</strong>
+                    <span>(Solicitação, Emissão, Assinatura, Disponibilização)</span>
+                </div>
+            </div>
+            
+
+            <!-- Linha 3: Titulação & Diplomação-Stricto -->
+            <div class="sub-row row-double">
+                <div class="chevron-box bg-titulacao" data-title="Titulação (Pós-Graduação)" data-details="Agendamento e realização de Banca de Defesa (Mestrado/Doutorado).|Validação da versão final da dissertação/tese na biblioteca.|Homologação do título de Mestre ou Doutor.">
+                    <strong>Titulação</strong>
+                    <span>(Agendamento, Banca, Validação, Diplomação-Stricto)</span>
+                </div>
+                <!-- CLASSE EXCLUSIVA: bg-diplomacao-stricto (Azul Real) -->
+                <div class="chevron-box bg-diplomacao-stricto" data-title="Diplomação - Stricto Sensu" data-details="Análise documental dos requisitos do programa de Pós-Graduação.|Emissão do diploma oficial de pós-graduação.|Registro e disponibilização do documento assinado digitalmente.">
+                    <strong>Diplomação-Stricto</strong>
+                    <span>(Encaminhamento, Registro, Emissão, Disponibilização)</span>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+</div>
+
+<!-- Modal Interativo -->
+<div class="modal-overlay" id="modal">
+    <div class="modal-card">
+        <div class="modal-header">
+            <h3 id="modal-title">Título da Etapa</h3>
+            <button class="close-btn" id="modal-close">&times;</button>
+        </div>
+        <div class="modal-body">
+            <strong>Principais Atividades / Detalhes:</strong>
+            <ul id="modal-list"></ul>
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    const modal = document.getElementById('modal');
+    const modalTitle = document.getElementById('modal-title');
+    const modalList = document.getElementById('modal-list');
+    const closeModal = document.getElementById('modal-close');
+
+    document.querySelectorAll('.chevron-box').forEach(box => {
+        box.addEventListener('click', () => {
+            const title = box.getAttribute('data-title');
+            const details = box.getAttribute('data-details');
+
+            if (title && details) {
+                modalTitle.textContent = title;
+                modalList.innerHTML = '';
+
+                details.split('|').forEach(item => {
+                    const li = document.createElement('li');
+                    li.textContent = item;
+                    modalList.appendChild(li);
+                });
+
+                modal.classList.add('active');
+            }
+        });
+    });
+
+    closeModal.addEventListener('click', () => modal.classList.remove('active'));
+    modal.addEventListener('click', (e) => {
+        if (e.target === modal) modal.classList.remove('active');
+    });
+});
+</script>
+
+</body>
+</html>

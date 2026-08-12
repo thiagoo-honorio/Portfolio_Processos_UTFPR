@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><?php echo $macroprocesso['titulo']; ?></title>
+    <style>
+        * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+    background-color: #f5f7fa;
+    padding: 40px;
+    display: flex;
+    justify-content: center;
+}
+
+.container {
+    width: 100%;
+    max-width: 900px;
+}
+
+/* Caixa do Título */
+.header-box {
+    background: linear-gradient(180deg, #b3d4fc 0%, #8cbbf1 100%);
+    border-radius: 15px;
+    padding: 20px;
+    text-align: center;
+    margin-bottom: 40px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+}
+
+.header-box h1 {
+    color: #000;
+    font-size: 24px;
+    font-style: italic;
+    font-weight: bold;
+}
+
+/* Linhas e Alinhamento */
+.row {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 15px;
+    position: relative;
+}
+
+.principal-row {
+    margin-bottom: 25px;
+}
+
+/* O Segredo da Seta em CSS */
+.arrow-box {
+    position: relative;
+    flex: 1;
+    min-height: 80px;
+    display: flex;
+    align-items: center;
+    padding: 10px 25px 10px 35px;
+    color: white;
+    font-size: 13px;
+}
+
+/* Recorte Traseiro da Seta */
+.arrow-box::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 0;
+    height: 0;
+    border-top: 40px solid transparent;
+    border-bottom: 40px solid transparent;
+    border-left: 20px solid #f5f7fa; /* Deve ser a cor do fundo do site */
+    z-index: 2;
+}
+
+/* Ponta da Seta */
+.arrow-box::after {
+    content: "";
+    position: absolute;
+    right: -20px;
+    top: 0;
+    width: 0;
+    height: 0;
+    border-top: 40px solid transparent;
+    border-bottom: 40px solid transparent;
+    border-left: 20px solid transparent;
+    z-index: 3;
+}
+
+/* Remove o recorte traseiro do primeiríssimo bloco se necessário, 
+   mas como o seu modelo original possui o recorte na "Conclusão", mantivemos. */
+
+.box-content {
+    position: relative;
+    z-index: 4;
+    text-align: center;
+    width: 100%;
+}
+
+.box-content strong {
+    display: block;
+    font-size: 16px;
+    margin-bottom: 4px;
+}
+
+.box-content span {
+    font-size: 11px;
+    opacity: 0.9;
+    display: block;
+    line-height: 1.3;
+}
+
+/* Estrutura de Conexão Lateral (Árvore) */
+.sub-processos-container {
+    position: relative;
+    padding-left: 240px; /* Alinha os sub-processos abaixo do bloco 'Conclusão' */
+}
+
+.linha-conectora {
+    position: absolute;
+    left: 120px; /* Ajuste para ficar no meio do bloco 'Conclusão' superior */
+    top: -25px;
+    width: 2px;
+    height: calc(100% - 55px);
+    background-color: #707070;
+    z-index: 1;
+}
+
+/* Pequenas setas horizontais saindo da linha conectora */
+.sub-processos-list .row::before {
+    content: "";
+    position: absolute;
+    left: -120px;
+    top: 40px;
+    width: 120px;
+    height: 2px;
+    background-color: #707070;
+    z-index: 1;
+}
+
+.sub-processos-list .row::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 36px;
+    width: 0;
+    height: 0;
+    border-top: 5px solid transparent;
+    border-bottom: 5px solid transparent;
+    border-left: 8px solid #707070;
+    z-index: 2;
+}
+
+
+/* Paleta de Cores Fiel à Imagem */
+
+.azul-escuro { background-color: #112d55; }
+.azul-escuro::after { border-left-color: #112d55; }
+
+.cinza { background-color: #9e9e9e; color: #fff; }
+.cinza::after { border-left-color: #9e9e9e; }
+
+.larja, .laranja { background-color: #c75116; }
+.laranja::after { border-left-color: #c75116; }
+
+.larja-claro, .laranja-claro { background-color: #e37e26; }
+.laranja-claro::after { border-left-color: #e37e26; }
+
+.verde { background-color: #437c32; }
+.verde::after { border-left-color: #437c32; }
+
+.azul-medio { background-color: #2b5496; }
+.azul-medio::after { border-left-color: #2b5496; }
+
+.azul-claro { background-color: #3b71ca; }
+.azul-claro::after { border-left-color: #3b71ca; }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="header-box">
+            <h1><?php echo $macroprocesso['titulo']; ?></h1>
+        </div>
+
+        <div class="row principal-row">
+            <?php foreach ($macroprocesso['fluxo_principal'] as $bloco): ?>
+                <div class="arrow-box <?php echo $bloco['cor']; ?>">
+                    <div class="box-content">
+                        <strong><?php echo $bloco['titulo']; ?></strong>
+                        <span>(<?php echo $bloco['subtitulos']; ?>)</span>
+                    </div>
+                </div>
+            <?php endforeach; ?>
+        </div>
+
+        <div class="sub-processos-container">
+            <div class="linha-conectora"></div>
+            
+            <div class="sub-processos-list">
+                
+                <div class="row">
+                    <div class="arrow-box <?php echo $macroprocesso['sub_processos']['formatura']['principal']['cor']; ?>">
+                        <div class="box-content">
+                            <strong><?php echo $macroprocesso['sub_processos']['formatura']['principal']['titulo']; ?></strong>
+                            <span>(<?php echo $macroprocesso['sub_processos']['formatura']['principal']['subtitulos']; ?>)</span>
+                        </div>
+                    </div>
+                    <div class="arrow-box <?php echo $macroprocesso['sub_processos']['formatura']['sequencia']['cor']; ?>">
+                        <div class="box-content">
+                            <strong><?php echo $macroprocesso['sub_processos']['formatura']['sequencia']['titulo']; ?></strong>
+                            <span>(<?php echo $macroprocesso['sub_processos']['formatura']['sequencia']['subtitulos']; ?>)</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="arrow-box <?php echo $macroprocesso['sub_processos']['certificacao']['principal']['cor']; ?>">
+                        <div class="box-content">
+                            <strong><?php echo $macroprocesso['sub_processos']['certificacao']['principal']['titulo']; ?></strong>
+                            <span>(<?php echo $macroprocesso['sub_processos']['certificacao']['principal']['subtitulos']; ?>)</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="arrow-box <?php echo $macroprocesso['sub_processos']['titulacao']['principal']['cor']; ?>">
+                        <div class="box-content">
+                            <strong><?php echo $macroprocesso['sub_processos']['titulacao']['principal']['titulo']; ?></strong>
+                            <span>(<?php echo $macroprocesso['sub_processos']['titulacao']['principal']['subtitulos']; ?>)</span>
+                        </div>
+                    </div>
+                    <div class="arrow-box <?php echo $macroprocesso['sub_processos']['titulacao']['sequencia']['cor']; ?>">
+                        <div class="box-content">
+                            <strong><?php echo $macroprocesso['sub_processos']['titulacao']['sequencia']['titulo']; ?></strong>
+                            <span>(<?php echo $macroprocesso['sub_processos']['titulacao']['sequencia']['subtitulos']; ?>)</span>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>
