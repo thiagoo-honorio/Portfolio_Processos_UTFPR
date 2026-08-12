@@ -413,8 +413,8 @@ body {
     </div>
 
     <div class="top-menu">
-        <div class="menu-item" data-link="glossario.html"><span>Glossário de termos de negócio</span><span class="icon">📋</span></div>
-        <div class="menu-item" data-link="paineis.html"><span>Painéis Institucionais</span><span class="icon">📈</span></div>
+        <div class="menu-item" data-link="https://www.utfpr.edu.br/estrutura/reitoria/escritorio-de-processos/paineis-institucionais/glossario"><span>Glossário de termos de negócio</span><span class="icon">📋</span></div>
+        <div class="menu-item" data-link="https://www.utfpr.edu.br/estrutura/reitoria/escritorio-de-processos/paineis-institucionais"><span>Painéis Institucionais</span><span class="icon">📈</span></div>
         <div class="menu-item" data-link="automacao.html"><span>Automação de processos</span><span class="icon">🧠</span></div>
         <div class="help-icon" data-link="ajuda.html">?</div>
     </div>
@@ -435,7 +435,7 @@ body {
             <div class="section-title">Macroprocessos Finalísticos</div>
             <div class="finalisticos-grid">
                 
-                <div class="process-card card-ensino" data-link="ensino.html">
+                <div class="process-card card-ensino" data-link="nivel_2.html">
                     <div class="process-badge"><span>🎓</span>ENSINO</div>
                     <div class="process-info">
                         <strong>Graduação & Pós-Graduação</strong>
@@ -443,7 +443,7 @@ body {
                     </div>
                 </div>
 
-                <div class="process-card" data-link="pesquisa.html">
+                <div class="process-card" data-link="nivel_2.html">
                     <div class="process-badge"><span>⚛️</span>PESQUISA</div>
                     <div class="process-info">
                         <strong>Científica & Aplicada</strong>
@@ -451,7 +451,7 @@ body {
                     </div>
                 </div>
 
-                <div class="process-card" data-link="extensao.html">
+                <div class="process-card" data-link="nivel_2.html">
                     <div class="process-badge"><span>💡</span>EXTENSÃO</div>
                     <div class="process-info">
                         <strong>Inovação & Comunidade</strong>
@@ -521,7 +521,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (targetPage) {
                 console.log(`Navegando para: ${targetPage}`);
                 // Para ativar o redirecionamento futuro, basta descomentar a linha abaixo:
-                // window.location.href = targetPage;
+                window.location.href = targetPage;
             }
         });
     });

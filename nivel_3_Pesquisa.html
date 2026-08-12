@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cadeia de Valor: Pesquisa - UTFPR</title>
+
+<style>
+:root {
+    --bg-light: #f8f9fa;
+    --gray-medium: #e9ecef;
+    --black-accent: #212529;
+    --yellow-soft: #ffe066;
+    --text-color: #343a40;
+    --card-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+    
+    /* Cores fiéis ao diagrama de Pesquisa */
+    --bg-pesquisa-outer: #16426e;
+    --bg-pesquisa-box: #d1e0f0;
+    --bg-pesquisa-chevron: #3b719f;
+    --bg-pesquisa-sustentacao: #61666c;
+    --bg-pesquisa-sociedade: #3c6b24;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body { 
+    font-family: 'Segoe UI', -apple-system, Arial, sans-serif; 
+    background-color: var(--bg-light);
+    color: var(--text-color);
+    padding: 0;
+    line-height: 1.4;
+}
+
+.portfolio-container {
+    width: 100%;
+    max-width: 100%;
+    margin: 0;
+    background: #ffffff;
+    border-radius: 0;
+    overflow: hidden;
+    box-shadow: none;
+}
+
+/* --- HEADER SLIM --- */
+.header {
+    background: var(--gray-medium);
+    padding: 2px 30px; 
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 4px solid #6c757d;
+}
+.logo-utfpr,
+.logo-escritorio { 
+    max-height: 52px; 
+    display: block;
+    object-fit: contain;
+}
+.header h1 { 
+    font-size: 17px; 
+    font-weight: 700; 
+    color: var(--black-accent);
+}
+
+/* --- TÍTULO DA CADEIA DE VALOR --- */
+.top-title-bar { 
+    display: flex; 
+    background: #ffffff; 
+    padding: 15px 30px; 
+}
+.title-headline { 
+    background: var(--yellow-soft); 
+    color: var(--black-accent); 
+    padding: 14px 24px; 
+    text-align: center;
+    font-size: 16px; 
+    font-weight: 700; 
+    border-radius: 8px;
+    width: 100%;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* --- WRAPPER E ESTRUTURA DO DIAGRAMA --- */
+.pesquisa-wrapper {
+    background: var(--bg-light); 
+    padding: 30px;
+}
+
+.pesquisa-card-outer {
+    background: var(--bg-pesquisa-outer);
+    border-radius: 12px;
+    padding: 25px;
+    display: grid;
+    grid-template-columns: 150px 1fr 65px;
+    gap: 20px;
+    align-items: center;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+}
+
+/* Caixa Esquerda: PESQUISA */
+.macro-pesquisa-box {
+    background: var(--bg-pesquisa-box);
+    color: var(--bg-pesquisa-outer);
+    font-weight: 800;
+    font-size: 18px;
+    text-align: center;
+    height: 100%;
+    min-height: 180px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 14px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    letter-spacing: 1px;
+    padding: 15px;
+}
+
+/* Área Central: Chevrons + Sustentação */
+.center-flow-area {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+/* Grid com 4 Chevrons de Pesquisa */
+.chevrons-grid-pesquisa {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 6px;
+}
+
+.etapa-chevron {
+    background: var(--bg-pesquisa-chevron);
+    color: #ffffff;
+    padding: 12px 12px 12px 22px;
+    font-size: 13px;
+    position: relative;
+    clip-path: polygon(0% 0%, calc(100% - 15px) 0%, 100% 50%, calc(100% - 15px) 100%, 0% 100%, 15px 50%);
+    min-height: 110px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    z-index: 1;
+    text-align: center;
+}
+
+.etapa-chevron:first-child {
+    clip-path: polygon(0% 0%, calc(100% - 15px) 0%, 100% 50%, calc(100% - 15px) 100%, 0% 100%);
+    padding-left: 15px;
+    border-radius: 6px 0 0 6px;
+}
+
+.etapa-chevron:last-child {
+    border-radius: 0 6px 6px 0;
+}
+
+.etapa-chevron strong {
+    font-size: 13px;
+    color: #ffffff;
+    display: block;
+    margin-bottom: 6px;
+    line-height: 1.2;
+}
+
+.etapa-chevron span {
+    font-size: 11px;
+    color: #dce7f3;
+    line-height: 1.3;
+}
+
+/* Barra Transversal Inferior: Projetos & Fomentos */
+.barra-sustentacao-pesquisa {
+    background: var(--bg-pesquisa-sustentacao);
+    color: #ffffff;
+    padding: 10px 20px;
+    border-radius: 4px;
+    font-size: 12px;
+    text-align: center;
+    clip-path: polygon(0% 0%, calc(100% - 12px) 0%, 100% 50%, calc(100% - 12px) 100%, 0% 100%);
+    padding-right: 30px;
+}
+
+.barra-sustentacao-pesquisa strong {
+    font-size: 13.5px;
+    color: #ffffff;
+    display: block;
+    margin-bottom: 2px;
+}
+
+.barra-sustentacao-pesquisa span {
+    font-size: 11px;
+    color: #e0e0e0;
+}
+
+/* Painel Direito: Resultados para SOCIEDADE */
+.sociedade-seta-pesquisa {
+    background: var(--bg-pesquisa-sociedade);
+    color: #ffffff;
+    font-weight: 800;
+    font-size: 17px;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    width: 65px;
+    height: 100%;
+    min-height: 220px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 20px 5px;
+    clip-path: polygon(0% 0%, calc(100% - 22px) 0%, 100% 50%, calc(100% - 22px) 100%, 0% 100%);
+    border-radius: 4px;
+}
+
+.sociedade-seta-pesquisa span {
+    writing-mode: vertical-rl;
+    transform: rotate(180deg);
+}
+
+/* ========================================================
+   EFEITOS INTERATIVOS (HOVER & CURSOR)
+   ======================================================== */
+.macro-pesquisa-box, 
+.etapa-chevron, 
+.barra-sustentacao-pesquisa, 
+.sociedade-seta-pesquisa {
+    cursor: pointer;
+    transition: transform 0.25s ease, box-shadow 0.25s ease, filter 0.25s ease;
+    user-select: none;
+}
+
+.active-hover {
+    transform: scale(1.04) translateY(-2px);
+    filter: brightness(1.1);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25) !important;
+    z-index: 10;
+}
+
+/* --- MODAL INTERATIVO --- */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.55);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+    z-index: 100;
+}
+
+.modal-overlay.active {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.modal-card {
+    background: #ffffff;
+    width: 90%;
+    max-width: 550px;
+    border-radius: 12px;
+    padding: 25px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+    transform: translateY(20px);
+    transition: transform 0.3s ease;
+}
+
+.modal-overlay.active .modal-card {
+    transform: translateY(0);
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 2px solid var(--gray-medium);
+    padding-bottom: 12px;
+    margin-bottom: 15px;
+}
+
+.modal-header h3 {
+    font-size: 18px;
+    color: var(--black-accent);
+}
+
+.close-btn {
+    background: none;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+    color: #888;
+}
+
+.modal-body ul {
+    margin-top: 10px;
+    padding-left: 20px;
+    font-size: 14px;
+    line-height: 1.6;
+    color: var(--text-color);
+}
+
+/* Responsividade */
+@media (max-width: 1100px) {
+    .pesquisa-card-outer {
+        grid-template-columns: 1fr;
+    }
+    .sociedade-seta-pesquisa {
+        display: none;
+    }
+    .chevrons-grid-pesquisa {
+        grid-template-columns: 1fr;
+        gap: 8px;
+    }
+    .etapa-chevron {
+        clip-path: none !important;
+        padding: 15px !important;
+        border-radius: 8px !important;
+        min-height: auto;
+    }
+    .barra-sustentacao-pesquisa {
+        clip-path: none;
+        padding-right: 20px;
+    }
+}
+</style>
+</head>
+<body>
+
+<div class="portfolio-container">
+
+    <!-- HEADER INSTITUCIONAL -->
+    <div class="header">
+        <img src="LOGO_UTFPR.png" alt="Logo UTFPR" class="logo-utfpr">
+        <h1>PORTFÓLIO DE PROCESSOS DA UTFPR</h1>
+        <img src="logo_escritorio_processos.png" alt="Escritório de Processos" class="logo-escritorio">
+    </div>
+
+    <!-- TÍTULO -->
+    <div class="top-title-bar">
+        <div class="title-headline">
+            Cadeia de Valor dos MACROPROCESSOS FINALÍSTICOS: PESQUISA
+        </div>
+    </div>
+
+    <!-- CONTAINER DA CADEIA DE PESQUISA -->
+    <div class="pesquisa-wrapper">
+        
+        <div class="pesquisa-card-outer">
+            
+            <!-- Caixa Esquerda -->
+            <div class="macro-pesquisa-box" 
+                 data-title="Macroprocesso: Pesquisa" 
+                 data-details="Atividades voltadas à geração e avanço do conhecimento científico e tecnológico.|Liderança em inovação acadêmica e aplicada no ecossistema regional.|Captação de fomentos externos e consolidação de grupos de pesquisa."
+                 data-link="macro_pesquisa.html">
+                PESQUISA
+            </div>
+
+            <!-- Centro: Chevrons e Sustentação -->
+            <div class="center-flow-area">
+                
+                <div class="chevrons-grid-pesquisa">
+                    
+                    <div class="etapa-chevron" 
+                         data-title="Pesquisa e Inovação" 
+                         data-details="Mapeamento e prospecção de editais e fontes de financiamento externas.|Lançamento de chamadas e editais internos de fomento à inovação.|Alocação de recursos orçamentários institucionais para pesquisa."
+                         data-link="pesquisa_inovacao.html">
+                        <strong>Pesquisa e Inovação</strong>
+                        <span>(Captação, Editais, Fomento, Alocação de Recursos)</span>
+                    </div>
+
+                    <div class="etapa-chevron" 
+                         data-title="Projeto de Pesquisa" 
+                         data-details="Elaboração e submissão de propostas de projetos científicos.|Planejamento das etapas metodológicas e cronograma de execução.|Desenvolvimento, acompanhamento e divulgação dos resultados."
+                         data-link="projeto_pesquisa.html">
+                        <strong>Projeto de Pesquisa</strong>
+                        <span>(Planejamento, Desenvolvimento e Divulgação)</span>
+                    </div>
+
+                    <div class="etapa-chevron" 
+                         data-title="Bolsas de Pesquisa" 
+                         data-details="Abertura de inscrições e seleção de alunos bolsistas e voluntários.|Distribuição de cotas de bolsas (PIBIC, PIBITI, etc.).|Acompanhamento da entrega de relatórios parciais e finais."
+                         data-link="bolsas_pesquisa.html">
+                        <strong>Bolsas de Pesquisa</strong>
+                        <span>(Captação, Distribuição, Monitoramento)</span>
+                    </div>
+
+                    <div class="etapa-chevron" 
+                         data-title="Publicações Científicas" 
+                         data-details="Monitoramento da produção intelectual dos docentes e discentes.|Avaliação e registro de periódicos, artigos, patentes e livros.|Publicação em repositórios institucionais de acesso aberto."
+                         data-link="publicacoes_cientificas.html">
+                        <strong>Publicações Científicas</strong>
+                        <span>(Monitoramento, Avaliação, Publicação)</span>
+                    </div>
+
+                </div>
+
+                <!-- Barra Transversal Inferior -->
+                <div class="barra-sustentacao-pesquisa" 
+                     data-title="Projetos & Fomentos" 
+                     data-details="Gestão unificada dos projetos de pesquisa ativos na universidade.|Acompanhamento de convênios, parcerias e termos de fomento.|Monitoramento contínuo dos indicadores de produtividade científica."
+                     data-link="projetos_fomentos.html">
+                    <strong>Projetos & Fomentos</strong>
+                    <span>(Gestão de Projetos de Pesquisa, Bolsas e Fomentos, Parcerias, Indicadores)</span>
+                </div>
+
+            </div>
+
+            <!-- Saída Direita -->
+            <div class="sociedade-seta-pesquisa" 
+                 data-title="Resultados para a Sociedade" 
+                 data-details="Geração e transferência de tecnologias e patentes.|Solução de desafios complexos do setor produtivo e social.|Formação de pesquisadores altamente qualificados para o país."
+                 data-link="resultados_sociedade.html">
+                <span>Resultados para SOCIEDADE</span>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- MODAL INTERATIVO -->
+<div class="modal-overlay" id="modal">
+    <div class="modal-card">
+        <div class="modal-header">
+            <h3 id="modal-title">Título do Processo</h3>
+            <button class="close-btn" id="modal-close">&times;</button>
+        </div>
+        <div class="modal-body">
+            <strong>Atividades e Subprocessos:</strong>
+            <ul id="modal-list"></ul>
+        </div>
+    </div>
+</div>
+
+<!-- JAVASCRIPT DE INTERAÇÃO -->
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    const modal = document.getElementById('modal');
+    const modalTitle = document.getElementById('modal-title');
+    const modalList = document.getElementById('modal-list');
+    const closeModal = document.getElementById('modal-close');
+
+    const interactiveElements = document.querySelectorAll('.macro-pesquisa-box, .etapa-chevron, .barra-sustentacao-pesquisa, .sociedade-seta-pesquisa');
+
+    interactiveElements.forEach(element => {
+        // Efeito Hover
+        element.addEventListener('mouseenter', () => {
+            element.classList.add('active-hover');
+        });
+
+        element.addEventListener('mouseleave', () => {
+            element.classList.remove('active-hover');
+        });
+
+        // Clique: Abre Modal e/ou Redireciona
+        element.addEventListener('click', () => {
+            const title = element.getAttribute('data-title');
+            const details = element.getAttribute('data-details');
+            const targetPage = element.getAttribute('data-link');
+
+            // Exibe o modal com detalhes da etapa
+            if (title && details) {
+                modalTitle.textContent = title;
+                modalList.innerHTML = '';
+
+                details.split('|').forEach(item => {
+                    const li = document.createElement('li');
+                    li.textContent = item;
+                    modalList.appendChild(li);
+                });
+
+                modal.classList.add('active');
+            }
+
+            // Para ativar o redirecionamento para outra página no clique, descomente a linha abaixo:
+            // if (targetPage) { window.location.href = targetPage; }
+        });
+    });
+
+    // Fechar Modal
+    closeModal.addEventListener('click', () => modal.classList.remove('active'));
+    modal.addEventListener('click', (e) => {
+        if (e.target === modal) modal.classList.remove('active');
+    });
+});
+</script>
+
+</body>
+</html>
