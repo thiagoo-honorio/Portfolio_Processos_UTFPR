@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cadeia de Valor: Extensão - UTFPR</title>
+
+<style>
+:root {
+    --bg-light: #f8f9fa;
+    --gray-medium: #e9ecef;
+    --black-accent: #212529;
+    --yellow-soft: #ffe066;
+    --text-color: #343a40;
+    
+    /* Cores fiéis ao diagrama de Extensão */
+    --bg-extensao-outer: #16426e;
+    --bg-extensao-box: #d1e0f0;
+    --bg-extensao-chevron: #3b719f;
+    --bg-extensao-sustentacao: #61666c;
+    --bg-extensao-sociedade: #3c6b24;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body { 
+    font-family: 'Segoe UI', -apple-system, Arial, sans-serif; 
+    background-color: var(--bg-light);
+    color: var(--text-color);
+    padding: 0;
+    line-height: 1.4;
+}
+
+.portfolio-container {
+    width: 100%;
+    max-width: 100%;
+    margin: 0;
+    background: #ffffff;
+    border-radius: 0;
+    overflow: hidden;
+}
+
+/* --- HEADER SLIM INSTITUCIONAL --- */
+.header {
+    background: var(--gray-medium);
+    padding: 2px 30px; 
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 4px solid #6c757d;
+}
+.logo-utfpr,
+.logo-escritorio { 
+    max-height: 52px; 
+    display: block;
+    object-fit: contain;
+}
+.header h1 { 
+    font-size: 17px; 
+    font-weight: 700; 
+    color: var(--black-accent);
+}
+
+/* --- TÍTULO DA CADEIA DE VALOR --- */
+.top-title-bar { 
+    display: flex; 
+    background: #ffffff; 
+    padding: 15px 30px; 
+}
+.title-headline { 
+    background: var(--yellow-soft); 
+    color: var(--black-accent); 
+    padding: 14px 24px; 
+    text-align: center;
+    font-size: 16px; 
+    font-weight: 700; 
+    border-radius: 8px;
+    width: 100%;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* --- WRAPPER E ESTRUTURA DO DIAGRAMA --- */
+.extensao-wrapper {
+    background: var(--bg-light); 
+    padding: 30px;
+}
+
+.extensao-card-outer {
+    background: var(--bg-extensao-outer);
+    border-radius: 12px;
+    padding: 25px;
+    display: grid;
+    grid-template-columns: 1fr 65px;
+    gap: 20px;
+    align-items: center;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+}
+
+.center-flow-area {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    align-items: center;
+}
+
+/* Caixa Superior: EXTENSÃO */
+.macro-extensao-box {
+    background: var(--bg-extensao-box);
+    color: var(--bg-extensao-outer);
+    font-weight: 800;
+    font-size: 18px;
+    text-align: center;
+    padding: 18px 45px;
+    border-radius: 14px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    letter-spacing: 1.5px;
+    width: fit-content;
+    max-width: 280px;
+}
+
+/* Grid com 5 Chevrons de Extensão */
+.chevrons-grid-extensao {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 4px;
+    width: 100%;
+}
+
+.etapa-chevron {
+    background: var(--bg-extensao-chevron);
+    color: #ffffff;
+    padding: 12px 8px 12px 18px;
+    font-size: 12px;
+    position: relative;
+    clip-path: polygon(0% 0%, calc(100% - 14px) 0%, 100% 50%, calc(100% - 14px) 100%, 0% 100%, 14px 50%);
+    min-height: 110px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    z-index: 1;
+    text-align: center;
+}
+
+.etapa-chevron:first-child {
+    clip-path: polygon(0% 0%, calc(100% - 14px) 0%, 100% 50%, calc(100% - 14px) 100%, 0% 100%);
+    padding-left: 12px;
+    border-radius: 6px 0 0 6px;
+}
+
+.etapa-chevron:last-child {
+    border-radius: 0 6px 6px 0;
+}
+
+.etapa-chevron strong {
+    font-size: 12.5px;
+    color: #ffffff;
+    display: block;
+    margin-bottom: 5px;
+    line-height: 1.2;
+}
+
+.etapa-chevron span {
+    font-size: 10.5px;
+    color: #dce7f3;
+    line-height: 1.25;
+}
+
+/* Barra Transversal Inferior: Projetos, Programas e Ações */
+.barra-sustentacao-extensao {
+    background: var(--bg-extensao-sustentacao);
+    color: #ffffff;
+    padding: 10px 20px;
+    border-radius: 4px;
+    font-size: 12px;
+    text-align: center;
+    width: 100%;
+    clip-path: polygon(0% 0%, calc(100% - 12px) 0%, 100% 50%, calc(100% - 12px) 100%, 0% 100%);
+    padding-right: 28px;
+}
+
+.barra-sustentacao-extensao strong {
+    font-size: 13.5px;
+    color: #ffffff;
+    display: block;
+    margin-bottom: 3px;
+}
+
+.barra-sustentacao-extensao span {
+    font-size: 11px;
+    color: #e0e0e0;
+}
+
+/* Painel Direito: Resultados para SOCIEDADE */
+.sociedade-seta-extensao {
+    background: var(--bg-extensao-sociedade);
+    color: #ffffff;
+    font-weight: 800;
+    font-size: 17px;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    width: 65px;
+    height: 100%;
+    min-height: 280px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 20px 5px;
+    clip-path: polygon(0% 0%, calc(100% - 22px) 0%, 100% 50%, calc(100% - 22px) 100%, 0% 100%);
+    border-radius: 4px;
+}
+
+.sociedade-seta-extensao span {
+    writing-mode: vertical-rl;
+    transform: rotate(180deg);
+}
+
+/* --- INTERATIVIDADE (HOVER E CURSOR) --- */
+.macro-extensao-box, 
+.etapa-chevron, 
+.barra-sustentacao-extensao, 
+.sociedade-seta-extensao {
+    cursor: pointer;
+    transition: transform 0.25s ease, box-shadow 0.25s ease, filter 0.25s ease;
+    user-select: none;
+}
+
+.active-hover {
+    transform: scale(1.03) translateY(-2px);
+    filter: brightness(1.1);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25) !important;
+    z-index: 10;
+}
+
+/* --- MODAL INTERATIVO --- */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.55);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+    z-index: 100;
+}
+
+.modal-overlay.active {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.modal-card {
+    background: #ffffff;
+    width: 90%;
+    max-width: 550px;
+    border-radius: 12px;
+    padding: 25px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+    transform: translateY(20px);
+    transition: transform 0.3s ease;
+}
+
+.modal-overlay.active .modal-card {
+    transform: translateY(0);
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 2px solid var(--gray-medium);
+    padding-bottom: 12px;
+    margin-bottom: 15px;
+}
+
+.modal-header h3 {
+    font-size: 18px;
+    color: var(--black-accent);
+}
+
+.close-btn {
+    background: none;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+    color: #888;
+}
+
+.modal-body ul {
+    margin-top: 10px;
+    padding-left: 20px;
+    font-size: 14px;
+    line-height: 1.6;
+    color: var(--text-color);
+}
+
+/* Responsividade */
+@media (max-width: 1100px) {
+    .extensao-card-outer {
+        grid-template-columns: 1fr;
+    }
+    .sociedade-seta-extensao {
+        display: none;
+    }
+    .chevrons-grid-extensao {
+        grid-template-columns: 1fr;
+        gap: 8px;
+    }
+    .etapa-chevron {
+        clip-path: none !important;
+        padding: 15px !important;
+        border-radius: 8px !important;
+        min-height: auto;
+    }
+    .barra-sustentacao-extensao {
+        clip-path: none;
+        padding-right: 20px;
+    }
+}
+</style>
+</head>
+<body>
+
+<div class="portfolio-container">
+
+    <!-- HEADER INSTITUCIONAL -->
+    <div class="header">
+        <img src="LOGO_UTFPR.png" alt="Logo UTFPR" class="logo-utfpr">
+        <h1>PORTFÓLIO DE PROCESSOS DA UTFPR</h1>
+        <img src="logo_escritorio_processos.png" alt="Escritório de Processos" class="logo-escritorio">
+    </div>
+
+    <!-- TÍTULO DA ETAPA -->
+    <div class="top-title-bar">
+        <div class="title-headline">
+            Cadeia de Valor dos MACROPROCESSOS FINALÍSTICOS: EXTENSÃO
+        </div>
+    </div>
+
+    <!-- WRAPPER DO DIAGRAMA DE EXTENSÃO -->
+    <div class="extensao-wrapper">
+        
+        <div class="extensao-card-outer">
+            
+            <!-- Centro: Top Box, Chevrons e Sustentação -->
+            <div class="center-flow-area">
+
+                <!-- Caixa Superior: EXTENSÃO -->
+                <div class="macro-extensao-box" 
+                     data-title="Macroprocesso: Extensão" 
+                     data-details="Promover a articulação entre a universidade e a comunidade externa.|Estimular a democratização do conhecimento acadêmico, científico e cultural.|Fortalecer o desenvolvimento regional e a inovação social."
+                     data-link="macro_extensao.html">
+                    EXTENSÃO
+                </div>
+                
+                <!-- 5 Chevrons da Extensão -->
+                <div class="chevrons-grid-extensao">
+                    
+                    <div class="etapa-chevron" 
+                         data-title="Ações de Extensão, Inovação e Parcerias" 
+                         data-details="Mapeamento e prospecção de editais e oportunidades de extensão.|Estabelecimento de convênios e parcerias com entidades parceiras.|Captação de fomento e execução das ações planejadas."
+                         data-link="acoes_extensao.html">
+                        <strong>Ações de Extensão, Inovação e Parcerias</strong>
+                        <span>(Captação, Editais, Fomento, Execução)</span>
+                    </div>
+
+                    <div class="etapa-chevron" 
+                         data-title="Bolsas de Extensão" 
+                         data-details="Lançamento de editais para bolsas de extensão.|Distribuição de cotas de bolsas e seleção de estudantes.|Acompanhamento e gestão dos bolsistas e prestação de contas."
+                         data-link="bolsas_extensao.html">
+                        <strong>Bolsas de extensão</strong>
+                        <span>(Captação, Distribuição, gestão)</span>
+                    </div>
+
+                    <div class="etapa-chevron" 
+                         data-title="Eventos" 
+                         data-details="Planejamento e suporte à organização de eventos acadêmicos e comunitários.|Promoção e ampla divulgação de simpósios, feiras e congressos.|Registro e controle de participação de público interno e externo."
+                         data-link="eventos.html">
+                        <strong>Eventos</strong>
+                        <span>(Promoção, Divulgação)</span>
+                    </div>
+
+                    <div class="etapa-chevron" 
+                         data-title="Cursos" 
+                         data-details="Submissão e aprovação de projetos de cursos de extensão.|Abertura de inscrições e participação da comunidade.|Realização, avaliação e emissão de certificados."
+                         data-link="cursos.html">
+                        <strong>Cursos</strong>
+                        <span>(Projeto, inscrição, participação, certificação)</span>
+                    </div>
+
+                    <div class="etapa-chevron" 
+                         data-title="Programas e Projetos" 
+                         data-details="Execução de programas e projetos extensionistas de médio e longo prazo.|Monitoramento e avaliação contínua dos resultados obtidos.|Divulgação do impacto gerado nas comunidades atendidas."
+                         data-link="programas_projetos.html">
+                        <strong>Programas e projetos</strong>
+                        <span>(Execução, Monitoramento, Avaliação, Divulgação)</span>
+                    </div>
+
+                </div>
+
+                <!-- Barra Transversal Inferior -->
+                <div class="barra-sustentacao-extensao" 
+                     data-title="Projetos, Programas e Ações de Extensão" 
+                     data-details="Gestão unificada da extensão e consolidação de indicadores institucionais.|Mapeamento de fomentos, incentivos, parcerias e convênios.|Fomento à produção bibliográfica, inovação e propriedade intelectual."
+                     data-link="projetos_acoes_extensao.html">
+                    <strong>Projetos, Programas e Ações de Extensão</strong>
+                    <span>(Gestão da Extensão, Indicadores, Fomento e Incentivos, Parcerias e Convênios, Produção Bibliográfica, Inovação e Propriedade Intelectual)</span>
+                </div>
+
+            </div>
+
+            <!-- Saída Direita: Resultados para SOCIEDADE -->
+            <div class="sociedade-seta-extensao" 
+                 data-title="Resultados para a Sociedade" 
+                 data-details="Transformação e desenvolvimento social, tecnológico e econômico.|Transferência direta de conhecimento da universidade para a sociedade.|Fortalecimento da cidadania e apoio às demandas locais e regionais."
+                 data-link="resultados_sociedade.html">
+                <span>Resultados para SOCIEDADE</span>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- MODAL INTERATIVO -->
+<div class="modal-overlay" id="modal">
+    <div class="modal-card">
+        <div class="modal-header">
+            <h3 id="modal-title">Título do Processo</h3>
+            <button class="close-btn" id="modal-close">&times;</button>
+        </div>
+        <div class="modal-body">
+            <strong>Atividades e Subprocessos:</strong>
+            <ul id="modal-list"></ul>
+        </div>
+    </div>
+</div>
+
+<!-- JAVASCRIPT DE INTERAÇÃO -->
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    const modal = document.getElementById('modal');
+    const modalTitle = document.getElementById('modal-title');
+    const modalList = document.getElementById('modal-list');
+    const closeModal = document.getElementById('modal-close');
+
+    const interactiveElements = document.querySelectorAll('.macro-extensao-box, .etapa-chevron, .barra-sustentacao-extensao, .sociedade-seta-extensao');
+
+    interactiveElements.forEach(element => {
+        // Efeito Hover
+        element.addEventListener('mouseenter', () => {
+            element.classList.add('active-hover');
+        });
+
+        element.addEventListener('mouseleave', () => {
+            element.classList.remove('active-hover');
+        });
+
+        // Clique: Abre Modal com Detalhes
+        element.addEventListener('click', () => {
+            const title = element.getAttribute('data-title');
+            const details = element.getAttribute('data-details');
+            const targetPage = element.getAttribute('data-link');
+
+            if (title && details) {
+                modalTitle.textContent = title;
+                modalList.innerHTML = '';
+
+                details.split('|').forEach(item => {
+                    const li = document.createElement('li');
+                    li.textContent = item;
+                    modalList.appendChild(li);
+                });
+
+                modal.classList.add('active');
+            }
+
+            // Para ativar redirecionamento via link, descomente a linha abaixo:
+            // if (targetPage) { window.location.href = targetPage; }
+        });
+    });
+
+    // Fechar Modal
+    closeModal.addEventListener('click', () => modal.classList.remove('active'));
+    modal.addEventListener('click', (e) => {
+        if (e.target === modal) modal.classList.remove('active');
+    });
+});
+</script>
+
+</body>
+</html>
