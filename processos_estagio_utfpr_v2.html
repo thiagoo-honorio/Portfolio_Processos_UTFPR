@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Estágio – Contextualização</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      font-family: Arial, Helvetica, sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: #f4f6f8;
+      display: flex;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    /* Container Principal */
+    .slide-card {
+      position: relative;
+      width: 100%;
+      max-width: 1050px;
+      background-color: #ffffff;
+      border: 1px solid #dcdcdc;
+      border-radius: 4px;
+      padding: 25px 30px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+      overflow: hidden;
+    }
+
+    /* Título do Slide */
+    .slide-header {
+      margin-top: 10px;
+      margin-bottom: 20px;
+    }
+    .slide-title {
+      color: #116a70;
+      font-size: 2.2rem;
+      font-weight: bold;
+    }
+
+    /* Body Layout */
+    .slide-body {
+      display: flex;
+      gap: 25px;
+    }
+
+    /* --- COLUNA ESQUERDA --- */
+    .left-col {
+      width: 270px;
+      flex-shrink: 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    /* Fluxo Visual (Setas e Foto) */
+    .flow-diagram {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 100%;
+    }
+
+    .flow-label {
+      color: #1d72b8;
+      font-weight: bold;
+      font-size: 1.1rem;
+      position: absolute;
+      z-index: 3;
+      white-space: nowrap;
+      line-height: 1.1;
+    }
+    .flow-label.top {
+      top: 0px;
+      left: 10px;
+      transform: rotate(-12deg);
+    }
+    .flow-label.bottom {
+      bottom: 20px;
+      left: 0px;
+      transform: rotate(-12deg);
+    }
+
+    .flow-container-wrapper {
+      position: relative;
+      width: 230px;
+      height: 280px;
+      margin: 10px 0;
+    }
+
+    .flow-container-wrapper img {
+      position: absolute;
+      left: 45px;
+      top: 50px;
+      width: 125px;
+      height: 180px;
+      object-fit: cover;
+      border-radius: 4px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.25);
+      z-index: 2;
+    }
+
+    /* Setas Amarelas em SVG */
+    .arrow-svg {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 1;
+      overflow: visible;
+    }
+
+    /* Caixa de Legenda */
+    .legend-box {
+      background-color: #e6ebf1;
+      border: 1px solid #b3c0d1;
+      border-radius: 16px;
+      padding: 12px 15px;
+      font-size: 0.85rem;
+      line-height: 1.3;
+    }
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 8px;
+    }
+    .legend-item:last-child {
+      margin-bottom: 0;
+    }
+
+    /* --- COLUNA DIREITA --- */
+    .right-col {
+      flex-grow: 1;
+    }
+
+    .section-title {
+      color: #f26a36;
+      font-size: 1.25rem;
+      font-weight: bold;
+      margin-bottom: 12px;
+    }
+
+    /* Estrutura de Lista Alinhada Flex */
+    .content-list {
+      list-style: none;
+      font-size: 0.93rem;
+      line-height: 1.45;
+      color: #222;
+      margin-bottom: 18px;
+    }
+
+    .content-list > li {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      margin-bottom: 8px;
+    }
+
+    /* Container das Bolinhas Pretas */
+    .bullet-container {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 16px;
+      flex-shrink: 0;
+      padding-top: 2px;
+    }
+
+    .bullet-dot {
+      font-size: 1.2rem;
+      line-height: 1;
+      color: #000;
+      display: inline-block;
+    }
+
+    .list-content {
+      flex-grow: 1;
+    }
+
+    .sub-list {
+      list-style-type: disc;
+      padding-left: 20px;
+      margin-top: 4px;
+    }
+
+    /* Cores de Destaque */
+    .text-red {
+      color: #cc0000;
+      font-weight: bold;
+    }
+    .text-orange {
+      color: #f26a36;
+    }
+    a {
+      color: #0066cc;
+      text-decoration: underline;
+    }
+
+    /* Bloco Inferior - Processo Transversal */
+    .transversal-box {
+      position: relative;
+      background-color: #dbe6f5;
+      border: 2px solid #8fb0db;
+      border-radius: 20px;
+      padding: 15px 20px 20px 20px;
+      margin-top: 15px;
+    }
+
+    .transversal-title {
+      font-size: 1.1rem;
+      font-weight: bold;
+      color: #000000;
+      margin-bottom: 15px;
+    }
+
+    .transversal-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1.2fr 1.3fr;
+      gap: 12px;
+      align-items: flex-end;
+    }
+
+    /* Botões Pílula (Extensão / Ensino) */
+    .pill-btn {
+      background-color: #badaf8;
+      color: #000;
+      font-weight: bold;
+      font-size: 1.1rem;
+      text-align: center;
+      padding: 14px 10px;
+      border-radius: 12px;
+    }
+
+    /* Blocos com Teto Angular (Gestão de Pessoas / Administração) */
+    .roof-btn {
+      background-color: #3d4b58;
+      color: #ffffff;
+      text-align: center;
+      padding: 28px 8px 12px 8px;
+      font-size: 1rem;
+      font-weight: 500;
+      clip-path: polygon(50% 0%, 100% 22%, 100% 100%, 0% 100%, 0% 22%);
+    }
+  </style>
+</head>
+<body>
+
+  <div class="slide-card">
+    <!-- Título -->
+    <div class="slide-header">
+      <h1 class="slide-title">Estágio – contextualização</h1>
+    </div>
+
+    <div class="slide-body">
+      
+      <!-- Coluna Esquerda: Diagrama de Imagem + Legenda -->
+      <div class="left-col">
+        <div class="flow-diagram">
+          <div class="flow-label top">Estágio<br>"Externo"</div>
+
+          <div class="flow-container-wrapper">
+            <img src="Imagem (1).png" alt="Fachada UTFPR">
+
+            <!-- Setas Amarelas -->
+            <svg class="arrow-svg" viewBox="0 0 230 280">
+              <path d="M 68 120 L 68 42 Q 68 18 95 18 L 180 18" 
+                    stroke="#f2a900" stroke-width="18" fill="none" stroke-linecap="butt" stroke-linejoin="round"/>
+              <polygon points="175,-2 212,18 175,38" fill="#f2a900" />
+
+              <path d="M 68 160 L 68 238 Q 68 262 95 262 L 180 262" 
+                    stroke="#f2a900" stroke-width="18" fill="none" stroke-linecap="butt" stroke-linejoin="round"/>
+              <polygon points="175,242 212,262 175,282" fill="#f2a900" />
+            </svg>
+          </div>
+
+          <div class="flow-label bottom">Estágio<br>"Interno"</div>
+        </div>
+
+        <!-- Legenda -->
+        <div class="legend-box">
+          <div class="legend-item">
+            <span class="bullet-dot">•</span>
+            <span>Estudante <strong>UTFPR</strong></span>
+          </div>
+          <div class="legend-item">
+            <span class="bullet-dot">•</span>
+            <span>Estudante <strong>Outra IE</strong> – Ensino superior</span>
+          </div>
+          <div class="legend-item">
+            <span class="bullet-dot">•</span>
+            <span>Estudante <strong>Outra IE</strong> – Ensino médio</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Coluna Direita: Conteúdo Principal -->
+      <div class="right-col">
+        
+        <!-- UTFPR como IE -->
+        <h2 class="section-title">UTFPR como IE (Instituição de Ensino)</h2>
+        <ul class="content-list">
+          <li>
+            <div class="bullet-container">
+              <span class="bullet-dot">•</span>
+            </div>
+            <div class="list-content">
+              Estudantes da UTFPR <span class="text-red">realizam estágio em UCE</span>
+            </div>
+          </li>
+          <li>
+            <div class="bullet-container">
+              <span class="bullet-dot">•</span>
+            </div>
+            <div class="list-content">
+              PROREC/DIEEM e PROGRAD/PRAE/Orientador gerenciam e monitoram o Estágio “externo” realizado em UCEs (inclusive na UTFPR) quanto aos aspectos pedagógicos/acadêmicos e contratuais (estágio obrigatório e não obrigatório)
+            </div>
+          </li>
+          <li>
+            <div class="bullet-container">
+              <span class="bullet-dot">•</span>
+            </div>
+            <div class="list-content">
+              Base legal:
+              <ul class="sub-list">
+                <li>regulamento de estágio <a href="https://sei.utfpr.edu.br/sei/publicacoes/controlador_publicacoes.php?acao=publicacao_visualizar&id_documento=1608522&id_orgao_publicacao=0" target="_blank">Resolução COEMP/COGEP nº 01/2020</a> e</li>
+                <li>regulamento dos respectivos PPCs (Projeto Pedagógico do Curso).</li>
+              </ul>
+            </div>
+          </li>
+        </ul>
+
+        <!-- UTFPR como UCE -->
+        <h2 class="section-title">UTFPR como UCE (Unidade Concedente de Estágio)</h2>
+        <ul class="content-list">
+          <li>
+            <div class="bullet-container">
+              <span class="bullet-dot">•</span>
+            </div>
+            <div class="list-content">
+              Estudantes da UTFPR e de outras Instituições de Ensino <span class="text-orange">realizam estágio na UTFPR</span>
+            </div>
+          </li>
+          <li>
+            <div class="bullet-container">
+              <span class="bullet-dot">•</span>
+            </div>
+            <div class="list-content">
+              Ensino médio e ensino superior
+            </div>
+          </li>
+          <li>
+            <div class="bullet-container">
+              <span class="bullet-dot">•</span>
+            </div>
+            <div class="list-content">
+              Gerenciado pela Gestão de Pessoas (DIRGEP/COGERH)
+            </div>
+          </li>
+          <li>
+            <div class="bullet-container">
+              <span class="bullet-dot">•</span>
+            </div>
+            <div class="list-content">
+              Monitorado (vagas e pagamentos) pela Gestão Administrativa (PROPLAD)
+            </div>
+          </li>
+          <li>
+            <div class="bullet-container">
+              <span class="bullet-dot">•</span>
+            </div>
+            <div class="list-content">
+              Base legal:
+              <ul class="sub-list">
+                <li>legislação de estágio (<a href="https://legislacao.presidencia.gov.br/atos/?tipo=LEI&numero=11788&ano=2008&ato=40dk3YE5UNRpWTbb3" target="_blank">LEI Nº 11.788, DE 25 DE SETEMBRO DE 2008</a>) e</li>
+                <li>Termo de Compromisso com Min. Público do Trabalho (<a href="https://nuvem.utfpr.edu.br/index.php/apps/files/?dir=/Trabalho%20(2)/Extens%C3%A3o/Extens%C3%A3o%20-%20Est%C3%A1gio%20e%20Emprego%20-%20Est%C3%A1gio%20Externo/levantamento_2018_2019/Base%20de%20Conhecimento%20para%20SEI%20-%20Est%C3%A1gio%20PROREC/Docs/Base%20Legal_lei%20regulamento%20tac&fileid=25149241" target="_blank">1274/11</a>).</li>
+              </ul>
+            </div>
+          </li>
+        </ul>
+
+        <!-- Processo Transversal -->
+        <div class="transversal-box">
+          <h3 class="transversal-title">Processo transversal (Ensino, Extensão e Gestão de Pessoas)</h3>
+          
+          <div class="transversal-grid">
+            <div class="pill-btn">EXTENSÃO</div>
+            <div class="pill-btn">ENSINO</div>
+            <div class="roof-btn">Gestão de Pessoas</div>
+            <div class="roof-btn">Administração</div>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+
+</body>
+</html>
