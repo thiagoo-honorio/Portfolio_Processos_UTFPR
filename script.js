@@ -1100,7 +1100,7 @@
             const linkCss = cloneDoc.querySelector('link[rel="stylesheet"][href="style.css"]');
             if (linkCss) linkCss.remove();
             if (css) {
-                const styleEl = cloneDoc.createElement('style');
+                const styleEl = document.createElement('style');
                 styleEl.textContent = css;
                 cloneDoc.querySelector('head').appendChild(styleEl);
             }
@@ -1111,7 +1111,7 @@
             const scriptTag = cloneDoc.querySelector('script[src="script.js"]');
             if (jsTexto && scriptTag) scriptTag.remove();
             if (jsTexto) {
-                const scriptEl = cloneDoc.createElement('script');
+                const scriptEl = document.createElement('script');
                 scriptEl.textContent = jsTexto.replace(/<\/script/gi, '<\\/script');
                 clonedBody.appendChild(scriptEl);
                 jsEmbutido = true;
@@ -1120,7 +1120,7 @@
             // Estado atual embutido como JSON
             const estadoAntigo = cloneDoc.querySelector('#estadoMapaExportado');
             if (estadoAntigo) estadoAntigo.remove();
-            const tagEstado = cloneDoc.createElement('script');
+            const tagEstado = document.createElement('script');
             tagEstado.type = 'application/json';
             tagEstado.id = 'estadoMapaExportado';
             tagEstado.textContent = JSON.stringify(coletarEstadoCompleto()).replace(/<\//g, '<\\/');
@@ -1130,7 +1130,7 @@
         }
 
         async function exportarComoHTML() {
-            toast('Gerando arquivo completo...', 'info', null, 2500);
+            toast('Preparando exportação — embutindo imagens, CSS e JS...', 'info', null, 4000);
             try {
                 const resultado = await gerarHTMLCompleto();
                 const blob = new Blob([resultado.html], { type: 'text/html;charset=utf-8' });
@@ -1138,22 +1138,26 @@
                 a.href = URL.createObjectURL(blob);
                 a.download = 'processo_estagio_utfpr_' + new Date().toISOString().slice(0, 10) + '.html';
                 a.click();
-                URL.revokeObjectURL(a.href);
+                setTimeout(() => URL.revokeObjectURL(a.href), 3000);
                 if (resultado.jsEmbutido) toast('Página completa exportada! HTML + CSS + JS + imagens num único arquivo.');
                 else toast('Exportado! Mas este navegador bloqueou a leitura do script.js — envie o .html JUNTO com o script.js e o style.css (ou abra a página pelo Firefox para vir tudo num só).', 'info', null, 10000);
             } catch (err) {
                 console.error(err);
-                toast('Falha ao exportar a página.', 'erro');
+                toast('Falha ao exportar a página. Verifique o console para detalhes.', 'erro');
             }
         }
 
         async function exportarComoPDF() {
+            if (typeof html2pdf === 'undefined') {
+                toast('Biblioteca html2pdf não foi carregada. Verifique sua conexão com a internet e recarregue a página.', 'erro', null, 8000);
+                return;
+            }
             const sec1Content = document.getElementById('sec1Content');
             const sec2Content = document.getElementById('sec2Content');
             const sec3Content = document.getElementById('sec3Content');
-            const sec1WasHidden = sec1Content.style.display === 'none';
-            const sec2WasHidden = sec2Content.style.display === 'none';
-            const sec3WasHidden = sec3Content.style.display === 'none';
+            const sec1WasHidden = sec1Content && sec1Content.style.display === 'none';
+            const sec2WasHidden = sec2Content && sec2Content.style.display === 'none';
+            const sec3WasHidden = sec3Content && sec3Content.style.display === 'none';
             if (sec1WasHidden) toggleSection('sec1Content', 'sec1Toggle');
             if (sec2WasHidden) toggleSection('sec2Content', 'sec2Toggle');
             if (sec3WasHidden) toggleSection('sec3Content', 'sec3Toggle');
@@ -1162,15 +1166,23 @@
             const propertiesPanel = document.getElementById('propertiesPanel');
             const searchContainer = document.getElementById('searchContainer');
             const workspace = document.getElementById('editorWorkspace');
-            globalBar.style.display = 'none'; toolbar.style.display = 'none'; propertiesPanel.style.display = 'none'; searchContainer.style.display = 'none';
-            const prevGrid = workspace.style.gridTemplateColumns;
-            workspace.style.gridTemplateColumns = '1fr';
+            if (globalBar) globalBar.style.display = 'none';
+            if (toolbar) toolbar.style.display = 'none';
+            if (propertiesPanel) propertiesPanel.style.display = 'none';
+            if (searchContainer) searchContainer.style.display = 'none';
+            const prevGrid = workspace ? workspace.style.gridTemplateColumns : '';
+            if (workspace) workspace.style.gridTemplateColumns = '1fr';
             resetarVisao(); selecionarNode(null);
+            toast('Gerando PDF — isso pode levar alguns segundos...', 'info', null, 6000);
             const options = { margin: [10, 10, 10, 10], filename: 'processo_estagio_utfpr.pdf', image: { type: 'jpeg', quality: 0.98 }, html2canvas: { scale: 2, useCORS: true, logging: false }, jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }, pagebreak: { mode: ['avoid-all', 'css', 'legacy'] } };
-            try { await html2pdf().set(options).from(document.getElementById('pageContainer')).save(); }
-            catch (err) { console.error('Erro ao gerar PDF:', err); alert('Ocorreu um erro ao gerar o PDF.'); }
+            try { await html2pdf().set(options).from(document.getElementById('pageContainer')).save(); toast('PDF exportado com sucesso!'); }
+            catch (err) { console.error('Erro ao gerar PDF:', err); toast('Ocorreu um erro ao gerar o PDF. Tente novamente.', 'erro'); }
             finally {
-                globalBar.style.display = 'flex'; toolbar.style.display = 'flex'; propertiesPanel.style.display = 'flex'; searchContainer.style.display = 'block'; workspace.style.gridTemplateColumns = prevGrid;
+                if (globalBar) globalBar.style.display = 'flex';
+                if (toolbar) toolbar.style.display = 'flex';
+                if (propertiesPanel) propertiesPanel.style.display = 'flex';
+                if (searchContainer) searchContainer.style.display = 'block';
+                if (workspace) workspace.style.gridTemplateColumns = prevGrid;
                 if (sec1WasHidden) toggleSection('sec1Content', 'sec1Toggle');
                 if (sec2WasHidden) toggleSection('sec2Content', 'sec2Toggle');
                 if (sec3WasHidden) toggleSection('sec3Content', 'sec3Toggle');
@@ -1178,12 +1190,95 @@
         }
 
         function exportarJSON() {
-            const blob = new Blob([JSON.stringify(state, null, 2)], { type: 'application/json' });
+            const dados = coletarEstadoCompleto();
+            const blob = new Blob([JSON.stringify(dados, null, 2)], { type: 'application/json' });
             const a = document.createElement('a');
             a.href = URL.createObjectURL(blob);
-            a.download = 'fluxo_estagio_utfpr.json';
+            a.download = 'fluxo_estagio_utfpr_' + new Date().toISOString().slice(0, 10) + '.json';
             a.click();
-            URL.revokeObjectURL(a.href);
+            setTimeout(() => URL.revokeObjectURL(a.href), 3000);
+        }
+
+        async function exportarComoPacote() {
+            if (typeof JSZip === 'undefined') {
+                toast('Biblioteca JSZip não foi carregada. Verifique sua conexão com a internet e recarregue a página.', 'erro', null, 8000);
+                return;
+            }
+            toast('Preparando pacote HTML + CSS + JS...', 'info', null, 4000);
+            try {
+                // Tenta ler CSS/JS direto dos arquivos (funciona em http:// e file:// no Firefox/Chrome)
+                let css = '';
+                let jsTexto = null;
+                try { const r = await fetch('style.css'); if (r.ok) css = await r.text(); } catch (e) {}
+                if (!css) css = coletarCSSLocal();
+                try { const r = await fetch('script.js'); if (r.ok) jsTexto = await r.text(); } catch (e) {}
+                if (!jsTexto) jsTexto = await lerScriptApp();
+
+                // Monta o HTML de referência (sem embutir CSS/JS inline)
+                const cloneDoc = document.documentElement.cloneNode(true);
+                cloneDoc.querySelectorAll('.toast-msg').forEach(el => el.remove());
+                cloneDoc.querySelectorAll('.modal-overlay, .lightbox-overlay, .jornada-lightbox').forEach(el => el.classList.remove('active'));
+                cloneDoc.querySelectorAll('.map-node.selected, .map-node.connecting-origin').forEach(el => el.classList.remove('selected', 'connecting-origin'));
+                const clonedBody = cloneDoc.querySelector('body');
+                if (clonedBody) clonedBody.classList.remove('editing');
+                cloneDoc.querySelectorAll('[data-editable="true"]').forEach(el => el.setAttribute('contenteditable', 'false'));
+                const propFormClone = cloneDoc.querySelector('#propForm');
+                if (propFormClone) propFormClone.style.display = 'none';
+
+                // Embute imagens no HTML
+                await embutirImagens(cloneDoc);
+
+                // Remove link CSS externo e script.js referência para reinserir como referência ao arquivo separado
+                const linkCss = cloneDoc.querySelector('link[rel="stylesheet"][href="style.css"]');
+                if (linkCss) linkCss.remove();
+                const scriptTag = cloneDoc.querySelector('script[src="script.js"]');
+                if (scriptTag) scriptTag.remove();
+
+                // Remove tags de script de CDN (html2pdf, jszip) — não são necessárias no pacote
+                cloneDoc.querySelectorAll('script[src*="cdnjs.cloudflare.com"]').forEach(el => el.remove());
+
+                // Reinserir referências aos arquivos separados
+                const head = cloneDoc.querySelector('head');
+                if (css && head) {
+                    const novoLink = document.createElement('link');
+                    novoLink.rel = 'stylesheet';
+                    novoLink.href = 'style.css';
+                    head.appendChild(novoLink);
+                }
+                if (jsTexto && clonedBody) {
+                    const novoScript = document.createElement('script');
+                    novoScript.src = 'script.js';
+                    clonedBody.appendChild(novoScript);
+                }
+
+                // Embute estado como JSON
+                const estadoAntigo = cloneDoc.querySelector('#estadoMapaExportado');
+                if (estadoAntigo) estadoAntigo.remove();
+                const tagEstado = document.createElement('script');
+                tagEstado.type = 'application/json';
+                tagEstado.id = 'estadoMapaExportado';
+                tagEstado.textContent = JSON.stringify(coletarEstadoCompleto()).replace(/<\//g, '<\\/');
+                clonedBody.appendChild(tagEstado);
+
+                const htmlLimpo = "<!DOCTYPE html>\n" + cloneDoc.outerHTML;
+
+                // Monta o ZIP
+                const zip = new JSZip();
+                zip.file('index.html', htmlLimpo);
+                if (css) zip.file('style.css', css);
+                if (jsTexto) zip.file('script.js', jsTexto);
+
+                const conteudo = await zip.generateAsync({ type: 'blob', compression: 'DEFLATE', compressionOptions: { level: 6 } });
+                const a = document.createElement('a');
+                a.href = URL.createObjectURL(conteudo);
+                a.download = 'projeto_estagio_utfpr_' + new Date().toISOString().slice(0, 10) + '.zip';
+                a.click();
+                setTimeout(() => URL.revokeObjectURL(a.href), 3000);
+                toast('Pacote exportado! Descompacte o .zip e abra o index.html no navegador.');
+            } catch (err) {
+                console.error(err);
+                toast('Falha ao exportar o pacote. Verifique o console para detalhes.', 'erro');
+            }
         }
 
         function importarJSON(e) {
@@ -1477,4 +1572,58 @@
                 viewport.addEventListener('touchend', function () { isDragging3 = false; viewport.classList.remove('dragging'); }, { passive: true });
                 document.addEventListener('keydown', function (event) { if (event.key === 'Escape') { fecharLightbox3(); fecharCard3(); } });
             });
+        })();
+
+        /* ================================================
+           NAVEGAÇÃO PROFISSIONAL (MENU / RODAPÉ)
+        ================================================ */
+        (function () {
+            const nav = document.getElementById('siteNav');
+            const toggle = document.getElementById('navToggle');
+            const menu = document.getElementById('navMenu');
+            const links = menu ? Array.from(menu.querySelectorAll('a[href^="#"]')) : [];
+
+            if (toggle && menu) {
+                toggle.addEventListener('click', () => {
+                    const aberto = menu.classList.toggle('open');
+                    toggle.classList.toggle('open', aberto);
+                    toggle.setAttribute('aria-expanded', String(aberto));
+                });
+
+                // Fecha o menu ao clicar num link (mobile) e dá scroll suave
+                menu.addEventListener('click', (e) => {
+                    const alvo = e.target.closest('a[href^="#"]');
+                    if (!alvo) return;
+                    menu.classList.remove('open');
+                    toggle.classList.remove('open');
+                    toggle.setAttribute('aria-expanded', 'false');
+                });
+            }
+
+            // Sombra na navbar ao rolar
+            if (nav) {
+                const aoRolar = () => nav.classList.toggle('scrolled', window.scrollY > 10);
+                aoRolar();
+                window.addEventListener('scroll', aoRolar, { passive: true });
+            }
+
+            // Scroll-spy: marca o link da seção visível
+            const secoes = links
+                .map(a => document.getElementById(a.dataset.secao))
+                .filter(Boolean);
+
+            if ('IntersectionObserver' in window && secoes.length) {
+                const spy = new IntersectionObserver((entradas) => {
+                    entradas.forEach(entrada => {
+                        if (!entrada.isIntersecting) return;
+                        const id = entrada.target.id;
+                        links.forEach(a => a.classList.toggle('active', a.dataset.secao === id));
+                    });
+                }, { rootMargin: '-45% 0px -50% 0px', threshold: 0 });
+                secoes.forEach(s => spy.observe(s));
+            }
+
+            // Ano do rodapé
+            const ano = document.getElementById('footerAno');
+            if (ano) ano.textContent = String(new Date().getFullYear());
         })();

@@ -5,16 +5,58 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Atores do Processo e Mapeamento Interativo - UTFPR</title>
+    <meta name="description" content="Portfólio institucional UTFPR: atores, fluxos, documentos e mapeamento interativo da gestão de estágios internos e externos.">
+    <link rel="icon" type="image/png" href="logo_utfpr.png">
 
     <link rel="stylesheet" href="style.css">
     <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
 
 </head>
 
 <body>
+    <span id="topo"></span>
+
+    <!-- MENU DE NAVEGAÇÃO -->
+    <nav class="site-nav" id="siteNav" aria-label="Navegação principal">
+        <div class="nav-container">
+            <a href="#topo" class="nav-brand" aria-label="Voltar ao início">
+                <img src="logo_utfpr.png" alt="Logo UTFPR" class="nav-logo">
+                <span class="nav-brand-text">
+                    <strong class="nav-brand-title">UTFPR</strong>
+                    <small class="nav-brand-sub">Portfólio de Processos de Estágio</small>
+                </span>
+            </a>
+            <button class="nav-toggle" id="navToggle" type="button" aria-label="Abrir ou fechar menu" aria-expanded="false" aria-controls="navMenu">
+                <span></span><span></span><span></span>
+            </button>
+            <ul class="nav-menu" id="navMenu">
+                <li><a href="#cadeiaValueBox" data-secao="cadeiaValueBox">Cadeia de Valor</a></li>
+                <li><a href="#contextBox" data-secao="contextBox">Contextualização</a></li>
+                <li><a href="#sec3Box" data-secao="sec3Box">Fluxo do Estágio</a></li>
+                <li><a href="#sec1Box" data-secao="sec1Box">Atores</a></li>
+                <li><a href="#sec1bBox" data-secao="sec1bBox">Documentos</a></li>
+                <li><a href="#sec2Box" data-secao="sec2Box">Mapa Interativo</a></li>
+            </ul>
+        </div>
+    </nav>
+
     <div class="page-container" id="pageContainer">
+        <!-- HERO INSTITUCIONAL -->
+        <header class="page-hero">
+            <div class="hero-content">
+                <p class="hero-eyebrow">Universidade Tecnológica Federal do Paraná</p>
+                <h1 class="hero-title">Portfólio de Processos da Gestão de Estágio</h1>
+                <p class="hero-subtitle">Visão integrada dos atores, fluxos, documentos e mapeamento interativo do estágio externo e interno na UTFPR.</p>
+                <div class="hero-actions">
+                    <a href="#cadeiaValueBox" class="btn-custom btn-custom-success">Explorar Conteúdo</a>
+                    <a href="#sec2Box" class="btn-custom btn-custom-outline hero-btn-outline">Ver Mapa Interativo</a>
+                </div>
+            </div>
+        </header>
+
         <!-- BARRA SUPERIOR -->
         <div class="global-actions-bar" id="globalActionsBar">
             <span class="edit-mode-indicator" id="editIndicator" aria-live="polite">✏️ Modo Edição Ativo</span>
@@ -28,6 +70,8 @@
                 <div class="dropdown-menu dropdown-menu-right dropdown-menu-export" id="exportDropdownMenu">
                     <a class="dropdown-item" href="#" onclick="exportarComoHTML(); closeExportDropdown(); return false;">🌐 Página completa
                         (HTML+CSS+JS+imagens)</a>
+                    <a class="dropdown-item" href="#" onclick="exportarComoPacote(); closeExportDropdown(); return false;">📦 Pacote
+                        (HTML + CSS + JS separados)</a>
                     <a class="dropdown-item" href="#" onclick="exportarComoPDF(); closeExportDropdown(); return false;">📄 PDF</a>
                     <a class="dropdown-item" href="#" onclick="exportarJSON(); closeExportDropdown(); return false;">📋 JSON</a>
                 </div>
@@ -657,6 +701,47 @@
             <img class="jornada-lightbox-img" src="" alt="Jornada do Ator ampliada">
         </div>
     </div>
+
+    <!-- RODAPE -->
+    <footer class="site-footer">
+        <div class="footer-top">
+            <div class="footer-col footer-brand-col">
+                <img src="logo_utfpr.png" alt="UTFPR" class="footer-logo">
+                <p class="footer-about">Universidade Tecnológica Federal do Paraná — Reitoria. Portfólio institucional dos processos que envolvem a gestão de estágios internos e externos.</p>
+            </div>
+            <div class="footer-col">
+                <h3 class="footer-heading">Navegação</h3>
+                <ul class="footer-list">
+                    <li><a href="#cadeiaValueBox">Cadeia de Valor</a></li>
+                    <li><a href="#contextBox">Contextualização</a></li>
+                    <li><a href="#sec3Box">Fluxo do Estágio</a></li>
+                    <li><a href="#sec1Box">Atores e Jornada</a></li>
+                    <li><a href="#sec1bBox">Documentos do Estágio</a></li>
+                    <li><a href="#sec2Box">Mapa Interativo</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h3 class="footer-heading">Links Úteis</h3>
+                <ul class="footer-list">
+                    <li><a href="https://www.utfpr.edu.br" target="_blank" rel="noopener">Portal UTFPR</a></li>
+                    <li><a href="https://www.guarapuava.utfpr.edu.br" target="_blank" rel="noopener">Campus Guarapuava</a></li>
+                    <li><a href="https://academico.utfpr.edu.br" target="_blank" rel="noopener">Portal Acadêmico</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h3 class="footer-heading">Contato</h3>
+                <ul class="footer-list footer-contact">
+                    <li>📍 Reitoria — UTFPR</li>
+                    <li>✉️ <a href="https://www.utfpr.edu.br/" target="_blank" rel="noopener">utfpr.edu.br</a></li>
+                    <li>📞 <a href="https://www.guarapuava.utfpr.edu.br" target="_blank" rel="noopener">Campus Guarapuava</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <span>&copy; <span id="footerAno">2025</span> UTFPR — Portfólio de Processos de Estágio</span>
+            <span class="footer-credits">Desenvolvido pela UTFPR — Reitoria</span>
+        </div>
+    </footer>
 
     <div id="toastContainer"></div>
 
