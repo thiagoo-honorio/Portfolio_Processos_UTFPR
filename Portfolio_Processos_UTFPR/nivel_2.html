@@ -282,6 +282,89 @@ body {
     z-index: 10;
 }
 
+/* --- MODAL DE DETALHES --- */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+    z-index: 200;
+}
+
+.modal-overlay.active {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.modal-card {
+    background: #ffffff;
+    width: 90%;
+    max-width: 560px;
+    border-radius: 12px;
+    padding: 25px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    transform: translateY(20px);
+    transition: transform 0.3s ease;
+}
+
+.modal-overlay.active .modal-card {
+    transform: translateY(0);
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 2px solid var(--bg-light);
+    padding-bottom: 12px;
+    margin-bottom: 15px;
+}
+
+.modal-header h3 {
+    font-size: 18px;
+    color: var(--text-color);
+}
+
+.modal-close {
+    background: none;
+    border: none;
+    font-size: 26px;
+    line-height: 1;
+    cursor: pointer;
+    color: #888;
+}
+
+.modal-header h3:hover,
+.modal-close:hover {
+    color: var(--black-accent);
+}
+
+.modal-body ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.modal-body li {
+    background: var(--bg-finalistico);
+    border-left: 4px solid var(--yellow-soft);
+    padding: 10px 14px;
+    border-radius: 6px;
+    font-size: 14px;
+    color: var(--text-color);
+}
+
 /* Responsividade */
 @media (max-width: 1200px) {
     .header {
@@ -357,28 +440,28 @@ body {
                 <div class="macro-mae" data-link="nivel_3_ensino.html">ENSINO</div>
                 <div class="macro-conteudo">
                     <div class="chevrons-sequencia">
-                        <div class="etapa-chevron" data-link="ensino-projeto.html">
+                        <div class="etapa-chevron" data-link="ensino-projeto.html" data-title="Projeto de Curso" data-details="PPC|Credenciamento|Parcerias|Oferta|Avaliação">
                             <strong>Projeto de Curso</strong>
                             <span>(PPC, Credenciamento, Parcerias, Oferta, Avaliação)</span>
                         </div>
-                        <div class="etapa-chevron" data-link="ensino-ingresso.html">
+                        <div class="etapa-chevron" data-link="ensino-ingresso.html" data-title="Ingresso" data-details="Seleção|Registro">
                             <strong>Ingresso</strong>
                             <span>(Seleção, Registro)</span>
                         </div>
-                        <div class="etapa-chevron" data-link="ensino-vida.html">
+                        <div class="etapa-chevron" data-link="ensino-vida.html" data-title="Vida Acadêmica" data-details="Matrícula|Acompanhamento|Avaliação|Estágio|Monitoria|Registro Acadêmico">
                             <strong>Vida Acadêmica</strong>
                             <span>(Matrícula, Acompanhamento, Avaliação, Estágio, Monitoria, Registro Acadêmico)</span>
                         </div>
-                        <div class="etapa-chevron" data-link="ensino-conclusao.html">
+                        <div class="etapa-chevron" data-link="ensino-conclusao.html" data-title="Conclusão" data-details="Formatura|Certificação|Titulação|Diplomação">
                             <strong>Conclusão</strong>
                             <span>(Formatura, Certificação, Titulação, Diplomação)</span>
                         </div>
-                        <div class="etapa-chevron" data-link="ensino-egresso.html">
+                        <div class="etapa-chevron" data-link="ensino-egresso.html" data-title="Egresso" data-details="Acompanhamento|Perfil|Networking|Interação">
                             <strong>Egresso</strong>
                             <span>(Acompanhamento, Perfil, Networking, Interação)</span>
                         </div>
                     </div>
-                    <div class="barra-sustentacao" data-link="ensino-sustentacao.html">
+                    <div class="barra-sustentacao" data-link="ensino-sustentacao.html" data-title="Monitoramento e Sustentação do ensino" data-details="Tecnologias Educacionais|Infraestrutura|Atratividade e Permanência|Fomentos|Horário|Calendário|Matrícula|Atividades Docentes|Indicadores">
                         <strong>Monitoramento e Sustentação do ensino</strong>
                         <span>(Tecnologias Educacionais, Infraestrutura, Atratividade e Permanência, Fomentos, Horário, Calendário, Matrícula, Atividades Docentes, Indicadores)</span>
                     </div>
@@ -390,24 +473,24 @@ body {
                 <div class="macro-mae" data-link="nivel_3_pesquisa.html">PESQUISA</div>
                 <div class="macro-conteudo">
                     <div class="chevrons-sequencia" style="grid-template-columns: repeat(4, 1fr);">
-                        <div class="etapa-chevron" data-link="pesquisa-inovacao.html">
+                        <div class="etapa-chevron" data-link="pesquisa-inovacao.html" data-title="Pesquisa e Inovação" data-details="Captação|Editais|Fomento|Alocação de Recursos">
                             <strong>Pesquisa e Inovação</strong>
                             <span>(Captação, Editais, Fomento, Alocação de Recursos)</span>
                         </div>
-                        <div class="etapa-chevron" data-link="pesquisa-projeto.html">
+                        <div class="etapa-chevron" data-link="pesquisa-projeto.html" data-title="Projeto de Pesquisa" data-details="Planejamento|Desenvolvimento e Divulgação">
                             <strong>Projeto de Pesquisa</strong>
                             <span>(Planejamento, Desenvolvimento e Divulgação)</span>
                         </div>
-                        <div class="etapa-chevron" data-link="pesquisa-bolsas.html">
+                        <div class="etapa-chevron" data-link="pesquisa-bolsas.html" data-title="Bolsas de Pesquisa" data-details="Captação|Distribuição|Monitoramento">
                             <strong>Bolsas de Pesquisa</strong>
                             <span>(Captação, Distribuição, Monitoramento)</span>
                         </div>
-                        <div class="etapa-chevron" data-link="pesquisa-publicacoes.html">
+                        <div class="etapa-chevron" data-link="pesquisa-publicacoes.html" data-title="Publicações Científicas" data-details="Monitoramento|Avaliação|Publicação">
                             <strong>Publicações Científicas</strong>
                             <span>(Monitoramento, Avaliação, Publicação)</span>
                         </div>
                     </div>
-                    <div class="barra-sustentacao" data-link="pesquisa-sustentacao.html">
+                    <div class="barra-sustentacao" data-link="pesquisa-sustentacao.html" data-title="Projetos & Fomentos" data-details="Gestão de Projetos de Pesquisa|Bolsas e Fomentos|Parcerias|Indicadores">
                         <strong>Projetos & Fomentos</strong>
                         <span>(Gestão de Projetos de Pesquisa, Bolsas e Fomentos, Parcerias, Indicadores)</span>
                     </div>
@@ -419,28 +502,28 @@ body {
                 <div class="macro-mae" data-link="nivel_3_extensao.html">EXTENSÃO</div>
                 <div class="macro-conteudo">
                     <div class="chevrons-sequencia">
-                        <div class="etapa-chevron" data-link="extensao-acoes.html">
+                        <div class="etapa-chevron" data-link="extensao-acoes.html" data-title="Ações de Extensão, Inovação e Parcerias" data-details="Captação|Editais|Fomento|Execução">
                             <strong>Ações de Extensão, Inovação e Parcerias</strong>
                             <span>(Captação, Editais, Fomento, Execução)</span>
                         </div>
-                        <div class="etapa-chevron" data-link="extensao-bolsas.html">
+                        <div class="etapa-chevron" data-link="extensao-bolsas.html" data-title="Bolsas de extensão" data-details="Captação|Distribuição|Gestão">
                             <strong>Bolsas de extensão</strong>
                             <span>(Captação, Distribuição, gestão)</span>
                         </div>
-                        <div class="etapa-chevron" data-link="extensao-eventos.html">
+                        <div class="etapa-chevron" data-link="extensao-eventos.html" data-title="Eventos" data-details="Promoção|Divulgação">
                             <strong>Eventos</strong>
                             <span>(Promoção, Divulgação)</span>
                         </div>
-                        <div class="etapa-chevron" data-link="extensao-cursos.html">
+                        <div class="etapa-chevron" data-link="extensao-cursos.html" data-title="Cursos" data-details="Projeto|Inscrição|Participação|Certificação">
                             <strong>Cursos</strong>
                             <span>(Projeto, inscrição, participação, certificação)</span>
                         </div>
-                        <div class="etapa-chevron" data-link="extensao-programas.html">
+                        <div class="etapa-chevron" data-link="extensao-programas.html" data-title="Programas e projetos" data-details="Execução|Monitoramento|Avaliação|Divulgação">
                             <strong>Programas e projetos</strong>
                             <span>(Execução, Monitoramento, Avaliação, Divulgação)</span>
                         </div>
                     </div>
-                    <div class="barra-sustentacao" data-link="extensao-sustentacao.html">
+                    <div class="barra-sustentacao" data-link="extensao-sustentacao.html" data-title="Projetos, Programas e Ações de Extensão" data-details="Gestão da Extensão|Indicadores|Fomento e Incentivos|Parcerias e Convênios|Produção Bibliográfica|Inovação e Propriedade Intelectual">
                         <strong>Projetos, Programas e Ações de Extensão</strong>
                         <span>(Gestão da Extensão, Indicadores, Fomento e Incentivos, Parcerias e Convênios, Produção Bibliográfica, Inovação e Propriedade Intelectual)</span>
                     </div>
@@ -458,32 +541,73 @@ body {
 
 </div>
 
+<!-- MODAL DE DETALHES -->
+<div class="modal-overlay" id="modal">
+    <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+        <div class="modal-header">
+            <h3 id="modal-title">Título da Etapa</h3>
+            <button class="modal-close" id="modal-close" aria-label="Fechar">&times;</button>
+        </div>
+        <div class="modal-body">
+            <ul id="modal-list"></ul>
+        </div>
+    </div>
+</div>
+
 <!-- SCRIPT DE INTERAÇÃO JAVASCRIPT -->
 <script>
 document.addEventListener('DOMContentLoaded', () => {
-    // Seleciona os elementos interativos
-    const interactiveElements = document.querySelectorAll('.macro-mae, .etapa-chevron, .barra-sustentacao, .sociedade-seta-container');
+    // Modal de detalhes
+    const modal = document.getElementById('modal');
+    const modalTitle = document.getElementById('modal-title');
+    const modalList = document.getElementById('modal-list');
+    const closeModal = document.getElementById('modal-close');
 
-    interactiveElements.forEach(element => {
-        // Evento de entrada do cursor: Adiciona o destaque visual
-        element.addEventListener('mouseenter', () => {
-            element.classList.add('active-hover');
+    function abrirModal(title, details) {
+        modalTitle.textContent = title;
+        modalList.innerHTML = '';
+        details.split('|').forEach(item => {
+            const li = document.createElement('li');
+            li.textContent = item.trim();
+            modalList.appendChild(li);
         });
+        modal.classList.add('active');
+    }
 
-        // Evento de saída do cursor: Remove o destaque
-        element.addEventListener('mouseleave', () => {
-            element.classList.remove('active-hover');
+    function fecharModal() {
+        modal.classList.remove('active');
+    }
+
+    closeModal.addEventListener('click', fecharModal);
+    modal.addEventListener('click', (e) => {
+        if (e.target === modal) fecharModal();
+    });
+
+    // Etapas e barras de sustentação: abrem card de detalhes (sem navegar p/ link inexistente)
+    document.querySelectorAll('.etapa-chevron, .barra-sustentacao').forEach(element => {
+        element.addEventListener('mouseenter', () => element.classList.add('active-hover'));
+        element.addEventListener('mouseleave', () => element.classList.remove('active-hover'));
+        element.addEventListener('click', () => {
+            const title = element.getAttribute('data-title');
+            const details = element.getAttribute('data-details');
+            if (title && details) abrirModal(title, details);
         });
+    });
 
-        // Evento de clique preparado para navegação futura
+    // Macroprocessos mãe: mantêm navegação para o nível 3 (links existentes)
+    document.querySelectorAll('.macro-mae').forEach(element => {
+        element.addEventListener('mouseenter', () => element.classList.add('active-hover'));
+        element.addEventListener('mouseleave', () => element.classList.remove('active-hover'));
         element.addEventListener('click', () => {
             const targetPage = element.getAttribute('data-link');
-            if (targetPage) {
-                console.log(`Navegando para: ${targetPage}`);
-                // Para ativar o redirecionamento no futuro, remova as duas barras (//) da linha abaixo:
-                window.location.href = targetPage;
-            }
+            if (targetPage) window.location.href = targetPage;
         });
+    });
+
+    // Painel "Resultados para a Sociedade": apenas destaque visual
+    document.querySelectorAll('.sociedade-seta-container').forEach(element => {
+        element.addEventListener('mouseenter', () => element.classList.add('active-hover'));
+        element.addEventListener('mouseleave', () => element.classList.remove('active-hover'));
     });
 });
 </script>
