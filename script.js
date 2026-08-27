@@ -1118,14 +1118,15 @@
             // Embute as imagens locais no próprio arquivo
             await embutirImagens(cloneDoc);
 
-            // CSS: embute o style.css lido das regras carregadas e remove o link externo
+            // CSS: embute o style.css lido das regras carregadas e remove o link externo.
+            // Se a leitura falhar (SecurityError no Chrome via file://), mantém o <link>
+            // original apontando para style.css para não deixar a página sem nenhuma referência.
             const css = coletarCSSLocal();
             const linkCss = cloneDoc.querySelector('link[rel="stylesheet"][href="style.css"]');
-            if (linkCss) linkCss.remove();
-            if (css) {
+            if (css && linkCss) {
                 const styleEl = document.createElement('style');
                 styleEl.textContent = css;
-                cloneDoc.querySelector('head').appendChild(styleEl);
+                linkCss.replaceWith(styleEl);
             }
 
             // JS: tenta embutir o script.js; se o navegador bloquear a leitura, mantém a referência externa
@@ -1217,7 +1218,7 @@
             }
         }
 
-function exportarJSON() {
+        function exportarJSON() {
             const dados = coletarEstadoCompleto(true);
             const blob = new Blob([JSON.stringify(dados, null, 2)], { type: 'application/json' });
             const a = document.createElement('a');
@@ -1259,27 +1260,26 @@ function exportarJSON() {
                 // Embute imagens no HTML
                 await embutirImagens(cloneDoc);
 
-                // Remove link CSS externo e script.js referência para reinserir como referência ao arquivo separado
-                const linkCss = cloneDoc.querySelector('link[rel="stylesheet"][href="style.css"]');
-                if (linkCss) linkCss.remove();
-                const scriptTag = cloneDoc.querySelector('script[src="script.js"]');
-                if (scriptTag) scriptTag.remove();
-
                 // Remove tags de script de CDN (html2pdf, jszip) — não são necessárias no pacote
                 cloneDoc.querySelectorAll('script[src*="cdnjs.cloudflare.com"]').forEach(el => el.remove());
 
-                // Reinserir referências aos arquivos separados
-                const head = cloneDoc.querySelector('head');
-                if (css && head) {
+                // Reinserir referências aos arquivos separados.
+                // As referências originais só são removidas quando o respectivo arquivo
+                // pôde ser lido (e, portanto, incluído no ZIP). Se a leitura falhar
+                // (Chrome em file://), mantém o <link>/<script> original apontando para
+                // o arquivo, para o pacote continuar utilizável.
+                const linkCss = cloneDoc.querySelector('link[rel="stylesheet"][href="style.css"]');
+                if (css && linkCss) {
                     const novoLink = document.createElement('link');
                     novoLink.rel = 'stylesheet';
                     novoLink.href = 'style.css';
-                    head.appendChild(novoLink);
+                    linkCss.replaceWith(novoLink);
                 }
-                if (jsTexto && clonedBody) {
+                const scriptTag = cloneDoc.querySelector('script[src="script.js"]');
+                if (jsTexto && scriptTag && clonedBody) {
                     const novoScript = document.createElement('script');
                     novoScript.src = 'script.js';
-                    clonedBody.appendChild(novoScript);
+                    scriptTag.replaceWith(novoScript);
                 }
 
                 // Embute estado como JSON
@@ -1305,7 +1305,14 @@ function exportarJSON() {
                 a.download = 'projeto_estagio_utfpr_' + new Date().toISOString().slice(0, 10) + '.zip';
                 a.click();
                 setTimeout(() => URL.revokeObjectURL(a.href), 3000);
-                toast('Pacote exportado! Descompacte o .zip e abra o index.html no navegador.');
+                const faltando = [];
+                if (!css) faltando.push('style.css');
+                if (!jsTexto) faltando.push('script.js');
+                if (faltando.length) {
+                    toast('Pacote exportado, mas ' + faltando.join(' e ') + ' NÃO pode(m) ser lido(s) neste navegador (Chrome via file:// bloqueia). Adicione-o(s) manualmente ao .zip ou abra a página pelo Firefox antes de exportar.', 'info', null, 12000);
+                } else {
+                    toast('Pacote exportado! Descompacte o .zip e abra o index.html no navegador.');
+                }
             } catch (err) {
                 console.error(err);
                 toast('Falha ao exportar o pacote. Verifique o console para detalhes.', 'erro');

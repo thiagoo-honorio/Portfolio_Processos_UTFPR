@@ -374,6 +374,31 @@
                 <div class="lightbox-hint">💡 Use o <b>Scroll do Mouse</b> para aproximar/afastar • <b>Clique e
                         Arraste</b> para navegar pela imagem • <b>Duplo Clique</b> para alternar zoom.</div>
             </div>
+
+            <!-- MODAL DE DETALHES DA ETAPA -->
+            <div class="modal-overlay" id="modalCard3" onclick="fecharCardFora3(event)">
+                <div class="info-card">
+                    <div class="card-header-bar" id="cardHeaderBar3"></div>
+                    <div class="card-body-content">
+                        <div class="card-header-title">
+                            <span class="card-badge" id="cardBadge3">Detalhes da Etapa</span>
+                            <button class="close-btn" onclick="fecharCard3()" aria-label="Fechar detalhes">&times;</button>
+                        </div>
+                        <h3 class="card-main-title" id="cardTitle3"></h3>
+                        <p class="card-subtitle">Principais itens desta etapa</p>
+                        <div class="tags-container" id="cardTags3"></div>
+                        <div class="modal-diagram-preview-box" id="diagramImgContainer3" style="display:none;"
+                            onclick="abrirImagemCompleta3()" title="Clique para ampliar o mapeamento">
+                            <img class="modal-diagram-preview" id="cardDiagramImg3" src="" alt="Mapeamento da etapa"
+                                onerror="tratarErroImagem3(this)">
+                            <span class="zoom-hover-badge">🔍 Ampliar</span>
+                        </div>
+                        <div class="card-footer">
+                            <button class="btn-action" onclick="abrirImagemCompleta3()">Ver mapeamento completo</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
 
         <!-- SEÇÃO 1: ATORES -->
@@ -715,7 +740,7 @@
                 <h3 class="footer-heading">Links Úteis</h3>
                 <ul class="footer-list">
                     <li><a href="https://www.utfpr.edu.br" target="_blank" rel="noopener">Portal UTFPR</a></li>
-                    <li><a href="https://www.guarapuava.utfpr.edu.br" target="_blank" rel="noopener">Campus Guarapuava</a></li>
+                    <li><a href="https://www.utfpr.edu.br/" target="_blank" rel="noopener">UTFPR</a></li>
                     <li><a href="https://academico.utfpr.edu.br" target="_blank" rel="noopener">Portal Acadêmico</a></li>
                 </ul>
             </div>
@@ -723,14 +748,14 @@
                 <h3 class="footer-heading">Contato</h3>
                 <ul class="footer-list footer-contact">
                     <li>📍 Reitoria — UTFPR</li>
-                    <li>✉️ <a href="https://www.utfpr.edu.br/" target="_blank" rel="noopener">utfpr.edu.br</a></li>
-                    <li>📞 <a href="https://www.guarapuava.utfpr.edu.br" target="_blank" rel="noopener">Campus Guarapuava</a></li>
+                    <li>✉️ <a href="https://www.utfpr.edu.br/estrutura/reitoria" target="_blank" rel="noopener">utfpr.edu.br</a></li>
+                    <li>📞 <a href="https://www.utfpr.edu.br/estrutura/reitoria" target="_blank" rel="noopener">Reitoria</a></li>
                 </ul>
             </div>
         </div>
         <div class="footer-bottom">
             <span>&copy; <span id="footerAno">2025</span> UTFPR — Portfólio de Processos de Estágio</span>
-            <span class="footer-credits">Desenvolvido pela UTFPR — Reitoria</span>
+            <span class="footer-credits">Desenvolvido pelo Escritório De Processos (EPROC) — Reitoria</span>
         </div>
     </footer>
 
