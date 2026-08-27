@@ -40,28 +40,32 @@
                 <li><a href="#sec1bBox" data-secao="sec1bBox">Documentos</a></li>
                 <li><a href="#sec2Box" data-secao="sec2Box">Mapa Interativo</a></li>
             </ul>
-        </div>
-        <!-- BARRA DE AÇÕES (Editar, Salvar, Restaurar, Exportar) -->
-        <div class="global-actions-bar" id="globalActionsBar">
-            <span class="edit-mode-indicator" id="editIndicator" aria-live="polite">✏️ Modo Edição Ativo</span>
-            <button class="btn-custom btn-custom-outline" id="btnToggleEdit" onclick="toggleEditMode()" aria-label="Alternar modo de edição">✏️
-                Editar</button>
-            <button class="btn-custom btn-custom-outline" onclick="salvarEstadoLocal()" aria-label="Salvar trabalho no navegador">💾 Salvar</button>
-            <button class="btn-custom btn-custom-outline" onclick="restaurarEstadoLocal()" aria-label="Restaurar último trabalho salvo">🔄 Restaurar</button>
-            <div class="dropdown" id="exportDropdown">
-                <button class="btn-custom btn-custom-outline" type="button" id="dropdownExport"
-                    onclick="toggleExportDropdown()" aria-haspopup="true" aria-expanded="false">📤 Exportar</button>
-                <div class="dropdown-menu dropdown-menu-right dropdown-menu-export" id="exportDropdownMenu">
-                    <a class="dropdown-item" href="#" onclick="exportarComoHTML(); closeExportDropdown(); return false;">🌐 Página completa
-                        (HTML+CSS+JS+imagens)</a>
-                    <a class="dropdown-item" href="#" onclick="exportarComoPacote(); closeExportDropdown(); return false;">📦 Pacote
-                        (HTML + CSS + JS separados)</a>
-                    <a class="dropdown-item" href="#" onclick="exportarComoPDF(); closeExportDropdown(); return false;">📄 PDF</a>
-                    <a class="dropdown-item" href="#" onclick="exportarJSON(); closeExportDropdown(); return false;">📋 JSON</a>
-                </div>
+            <div class="nav-actions">
+                <button class="btn-custom btn-custom-outline" id="btnToggleEdit" onclick="toggleEditMode()" aria-label="Alternar modo de edição">Editar</button>
             </div>
         </div>
     </nav>
+
+    <!-- PILHA DE AÇÕES FLUTUANTE (Editar, Salvar, Restaurar, Exportar) — visível no modo edição -->
+    <aside class="action-stack" id="globalActionsBar" aria-label="Ações de edição">
+        <span class="edit-mode-indicator" id="editIndicator" aria-live="polite">Modo Edição Ativo</span>
+        <button class="btn-custom btn-custom-outline btn-edit-current" onclick="toggleEditMode()" aria-label="Sair do modo de edição">
+            Sair da Edição</button>
+        <button class="btn-custom btn-custom-outline" onclick="salvarEstadoLocal()" aria-label="Salvar trabalho no navegador">Salvar</button>
+        <button class="btn-custom btn-custom-outline" onclick="restaurarEstadoLocal()" aria-label="Restaurar último trabalho salvo">Restaurar</button>
+        <div class="dropdown dropdown-stack" id="exportDropdown">
+            <button class="btn-custom btn-custom-outline" type="button" id="dropdownExport"
+                onclick="toggleExportDropdown()" aria-haspopup="true" aria-expanded="false">Exportar</button>
+            <div class="dropdown-menu dropdown-menu-right dropdown-menu-export" id="exportDropdownMenu">
+                <a class="dropdown-item" href="#" onclick="exportarComoHTML(); closeExportDropdown(); return false;">Página completa
+                    (HTML+CSS+JS+imagens)</a>
+                <a class="dropdown-item" href="#" onclick="exportarComoPacote(); closeExportDropdown(); return false;">Pacote
+                    (HTML + CSS + JS separados)</a>
+                <a class="dropdown-item" href="#" onclick="exportarComoPDF(); closeExportDropdown(); return false;">PDF</a>
+                <a class="dropdown-item" href="#" onclick="exportarJSON(); closeExportDropdown(); return false;">JSON</a>
+            </div>
+        </div>
+    </aside>
 
     <div class="page-container" id="pageContainer">
         <!-- HERO INSTITUCIONAL -->
@@ -94,13 +98,28 @@
                     <div class="cadeia-row" data-level="1">
                         <div class="cadeia-step bg-blue-mid">
                             <span class="cadeia-step-titulo" data-editable="true">Estágio</span>
-                            <span class="cadeia-step-sub" data-editable="true">(Realização)</span>
+                            <span class="cadeia-step-sub" data-editable="true">(Realização, Validação)</span>
+                        </div>
+                        <div class="cadeia-desc" data-editable="true" data-field="cadeiaEstagio">
+                            # Explicação do contexto do estágio e tipos #
+                        </div>
+                    </div>
+                    <div class="cadeia-row" data-level="2">
+                        <div class="cadeia-step bg-blue-mid">
+                            <span class="cadeia-step-titulo" data-editable="true">Validação</span>
+                            <span class="cadeia-step-sub" data-editable="true">(Atividade Profissional, Bolsista ou Voluntário)</span>
+                        </div>
+                        <div class="cadeia-desc" data-editable="true" data-field="cadeiaValidacao">
+                            # Link para BC #
                         </div>
                     </div>
                     <div class="cadeia-row" data-level="2">
                         <div class="cadeia-step bg-blue-mid">
                             <span class="cadeia-step-titulo" data-editable="true">Realização</span>
                             <span class="cadeia-step-sub" data-editable="true">(Disponibilização, Seleção, Contratação, Vigência, Encerramento)</span>
+                        </div>
+                        <div class="cadeia-desc" data-editable="true" data-field="cadeiaRealizacao">
+                            # Texto explicativo #
                         </div>
                     </div>
                     <div class="cadeia-row" data-level="2">

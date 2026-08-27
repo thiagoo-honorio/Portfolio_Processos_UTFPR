@@ -59,11 +59,11 @@
 
             if (editMode) {
                 btn.classList.add('btn-custom-success');
-                btn.innerText = '✅ Concluir Edição';
+                btn.innerText = 'Concluir Edição';
                 indicator.classList.add('active');
             } else {
                 btn.classList.remove('btn-custom-success');
-                btn.innerText = '✏️ Editar';
+                btn.innerText = 'Editar';
                 indicator.classList.remove('active');
             }
             aplicarEstadoEditavel();
@@ -569,15 +569,6 @@
             if (!content || !btn) return;
             if (content.style.display === 'none') { content.style.display = 'block'; btn.innerText = '[−] Ocultar'; }
             else { content.style.display = 'none'; btn.innerText = '[+] Expandir'; }
-        }
-
-        function navegarParaSecao(sectionId) {
-            const alvo = document.getElementById(sectionId);
-            if (!alvo) return;
-            const conteudoMap = { sec1Box: 'sec1Content', sec2Box: 'sec2Content', sec3Box: 'sec3Content' };
-            const conteudo = document.getElementById(conteudoMap[sectionId]);
-            if (conteudo && conteudo.style.display === 'none') toggleSection(conteudoMap[sectionId], sectionId.replace('Box', 'Toggle'));
-            alvo.scrollIntoView({ behavior: 'smooth', block: 'start' });
         }
 
         function abrirImgCadeia(src) {
@@ -1314,33 +1305,6 @@
                 console.error(err);
                 toast('Falha ao exportar o pacote. Verifique o console para detalhes.', 'erro');
             }
-        }
-
-        function importarJSON(e) {
-            const file = e.target.files && e.target.files[0];
-            e.target.value = '';
-            if (!file) return;
-            const fileReader = new FileReader();
-            fileReader.onload = function (event) {
-                try {
-                    const parsed = JSON.parse(event.target.result);
-                    const mapa = parsed && parsed.map ? parsed.map : parsed;
-                    if (!mapa || !Array.isArray(mapa.nodes) || !Array.isArray(mapa.conexoes)) {
-                        alert('Arquivo inválido: o JSON deve conter as listas "nodes" e "conexoes".');
-                        return;
-                    }
-                    state = mapa;
-                    nodeSelecionadoId = null;
-                    salvarHistorico();
-                    renderizarMapa();
-                    selecionarNode(null);
-
-                    alert('JSON importado com sucesso!');
-                } catch (err) {
-                    alert('Erro ao ler o arquivo JSON: ' + err.message);
-                }
-            };
-            fileReader.readAsText(file);
         }
 
         function rgbToHex(rgb) {

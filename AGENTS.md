@@ -9,9 +9,7 @@
 - `teste.html` — página principal (navbar, hero, atores, cadeia de valor, fluxo, mapa interativo, rodapé).
 - `style.css` — estilos (não usa `url()` para imagens; `box-sizing` global; scroll suave).
 - `script.js` — toda a lógica (mapa, atores, etapas, exportações, navegação).
-- `javascript.js` — legado morto (14 linhas, referência a elemento inexistente); **não** é carregado por `teste.html`; candidato a remoção.
-- `Portfolio_Processos_UTFPR/` — páginas nivel_1…nivel_3 (repositório isolado embutido; `.git` interno foi removido).
-- `processos_estagio_utfpr_v2.html` — versão antiga/referência.
+- `Portfolio_Processos_UTFPR/` — páginas nivel_1…nivel_3 (repositório isolado embutido; `.git` interno foi removido). Contém as cópias locais de `logo_utfpr.png` e `logo_escritorio_processos.png`, referenciadas localmente por ele.
 
 ## Imagens
 - As imagens são referenciadas por **links do CDN jsDelivr** a partir do GitHub (repo público `thiagoo-honorio/Portfolio_Processos_UTFPR`, branch `master`):
