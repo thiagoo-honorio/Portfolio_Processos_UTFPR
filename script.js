@@ -178,6 +178,13 @@
                 if (btn.nextSibling) row.insertBefore(preview, btn.nextSibling);
                 else row.appendChild(preview);
             }
+
+            // Reflete no botão se a linha já veio expandida (ex.: estado exportado)
+            if (row.classList.contains('expandido')) {
+                const span = btn.querySelector('span');
+                if (span) span.innerText = '(−)';
+                btn.setAttribute('aria-expanded', 'true');
+            }
         }
 
         function alternarExpansaoAtor(row, forcarEstado) {
@@ -192,6 +199,17 @@
 
         function instalarTogglesAtores() {
             document.querySelectorAll('#actorsList .actor-row').forEach(instalarToggleAtor);
+        }
+
+        // Expande todos os atores (usado nas exportações para incluir o texto completo)
+        function expandirTodosAtores(escopo) {
+            escopo.querySelectorAll('#actorsList .actor-row').forEach(row => {
+                row.classList.add('expandido');
+                const span = row.querySelector('.ator-toggle-btn span');
+                if (span) span.innerText = '(−)';
+                const btn = row.querySelector('.ator-toggle-btn');
+                if (btn) btn.setAttribute('aria-expanded', 'true');
+            });
         }
 
         function focarAtorNaLista(actorKey) {
@@ -687,7 +705,7 @@
             });
         }
 
-        function capturarAtores() {
+        function capturarAtores(forcarExpandido) {
             return Array.from(document.querySelectorAll('#actorsList .actor-row')).map(row => {
                 const card = row.querySelector('.actor-card');
                 const descDiv = row.querySelector('.actor-description > div');
@@ -698,15 +716,17 @@
                     cardBorder: cs ? rgbToHex(cs.borderColor) : '#0070c0',
                     cardColor: cs ? rgbToHex(cs.color) : '#0070c0',
                     bg: rgbToHex(getComputedStyle(row.querySelector('.actor-description')).backgroundColor),
-                    descHTML: descDiv ? descDiv.innerHTML : ''
+                    descHTML: descDiv ? descDiv.innerHTML : '',
+                    expandido: !!(forcarExpandido || row.classList.contains('expandido'))
                 };
             });
         }
 
         function criarLinhaAtorHTML(a) {
             const key = escaparHTML(a.key);
+            const clsExp = a.expandido ? ' expandido' : '';
             return `
-                <div class="actor-row" data-actor="${key}" title="Duplo clique para focar no Mapa Interativo">
+                <div class="actor-row${clsExp}" data-actor="${key}" title="Duplo clique para focar no Mapa Interativo">
                     <div class="edit-controls">
                         <button class="edit-ctrl-btn color-btn" title="Cor da borda"><input type="color" value="${a.cardBorder}" onchange="mudarCorAtor('${key}','border',this.value)"></button>
                         <button class="edit-ctrl-btn color-btn" title="Cor de fundo"><input type="color" value="${a.bg}" onchange="mudarCorAtor('${key}','bg',this.value)"></button>
@@ -864,13 +884,13 @@
         /* ================================================
            ESTADO COMPLETO (COLETAR / APLICAR)
         ================================================ */
-        function coletarEstadoCompleto() {
+        function coletarEstadoCompleto(forcarExpandido) {
             return {
                 versao: 2,
                 salvoEm: new Date().toISOString(),
                 map: state,
                 editMode: editMode,
-                atores: capturarAtores(),
+                atores: capturarAtores(forcarExpandido),
                 etapas: capturarEtapas(),
                 textos: capturarTextosEditaveis()
             };
@@ -1092,6 +1112,9 @@
             const propFormClone = cloneDoc.querySelector('#propForm');
             if (propFormClone) propFormClone.style.display = 'none';
 
+            // Expande todos os atores para que as descrições completas apareçam no arquivo exportado
+            expandirTodosAtores(cloneDoc);
+
             // Embute as imagens locais no próprio arquivo
             await embutirImagens(cloneDoc);
 
@@ -1123,7 +1146,7 @@
             const tagEstado = document.createElement('script');
             tagEstado.type = 'application/json';
             tagEstado.id = 'estadoMapaExportado';
-            tagEstado.textContent = JSON.stringify(coletarEstadoCompleto()).replace(/<\//g, '<\\/');
+            tagEstado.textContent = JSON.stringify(coletarEstadoCompleto(true)).replace(/<\//g, '<\\/');
             clonedBody.appendChild(tagEstado);
 
             return { html: "<!DOCTYPE html>\n" + cloneDoc.outerHTML, jsEmbutido: jsEmbutido };
@@ -1173,6 +1196,10 @@
             const prevGrid = workspace ? workspace.style.gridTemplateColumns : '';
             if (workspace) workspace.style.gridTemplateColumns = '1fr';
             resetarVisao(); selecionarNode(null);
+            // Expande todos os atores para incluir as descrições completas no PDF
+            const atoresRows = Array.from(document.querySelectorAll('#actorsList .actor-row'));
+            const atoresExpandidosAntes = atoresRows.filter(r => r.classList.contains('expandido'));
+            atoresRows.forEach(r => alternarExpansaoAtor(r, true));
             toast('Gerando PDF — isso pode levar alguns segundos...', 'info', null, 6000);
             const options = { margin: [10, 10, 10, 10], filename: 'processo_estagio_utfpr.pdf', image: { type: 'jpeg', quality: 0.98 }, html2canvas: { scale: 2, useCORS: true, logging: false }, jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }, pagebreak: { mode: ['avoid-all', 'css', 'legacy'] } };
             try { await html2pdf().set(options).from(document.getElementById('pageContainer')).save(); toast('PDF exportado com sucesso!'); }
@@ -1186,11 +1213,12 @@
                 if (sec1WasHidden) toggleSection('sec1Content', 'sec1Toggle');
                 if (sec2WasHidden) toggleSection('sec2Content', 'sec2Toggle');
                 if (sec3WasHidden) toggleSection('sec3Content', 'sec3Toggle');
+                atoresRows.forEach(r => alternarExpansaoAtor(r, atoresExpandidosAntes.includes(r)));
             }
         }
 
-        function exportarJSON() {
-            const dados = coletarEstadoCompleto();
+function exportarJSON() {
+            const dados = coletarEstadoCompleto(true);
             const blob = new Blob([JSON.stringify(dados, null, 2)], { type: 'application/json' });
             const a = document.createElement('a');
             a.href = URL.createObjectURL(blob);
@@ -1225,6 +1253,9 @@
                 const propFormClone = cloneDoc.querySelector('#propForm');
                 if (propFormClone) propFormClone.style.display = 'none';
 
+                // Expande todos os atores para que as descrições completas apareçam no pacote
+                expandirTodosAtores(cloneDoc);
+
                 // Embute imagens no HTML
                 await embutirImagens(cloneDoc);
 
@@ -1257,7 +1288,7 @@
                 const tagEstado = document.createElement('script');
                 tagEstado.type = 'application/json';
                 tagEstado.id = 'estadoMapaExportado';
-                tagEstado.textContent = JSON.stringify(coletarEstadoCompleto()).replace(/<\//g, '<\\/');
+                tagEstado.textContent = JSON.stringify(coletarEstadoCompleto(true)).replace(/<\//g, '<\\/');
                 clonedBody.appendChild(tagEstado);
 
                 const htmlLimpo = "<!DOCTYPE html>\n" + cloneDoc.outerHTML;
