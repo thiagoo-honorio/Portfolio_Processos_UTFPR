@@ -1260,9 +1260,6 @@
                 // Embute imagens no HTML
                 await embutirImagens(cloneDoc);
 
-                // Remove tags de script de CDN (html2pdf, jszip) — não são necessárias no pacote
-                cloneDoc.querySelectorAll('script[src*="cdnjs.cloudflare.com"]').forEach(el => el.remove());
-
                 // Reinserir referências aos arquivos separados.
                 // As referências originais só são removidas quando o respectivo arquivo
                 // pôde ser lido (e, portanto, incluído no ZIP). Se a leitura falhar
@@ -1378,8 +1375,16 @@
         }
 
         document.addEventListener('DOMContentLoaded', () => {
-            const restaurouAutoSave = tentarRestaurarAutoSave();
-            if (!restaurouAutoSave) carregarEstadoExportado();
+            // No arquivo exportado (que contém #estadoMapaExportado), o conteúdo embutido
+            // deve ter prioridade sobre o auto-save local do navegador, garantindo que o
+            // que foi exportado seja exatamente o que aparece ao abrir o arquivo.
+            const temEstadoEmbutido = !!document.getElementById('estadoMapaExportado');
+            if (temEstadoEmbutido) {
+                carregarEstadoExportado();
+            } else {
+                const restaurouAutoSave = tentarRestaurarAutoSave();
+                if (!restaurouAutoSave) carregarEstadoExportado();
+            }
             salvarHistorico(); renderizarMapa();
             vincularCliquesAtores();
             instalarTogglesAtores();

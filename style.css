@@ -269,14 +269,14 @@ body {
     color: #ffffff;
 }
 
-/* Ajusta âncoras para compensar o menu fixo */
+/* Ajusta âncoras para compensar o menu fixo (2 linhas: links + botões) */
 #cadeiaValueBox,
 #contextBox,
 #sec3Box,
 #sec1Box,
 #sec1bBox,
 #sec2Box {
-    scroll-margin-top: 96px;
+    scroll-margin-top: 125px;
 }
 
 /* ===== RESPONSIVO: NAVEGAÇÃO ===== */
@@ -325,7 +325,7 @@ body {
     #sec1Box,
     #sec1bBox,
     #sec2Box {
-        scroll-margin-top: 132px;
+        scroll-margin-top: 150px;
     }
 }
 
@@ -339,6 +339,32 @@ body {
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
     border: 1px solid var(--border-color);
     flex-wrap: wrap;
+}
+
+/* Barra de ações integrada ao menu de navegação (sobre o gradiente azul) */
+.site-nav .global-actions-bar {
+    max-width: 1200px;
+    margin: 0 auto;
+    width: 100%;
+    box-sizing: border-box;
+    background: transparent;
+    border: none;
+    border-top: 1px solid rgba(255, 255, 255, 0.18);
+    box-shadow: none;
+    border-radius: 0;
+    padding: 10px 20px;
+    justify-content: flex-end;
+}
+
+.site-nav .global-actions-bar .btn-custom-outline {
+    background: rgba(255, 255, 255, 0.10);
+    border: 1px solid rgba(255, 255, 255, 0.55);
+    color: #ffffff;
+}
+.site-nav .global-actions-bar .btn-custom-outline:hover {
+    background: rgba(255, 255, 255, 0.25);
+    border-color: rgba(255, 255, 255, 0.85);
+    color: #ffffff;
 }
 
 .header-wrapper {
