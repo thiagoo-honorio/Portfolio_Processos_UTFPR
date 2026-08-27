@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cadeia de Valor dos Macroprocessos Finalísticos - UTFPR</title>
+
+<style>
+:root {
+    --bg-light: #f8f9fa;
+    --gray-light: #dee0e2;
+    --gray-medium: #e9ecef;
+    --gray-dark: #495057;
+    --black-accent: #212529;
+    --yellow-soft: #eecb40;
+    --text-color: #343a40;
+    --card-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+    
+    /* Escala de Cinzas Neutros Elegantes Seguidas Estritamente */
+    --bg-estrategico: #474a4e;       
+    --bg-finalistico: #f1f3f5;       
+    --bg-suporte: #474a4e;           
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body { 
+    font-family: 'Segoe UI', -apple-system, Arial, sans-serif; 
+    background-color: var(--bg-light);
+    color: var(--text-color);
+    padding: 0;
+    line-height: 1.4;
+}
+
+.portfolio-container {
+    width: 100%;
+    max-width: 100%;
+    margin: 0;
+    background: #ffffff;
+    border-radius: 0;
+    overflow: hidden;
+    box-shadow: none;
+}
+
+/* --- HEADER PROPORCIONAL (FAIXA SLIM E LOGOS MAIORES) --- */
+.header {
+    background: var(--gray-medium);
+    padding: 2px 30px; 
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 4px solid var(--bg-estrategico);
+}
+.logo-utfpr,
+.logo-escritorio { 
+    max-height: 65px; 
+    display: block;
+    object-fit: contain;
+}
+.header h1 { 
+    font-size: 17px; 
+    font-weight: 700; 
+    color: var(--black-accent);
+}
+
+/* --- TITULO DA CADEIA DE VALOR --- */
+.top-title-bar { 
+    display: flex; 
+    background: #ffffff; 
+    padding: 15px 30px; 
+}
+.title-headline { 
+    background: var(--yellow-soft); 
+    color: var(--black-accent); 
+    padding: 14px 24px; 
+    text-align: center;
+    font-size: 16px; 
+    font-weight: 700; 
+    border-radius: 8px;
+    width: 100%;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* --- CONTAINER DA CADEIA --- */
+.cadeia-valor-wrapper {
+    background: var(--bg-finalistico); 
+    padding: 30px;
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    gap: 15px;
+    align-items: center;
+}
+
+/* --- RAMIFICAÇÃO DE SETAS CONECTORAS --- */
+.conexao-lateral {
+    display: flex;
+    position: relative;
+    width: 35px;
+    height: 82%;
+    align-self: center;
+}
+.conexao-lateral::before {
+    content: "";
+    position: absolute;
+    top: 9%;
+    bottom: 9%;
+    left: 10px;
+    width: 3px;
+    background-color: var(--black-accent);
+}
+.braço-seta {
+    position: absolute;
+    left: 10px;
+    right: 0;
+    height: 3px;
+    background-color: var(--black-accent);
+}
+.braço-seta::after {
+    content: "▶";
+    position: absolute;
+    right: -5px;
+    top: -6px;
+    font-size: 11px;
+    color: var(--black-accent);
+}
+.seta-ensino { top: 9%; }
+.seta-pesquisa { top: 50%; transform: translateY(-50%); }
+.seta-extensao { bottom: 9%; }
+
+/* Área central que abriga as raias */
+.fluxos-container {
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+}
+
+/* --- ESTRUTURA DA RAIA --- */
+.raia-row {
+    background: #ffffff;
+    border-radius: 12px;
+    padding: 18px;
+    display: grid;
+    grid-template-columns: 140px 1fr;
+    gap: 20px;
+    align-items: center;
+    box-shadow: var(--card-shadow);
+    border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+/* Caixa do Macroprocesso Mãe */
+.macro-mae {
+    background: var(--bg-estrategico);
+    color: #ffffff;
+    font-weight: 800;
+    font-size: 16px;
+    text-align: center;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+    letter-spacing: 1px;
+    padding: 10px;
+}
+
+/* Área interna contendo chevrons e sustentação */
+.macro-conteudo {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+/* Linha de Chevrons sequenciais */
+.chevrons-sequencia {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 8px;
+}
+
+/* Estilização de seta via CSS */
+.etapa-chevron {
+    background: var(--gray-light);
+    color: var(--text-color);
+    padding: 12px 15px 12px 25px;
+    font-size: 13px;
+    position: relative;
+    clip-path: polygon(0% 0%, calc(100% - 15px) 0%, 100% 50%, calc(100% - 15px) 100%, 0% 100%, 15px 50%);
+    min-height: 90px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    z-index: 1;
+}
+.etapa-chevron:first-child {
+    clip-path: polygon(0% 0%, calc(100% - 15px) 0%, 100% 50%, calc(100% - 15px) 100%, 0% 100%);
+    padding-left: 15px;
+    border-radius: 6px 0 0 6px;
+}
+.etapa-chevron:last-child {
+    border-radius: 0 6px 6px 0;
+}
+
+.etapa-chevron strong {
+    font-size: 13px;
+    color: var(--black-accent);
+    display: block;
+    margin-bottom: 4px;
+    line-height: 1.2;
+}
+
+.etapa-chevron span {
+    font-size: 11px;
+    color: #666;
+    line-height: 1.3;
+}
+
+/* Barra de Monitoramento / Transversal Inferior */
+.barra-sustentacao {
+    background: var(--gray-medium);
+    color: var(--text-color);
+    padding: 10px 20px;
+    border-radius: 6px;
+    font-size: 12px;
+    text-align: center;
+    clip-path: polygon(0% 0%, calc(100% - 12px) 0%, 100% 50%, calc(100% - 12px) 100%, 0% 100%);
+    padding-right: 30px;
+}
+.barra-sustentacao strong {
+    font-size: 13px;
+    color: var(--black-accent);
+    display: block;
+    margin-bottom: 2px;
+}
+
+/* --- PAINEL DIREITO: RESULTADOS PARA A SOCIEDADE --- */
+.sociedade-seta-container {
+    background: var(--bg-suporte);
+    color: #ffffff;
+    font-weight: 800;
+    font-size: 18px;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    width: 65px;
+    height: 100%;
+    min-height: 520px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 20px 5px;
+    clip-path: polygon(0% 0%, calc(100% - 25px) 0%, 100% 50%, calc(100% - 25px) 100%, 0% 100%);
+    border-radius: 4px;
+    margin-left: 10px;
+}
+.sociedade-seta-container span {
+    writing-mode: vertical-rl;
+    transform: rotate(180deg);
+}
+
+/* ========================================================
+   EFEITOS INTERATIVOS (INTERAÇÃO JS & CURSOR)
+   ======================================================== */
+.macro-mae, 
+.etapa-chevron, 
+.barra-sustentacao, 
+.sociedade-seta-container {
+    cursor: pointer;
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+    user-select: none;
+}
+
+/* Classe ativada via JS ao passar o mouse */
+.active-hover {
+    transform: scale(1.04) translateY(-2px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15) !important;
+    z-index: 10;
+}
+
+/* Responsividade */
+@media (max-width: 1200px) {
+    .header {
+        padding: 6px 15px;
+    }
+    .logo-utfpr, .logo-escritorio {
+        max-height: 45px;
+    }
+    .header h1 {
+        font-size: 13px;
+    }
+    .cadeia-valor-wrapper {
+        grid-template-columns: 1fr;
+        padding: 15px;
+    }
+    .conexao-lateral, .sociedade-seta-container {
+        display: none;
+    }
+    .chevrons-sequencia {
+        grid-template-columns: 1fr;
+        gap: 10px;
+    }
+    .etapa-chevron {
+        clip-path: none !important;
+        padding: 15px !important;
+        border-radius: 8px !important;
+        min-height: auto;
+    }
+    .raia-row {
+        grid-template-columns: 1fr;
+        padding: 15px;
+    }
+    .barra-sustentacao {
+        clip-path: none;
+        padding-right: 20px;
+    }
+}
+</style>
+</head>
+<body>
+
+<div class="portfolio-container">
+
+    <!-- HEADER INSTITUCIONAL -->
+    <div class="header">
+        <img src="LOGO_UTFPR.png" alt="Logo UTFPR" class="logo-utfpr">
+        <h1>PORTFÓLIO DE PROCESSOS DA UTFPR</h1>
+        <img src="logo_escritorio_processos.png" alt="Escritório de Processos" class="logo-escritorio">
+    </div>
+
+    <!-- TÍTULO DA RAIA ATUAL -->
+    <div class="top-title-bar">
+        <div class="title-headline">
+            Cadeia de Valor dos MACROPROCESSOS FINALÍSTICOS: etapas principais do negócio
+        </div>
+    </div>
+
+    <!-- MAPA DA CADEIA DE VALOR -->
+    <div class="cadeia-valor-wrapper">
+        
+        <!-- Conexão Lateral Ramificada -->
+        <div class="conexao-lateral">
+            <div class="braço-seta seta-ensino"></div>
+            <div class="braço-seta seta-pesquisa"></div>
+            <div class="braço-seta seta-extensao"></div>
+        </div>
+
+        <!-- Painel Central com os Fluxos (Ensino, Pesquisa, Extensão) -->
+        <div class="fluxos-container">
+            
+            <!-- RAIA 1: ENSINO -->
+            <div class="raia-row">
+                <div class="macro-mae" data-link="nivel_3_ensino.html">ENSINO</div>
+                <div class="macro-conteudo">
+                    <div class="chevrons-sequencia">
+                        <div class="etapa-chevron" data-link="ensino-projeto.html">
+                            <strong>Projeto de Curso</strong>
+                            <span>(PPC, Credenciamento, Parcerias, Oferta, Avaliação)</span>
+                        </div>
+                        <div class="etapa-chevron" data-link="ensino-ingresso.html">
+                            <strong>Ingresso</strong>
+                            <span>(Seleção, Registro)</span>
+                        </div>
+                        <div class="etapa-chevron" data-link="ensino-vida.html">
+                            <strong>Vida Acadêmica</strong>
+                            <span>(Matrícula, Acompanhamento, Avaliação, Estágio, Monitoria, Registro Acadêmico)</span>
+                        </div>
+                        <div class="etapa-chevron" data-link="ensino-conclusao.html">
+                            <strong>Conclusão</strong>
+                            <span>(Formatura, Certificação, Titulação, Diplomação)</span>
+                        </div>
+                        <div class="etapa-chevron" data-link="ensino-egresso.html">
+                            <strong>Egresso</strong>
+                            <span>(Acompanhamento, Perfil, Networking, Interação)</span>
+                        </div>
+                    </div>
+                    <div class="barra-sustentacao" data-link="ensino-sustentacao.html">
+                        <strong>Monitoramento e Sustentação do ensino</strong>
+                        <span>(Tecnologias Educacionais, Infraestrutura, Atratividade e Permanência, Fomentos, Horário, Calendário, Matrícula, Atividades Docentes, Indicadores)</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- RAIA 2: PESQUISA -->
+            <div class="raia-row">
+                <div class="macro-mae" data-link="nivel_3_pesquisa.html">PESQUISA</div>
+                <div class="macro-conteudo">
+                    <div class="chevrons-sequencia" style="grid-template-columns: repeat(4, 1fr);">
+                        <div class="etapa-chevron" data-link="pesquisa-inovacao.html">
+                            <strong>Pesquisa e Inovação</strong>
+                            <span>(Captação, Editais, Fomento, Alocação de Recursos)</span>
+                        </div>
+                        <div class="etapa-chevron" data-link="pesquisa-projeto.html">
+                            <strong>Projeto de Pesquisa</strong>
+                            <span>(Planejamento, Desenvolvimento e Divulgação)</span>
+                        </div>
+                        <div class="etapa-chevron" data-link="pesquisa-bolsas.html">
+                            <strong>Bolsas de Pesquisa</strong>
+                            <span>(Captação, Distribuição, Monitoramento)</span>
+                        </div>
+                        <div class="etapa-chevron" data-link="pesquisa-publicacoes.html">
+                            <strong>Publicações Científicas</strong>
+                            <span>(Monitoramento, Avaliação, Publicação)</span>
+                        </div>
+                    </div>
+                    <div class="barra-sustentacao" data-link="pesquisa-sustentacao.html">
+                        <strong>Projetos & Fomentos</strong>
+                        <span>(Gestão de Projetos de Pesquisa, Bolsas e Fomentos, Parcerias, Indicadores)</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- RAIA 3: EXTENSÃO -->
+            <div class="raia-row">
+                <div class="macro-mae" data-link="nivel_3_extensao.html">EXTENSÃO</div>
+                <div class="macro-conteudo">
+                    <div class="chevrons-sequencia">
+                        <div class="etapa-chevron" data-link="extensao-acoes.html">
+                            <strong>Ações de Extensão, Inovação e Parcerias</strong>
+                            <span>(Captação, Editais, Fomento, Execução)</span>
+                        </div>
+                        <div class="etapa-chevron" data-link="extensao-bolsas.html">
+                            <strong>Bolsas de extensão</strong>
+                            <span>(Captação, Distribuição, gestão)</span>
+                        </div>
+                        <div class="etapa-chevron" data-link="extensao-eventos.html">
+                            <strong>Eventos</strong>
+                            <span>(Promoção, Divulgação)</span>
+                        </div>
+                        <div class="etapa-chevron" data-link="extensao-cursos.html">
+                            <strong>Cursos</strong>
+                            <span>(Projeto, inscrição, participação, certificação)</span>
+                        </div>
+                        <div class="etapa-chevron" data-link="extensao-programas.html">
+                            <strong>Programas e projetos</strong>
+                            <span>(Execução, Monitoramento, Avaliação, Divulgação)</span>
+                        </div>
+                    </div>
+                    <div class="barra-sustentacao" data-link="extensao-sustentacao.html">
+                        <strong>Projetos, Programas e Ações de Extensão</strong>
+                        <span>(Gestão da Extensão, Indicadores, Fomento e Incentivos, Parcerias e Convênios, Produção Bibliográfica, Inovação e Propriedade Intelectual)</span>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Saída à Direita: Resultados para a Sociedade -->
+        <div class="sociedade-seta-container" data-link="resultados-sociedade.html">
+            <span>Resultados para a Sociedade</span>
+        </div>
+
+    </div>
+
+</div>
+
+<!-- SCRIPT DE INTERAÇÃO JAVASCRIPT -->
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    // Seleciona os elementos interativos
+    const interactiveElements = document.querySelectorAll('.macro-mae, .etapa-chevron, .barra-sustentacao, .sociedade-seta-container');
+
+    interactiveElements.forEach(element => {
+        // Evento de entrada do cursor: Adiciona o destaque visual
+        element.addEventListener('mouseenter', () => {
+            element.classList.add('active-hover');
+        });
+
+        // Evento de saída do cursor: Remove o destaque
+        element.addEventListener('mouseleave', () => {
+            element.classList.remove('active-hover');
+        });
+
+        // Evento de clique preparado para navegação futura
+        element.addEventListener('click', () => {
+            const targetPage = element.getAttribute('data-link');
+            if (targetPage) {
+                console.log(`Navegando para: ${targetPage}`);
+                // Para ativar o redirecionamento no futuro, remova as duas barras (//) da linha abaixo:
+                window.location.href = targetPage;
+            }
+        });
+    });
+});
+</script>
+
+</body>
+</html>
