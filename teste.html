@@ -96,55 +96,58 @@
                         <div class="cv-macro-conteudo">
                             <!-- Linha de chevrons: etapas principais do Ensino -->
                             <div class="cv-floor">
-                                <div class="cv-step bg-blue-light">
+                                <div class="cv-step bg-gray-chevron">
                                     <strong data-editable="true">Projeto de Curso</strong>
-                                    <span data-editable="true">(PPC, Credenciamento, Parcerias, Oferta, Avaliação)</span>
                                 </div>
-                                <div class="cv-step bg-blue-light">
+                                <div class="cv-step bg-gray-chevron">
                                     <strong data-editable="true">Ingresso</strong>
-                                    <span data-editable="true">(Seleção, Registro)</span>
                                 </div>
-                                <div class="cv-step bg-blue-light">
+                                <div class="cv-step bg-blue-mid">
                                     <strong data-editable="true">Vida Acadêmica</strong>
-                                    <span data-editable="true">(Matrícula, Acompanhamento, Avaliação, Estágio, Monitoria, Registro Acadêmico)</span>
                                 </div>
-                                <div class="cv-step bg-blue-light">
+                                <div class="cv-step bg-gray-chevron">
                                     <strong data-editable="true">Conclusão</strong>
-                                    <span data-editable="true">(Formatura, Certificação, Titulação, Diplomação)</span>
                                 </div>
-                                <div class="cv-step bg-blue-light">
+                                <div class="cv-step bg-gray-chevron">
                                     <strong data-editable="true">Egresso</strong>
-                                    <span data-editable="true">(Acompanhamento, Perfil, Networking, Interação)</span>
                                 </div>
                             </div>
-                            <!-- Ramificação: Estágio (a partir de Vida Acadêmica) -> Realização -->
-                            <div class="cv-branch">
-                                <div class="cv-branch-estagio">
-                                    <div class="cv-step bg-blue-mid">
-                                        <strong data-editable="true">Estágio</strong>
-                                        <span data-editable="true">(Realização)</span>
-                                    </div>
+                        </div>
+                    </div>
+                    <!-- Ramificação (fora da raia): Estágio -> Realização, alinhada sob Vida Acadêmica -->
+                    <div class="cv-branch-row">
+                        <div class="cv-branch-spacer"></div>
+                        <div class="cv-branch">
+                            <div class="cv-branch-estagio">
+                                <div class="cv-step bg-blue-mid">
+                                    <strong data-editable="true">Estágio</strong>
+                                    <span data-editable="true">(Realização)</span>
                                 </div>
-                                <div class="cv-branch-realizacao">
-                                    <div class="cv-step bg-blue-mid">
-                                        <strong data-editable="true">Realização</strong>
-                                        <span data-editable="true">(Disponibilização, Seleção, Contratação, Vigência, Encerramento)</span>
+                            </div>
+                            <div class="cv-branch-validacao">
+                                <div class="cv-step bg-blue-mid">
+                                    <strong data-editable="true">Validação</strong>
+                                    <span data-editable="true">(Atividade Profissional, Bolsista ou Voluntário)</span>
+                                </div>
+                            </div>
+                            <div class="cv-branch-realizacao">
+                                <div class="cv-step bg-blue-mid">
+                                    <strong data-editable="true">Realização</strong>
+                                    <span data-editable="true">(Disponibilização, Seleção, Contratação, Vigência, Encerramento)</span>
+                                </div>
+                            </div>
+                            <div class="cv-branch-resultados">
+                                <div class="cadeia-card-resultados">
+                                    <div class="cadeia-card-titulo">Resultados</div>
+                                    <div class="cadeia-card-imagens">
+                                        <img src="https://cdn.jsdelivr.net/gh/thiagoo-honorio/Portfolio_Processos_UTFPR@master/paineis_resultados.png" alt="Painel de Resultados 1" onclick="abrirImgCadeia(this.src)">
+                                        <img src="https://cdn.jsdelivr.net/gh/thiagoo-honorio/Portfolio_Processos_UTFPR@master/paineis_resultados.png" alt="Painel de Resultados 2" onclick="abrirImgCadeia(this.src)">
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
 
-                    <!-- Card de Resultados -->
-                    <div class="cadeia-row" data-level="0">
-                        <div class="cadeia-card-resultados">
-                            <div class="cadeia-card-titulo">Resultados</div>
-                            <div class="cadeia-card-imagens">
-                                <img src="https://cdn.jsdelivr.net/gh/thiagoo-honorio/Portfolio_Processos_UTFPR@master/paineis_resultados.png" alt="Painel de Resultados 1" onclick="abrirImgCadeia(this.src)">
-                                <img src="https://cdn.jsdelivr.net/gh/thiagoo-honorio/Portfolio_Processos_UTFPR@master/paineis_resultados.png" alt="Painel de Resultados 2" onclick="abrirImgCadeia(this.src)">
-                            </div>
-                        </div>
-                    </div>
                 </div>
                 <div class="edit-actor-bar">
                     <button class="add-actor-btn" onclick="adicionarLinhaCadeia()" aria-label="Adicionar nova linha na cadeia de valor">+ Adicionar Linha</button>

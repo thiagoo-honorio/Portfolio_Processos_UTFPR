@@ -2569,12 +2569,12 @@ body:not(.editing) [data-editable] a::before {
 /* ===== Cadeia de Valor: layout estilo nivel_2 (linha de chevrons + ramificação) ===== */
 .cv-raia {
     display: grid;
-    grid-template-columns: 130px 1fr;
-    gap: 18px;
+    grid-template-columns: 110px 1fr;
+    gap: 12px;
     align-items: stretch;
     background: #ffffff;
     border-radius: 12px;
-    padding: 16px;
+    padding: 10px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
     border: 1px solid rgba(0, 0, 0, 0.05);
 }
@@ -2596,14 +2596,14 @@ body:not(.editing) [data-editable] a::before {
 }
 
 .cv-macro-mae span {
-    writing-mode: vertical-rl;
-    transform: rotate(180deg);
+    writing-mode: horizontal-tb;
+    transform: none;
 }
 
 .cv-macro-conteudo {
     display: flex;
     flex-direction: column;
-    gap: 8px;
+    gap: 6px;
     min-width: 0;
 }
 
@@ -2650,23 +2650,60 @@ body:not(.editing) [data-editable] a::before {
     line-height: 1.3;
 }
 
-/* Ramificação em árvore: Estágio (a partir de Vida Acadêmica) -> Realização */
+/* Chevrons do Ensino no mesmo estilo do nivel_2 (cinza) */
+.cv-step.bg-gray-chevron {
+    background: #dee0e2;
+    color: #343a40;
+}
+
+.cv-step.bg-gray-chevron strong {
+    color: #212529;
+}
+
+.cv-step.bg-gray-chevron span {
+    color: #666;
+}
+
+/* Ensino mais compacto: apenas títulos, reduz altura de toda a raia */
+.cv-raia .cv-step {
+    min-height: 60px;
+    padding: 8px 12px 8px 20px;
+}
+
+.cv-step.bg-gray-chevron strong {
+    margin-bottom: 0;
+    text-align: center;
+    width: 100%;
+}
+
+/* Ramificação em árvore (fora da raia): alinhada sob a raia de Ensino */
+.cv-branch-row {
+    display: grid;
+    grid-template-columns: 110px 1fr;
+    gap: 12px;
+    margin-top: 10px;
+}
+
+.cv-branch-spacer {
+    grid-column: 1 / 2;
+}
+
 .cv-branch {
+    grid-column: 2 / 3;
     display: grid;
     grid-template-columns: repeat(5, 1fr);
     gap: 8px;
-    margin-top: 4px;
     position: relative;
 }
 
-/* Conector vertical a partir do centro da coluna 3 do cv-floor (Vida Acadêmica) */
+/* Conector vertical da base da raia (Vida Acadêmica) até o card Estágio */
 .cv-branch::before {
     content: '';
     position: absolute;
     left: calc(50% - 1px);
-    top: -14px;
+    top: -10px;
     width: 2px;
-    height: 14px;
+    height: 10px;
     background: var(--border-color);
 }
 
@@ -2677,23 +2714,62 @@ body:not(.editing) [data-editable] a::before {
     position: relative;
 }
 
-/* Realização: card abaixo do Estágio, ramificando dele */
-.cv-branch-realizacao {
+/* Validação: card abaixo do Estágio */
+.cv-branch-validacao {
     grid-column: 3 / 4;
     justify-self: stretch;
-    margin-top: 30px;
+    margin-top: 22px;
     position: relative;
 }
 
-/* Vertical descendo do centro do Estágio até o Realização */
+/* Vertical descendo do centro do Estágio até a Validação */
+.cv-branch-validacao::before {
+    content: '';
+    position: absolute;
+    left: calc(50% - 1px);
+    top: -22px;
+    width: 2px;
+    height: 24px;
+    background: var(--border-color);
+}
+
+/* Realização: card abaixo da Validação */
+.cv-branch-realizacao {
+    grid-column: 3 / 4;
+    justify-self: stretch;
+    margin-top: 22px;
+    position: relative;
+}
+
+/* Vertical descendo do centro da Validação até o Realização */
 .cv-branch-realizacao::before {
     content: '';
     position: absolute;
     left: calc(50% - 1px);
-    top: -30px;
+    top: -22px;
     width: 2px;
-    height: 32px;
+    height: 24px;
     background: var(--border-color);
+}
+
+/* Alta menor: compacta os cards da ramificação Estágio/Validação/Realização */
+.cv-branch .cv-step {
+    min-height: 60px;
+    padding: 8px 12px 8px 20px;
+}
+
+/* Resultados ao lado da Realização (colunas 4-5, mesma linha) */
+.cv-branch-resultados {
+    grid-column: 4 / 6;
+    grid-row: 3;
+    justify-self: stretch;
+    align-self: center;
+    min-width: 0;
+}
+
+.cv-branch-resultados .cadeia-card-resultados {
+    min-width: 0;
+    width: 100%;
 }
 
 body.editing .cv-step strong,
@@ -2702,6 +2778,11 @@ body.editing .cv-step span {
     outline: 1px dashed rgba(255, 255, 255, 0.5);
     outline-offset: 2px;
     border-radius: 3px;
+}
+
+body.editing .cv-step.bg-gray-chevron strong,
+body.editing .cv-step.bg-gray-chevron span {
+    outline-color: #9aa0a6;
 }
 
 /* ===== Cadeia de Valor: responsividade (layout nivel_2) ===== */
@@ -2721,18 +2802,25 @@ body.editing .cv-step span {
 }
 
 @media (max-width: 768px) {
-    .cv-raia {
+    .cv-raia,
+    .cv-branch-row {
         grid-template-columns: 1fr;
     }
     .cv-macro-mae span {
         writing-mode: horizontal-tb;
         transform: none;
     }
+    .cv-branch-spacer {
+        display: none;
+    }
     .cv-branch,
     .cv-branch-estagio,
-    .cv-branch-realizacao {
+    .cv-branch-validacao,
+    .cv-branch-realizacao,
+    .cv-branch-resultados {
         grid-template-columns: 1fr;
         grid-column: auto;
+        grid-row: auto;
         justify-self: stretch;
         max-width: none;
     }
