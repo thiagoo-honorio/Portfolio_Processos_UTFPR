@@ -2409,18 +2409,6 @@ body:not(.editing) [data-editable] a::before {
     margin: 6px 0 0 0;
 }
 
-.sup-badge-uce {
-    background-color: #f2a900;
-    color: #000000;
-    font-weight: bold;
-    padding: 8px 16px;
-    border-radius: 6px;
-    font-size: 0.9rem;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
 .sup-controls {
     display: flex;
     flex-direction: column;
