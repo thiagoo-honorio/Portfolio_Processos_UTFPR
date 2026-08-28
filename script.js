@@ -148,8 +148,13 @@
             }
         }
 
+        const togglesAtoresVinculados = new WeakSet();
+        const atoresVinculados = new WeakSet();
+        const previewsEtapasVinculados = new WeakSet();
+
         function instalarToggleAtor(row) {
-            if (!row || row.querySelector('.ator-toggle-btn')) return;
+            if (!row || togglesAtoresVinculados.has(row)) return;
+            togglesAtoresVinculados.add(row);
             const btn = document.createElement('button');
             btn.type = 'button';
             btn.className = 'ator-toggle-btn';
@@ -792,12 +797,17 @@
                 const img = document.createElement('img');
                 img.alt = 'Prévia do fluxo da etapa';
                 preview.appendChild(img);
-                preview.addEventListener('click', (e) => { e.stopPropagation(); openJornada(e); });
                 if (item.nextSibling) container.insertBefore(preview, item.nextSibling);
                 else container.appendChild(preview);
             }
             preview.querySelector('img').src = imgSrc;
             preview.style.display = '';
+            // Re-acopla o listener mesmo quando o preview já existe (cloneNode não copia listeners;
+            // o WeakSet em memória não sobrevive ao clone, então os clones re-anexam aqui).
+            if (!previewsEtapasVinculados.has(preview)) {
+                previewsEtapasVinculados.add(preview);
+                preview.addEventListener('click', (e) => { e.stopPropagation(); openJornada(e); });
+            }
         }
 
         function instalarPreviewsEtapas() {
@@ -862,8 +872,8 @@
 
         function vincularCliquesAtores() {
             document.querySelectorAll('.actor-row').forEach(row => {
-                if (row.dataset.clickBound) return;
-                row.dataset.clickBound = '1';
+                if (atoresVinculados.has(row)) return;
+                atoresVinculados.add(row);
                 row.addEventListener('dblclick', (e) => {
                     if (editMode || e.target.closest('.edit-controls') || e.target.closest('[contenteditable]')) return;
                     const actorKey = row.getAttribute('data-actor');
@@ -1634,3 +1644,168 @@
             const ano = document.getElementById('footerAno');
             if (ano) ano.textContent = String(new Date().getFullYear());
         })();
+
+        /* ================================================
+           SEÇÃO: SUPORTE TECNOLÓGICO
+           (Integrado a partir de suporte_tecnologico.html)
+        ================================================ */
+        const processosSuporte = [
+            {
+                idAtual: "1177",
+                idRaiz: "1158",
+                seiId: "100000849",
+                descricao: "Estágio em UCE Externa: Contratação e Acompanhamento",
+                categoria: "externo",
+                categoriaNome: "UCE Externa",
+                liberacao: "31/07/2024",
+                link: "https://processos.utfpr.edu.br/basec/visualizar_base_conhecimento.php?id_base_conhecimento=1177"
+            },
+            {
+                idAtual: "1142",
+                idRaiz: "1054",
+                seiId: "100000876",
+                descricao: "Estágio em UCE Externa: Homologação de Empresas",
+                categoria: "externo",
+                categoriaNome: "UCE Externa",
+                liberacao: "07/08/2024",
+                link: "https://processos.utfpr.edu.br/basec/visualizar_base_conhecimento.php?id_base_conhecimento=1142"
+            },
+            {
+                idAtual: "1286",
+                idRaiz: "1190",
+                seiId: "100000633",
+                descricao: "Estágio Interno: Contratação de Estagiário",
+                categoria: "interno",
+                categoriaNome: "Estágio Interno",
+                liberacao: "25/11/2025",
+                link: "https://processos.utfpr.edu.br/basec/visualizar_base_conhecimento.php?id_base_conhecimento=1286"
+            },
+            {
+                idAtual: "1112",
+                idRaiz: "1056",
+                seiId: "100000880",
+                descricao: "Estágio Obrigatório: Atividade Profissional (em realização)",
+                categoria: "obrigatorio",
+                categoriaNome: "Obrigatório",
+                liberacao: "07/08/2024",
+                link: "https://processos.utfpr.edu.br/basec/visualizar_base_conhecimento.php?id_base_conhecimento=1112"
+            },
+            {
+                idAtual: "1125",
+                idRaiz: "1057",
+                seiId: "100000853",
+                descricao: "Estágio Obrigatório: Bolsista ou Voluntário",
+                categoria: "obrigatorio",
+                categoriaNome: "Obrigatório",
+                liberacao: "07/08/2024",
+                link: "https://processos.utfpr.edu.br/basec/visualizar_base_conhecimento.php?id_base_conhecimento=1125"
+            },
+            {
+                idAtual: "1141",
+                idRaiz: "1058",
+                seiId: "100000881",
+                descricao: "Estágio Obrigatório: Validação de Atividade Profissional (já realizada)",
+                categoria: "obrigatorio",
+                categoriaNome: "Obrigatório",
+                liberacao: "07/08/2024",
+                link: "https://processos.utfpr.edu.br/basec/visualizar_base_conhecimento.php?id_base_conhecimento=1141"
+            },
+            {
+                idAtual: "594",
+                idRaiz: "594",
+                seiId: "100000873",
+                descricao: "Graduação: Avaliação Final de Estágio",
+                categoria: "graduacao",
+                categoriaNome: "Graduação",
+                liberacao: "25/05/2020",
+                link: "https://processos.utfpr.edu.br/basec/visualizar_base_conhecimento.php?id_base_conhecimento=594"
+            }
+        ];
+
+        function inicializarSuporteTecnologico() {
+            const grid = document.getElementById('processGrid');
+            if (!grid) return;
+            const searchInput = document.getElementById('searchInput');
+            const filterBtns = Array.from(document.querySelectorAll('.sup-filter-btn'));
+
+            let currentFilter = 'todos';
+            let searchTerm = '';
+
+            function aplicarEstadoCards() {
+                document.querySelectorAll('.sup-card [data-editable="true"]').forEach(el => {
+                    el.contentEditable = editMode ? 'true' : 'false';
+                });
+            }
+
+            function renderCards() {
+                const filtered = processosSuporte.filter(p => {
+                    const matchesFilter = currentFilter === 'todos' || p.categoria === currentFilter;
+                    const t = searchTerm;
+                    const matchesSearch = t === '' ||
+                        p.descricao.toLowerCase().includes(t) ||
+                        p.seiId.includes(t) ||
+                        p.idAtual.includes(t);
+                    return matchesFilter && matchesSearch;
+                });
+
+                grid.innerHTML = '';
+
+                if (filtered.length === 0) {
+                    const vazio = document.createElement('div');
+                    vazio.className = 'sup-empty-message';
+                    vazio.textContent = 'Nenhum processo encontrado.';
+                    grid.appendChild(vazio);
+                    return;
+                }
+
+                filtered.forEach(p => {
+                    const card = document.createElement('div');
+                    card.className = 'sup-card';
+                    card.innerHTML = `
+                        <div>
+                            <div class="sup-card-header">
+                                <span class="sup-category-tag sup-tag-${p.categoria}" data-editable="true">${p.categoriaNome}</span>
+                                <span class="sup-sei-badge" data-editable="true" title="ID do Tipo de Processo SEI">SEI ${p.seiId}</span>
+                            </div>
+                            <h3 class="sup-card-title" data-editable="true">${p.descricao}</h3>
+                        </div>
+                        <div>
+                            <div class="sup-card-meta">
+                                <div><span>ID Atual:</span> <strong data-editable="true">${p.idAtual}</strong></div>
+                                <div><span>ID Raiz:</span> <strong data-editable="true">${p.idRaiz}</strong></div>
+                                <div><span>Liberação:</span> <strong data-editable="true">${p.liberacao}</strong></div>
+                            </div>
+                            <a href="${p.link}" target="_blank" rel="noopener noreferrer" class="sup-btn-link" data-editable="true" data-link="${p.link}">Acessar Base de Conhecimento &#8599;</a>
+                        </div>
+                    `;
+                    grid.appendChild(card);
+                });
+                aplicarEstadoCards();
+            }
+
+            if (searchInput) {
+                searchInput.addEventListener('input', () => {
+                    searchTerm = searchInput.value.toLowerCase().trim();
+                    renderCards();
+                });
+            }
+
+            filterBtns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    filterBtns.forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    currentFilter = btn.getAttribute('data-filter');
+                    renderCards();
+                });
+            });
+
+            renderCards();
+        }
+
+        if (document.getElementById('processGrid')) {
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', inicializarSuporteTecnologico, { once: true });
+            } else {
+                inicializarSuporteTecnologico();
+            }
+        }
