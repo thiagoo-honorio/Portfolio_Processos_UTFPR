@@ -1805,6 +1805,9 @@ body.editing .chevron-item.arrastando {
     flex-direction: column;
     gap: 0;
     padding-left: 0;
+    margin-top: 24px;
+    border-top: 1px solid var(--border-color);
+    padding-top: 18px;
 }
 
 .cadeia-row {
@@ -1937,13 +1940,15 @@ body.editing .cadeia-desc {
 
 .cadeia-card-imagens {
     display: flex;
+    flex-direction: column;
     gap: 8px;
+    align-items: stretch;
 }
 
 .cadeia-card-imagens img {
-    flex: 1 1 50%;
-    width: 90px;
-    height: 60px;
+    flex: 0 0 auto;
+    width: 120px;
+    height: 70px;
     object-fit: cover;
     border-radius: 4px;
     border: 1px solid var(--border-color);
@@ -2580,19 +2585,31 @@ body:not(.editing) [data-editable] a::before {
 }
 
 .cv-macro-mae {
-    background: #474a4e;
+    background: linear-gradient(180deg, #1d5f8e, #143f60);
     color: #ffffff;
     font-weight: 800;
-    font-size: 16px;
+    font-size: 17px;
     text-align: center;
     display: flex;
     align-items: center;
     justify-content: center;
-    border-radius: 8px;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
-    letter-spacing: 1px;
+    border-radius: 10px;
+    box-shadow:
+        0 10px 24px rgba(20, 63, 96, 0.45),
+        inset 0 1px 0 rgba(255, 255, 255, 0.18);
+    letter-spacing: 1.5px;
     padding: 10px;
     text-transform: uppercase;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+/* Efeito de botão: eleva ao passar o mouse */
+.cv-macro-mae:hover {
+    transform: translateY(-2px);
+    box-shadow:
+        0 14px 32px rgba(20, 63, 96, 0.55),
+        inset 0 1px 0 rgba(255, 255, 255, 0.22);
 }
 
 .cv-macro-mae span {
@@ -2700,11 +2717,13 @@ body:not(.editing) [data-editable] a::before {
 .cv-branch::before {
     content: '';
     position: absolute;
-    left: calc(50% - 1px);
+    left: calc(50% - 1.5px);
     top: -10px;
-    width: 2px;
+    width: 3px;
     height: 10px;
-    background: var(--border-color);
+    background: #3b82c4;
+    border-radius: 3px;
+    box-shadow: 0 1px 2px rgba(59, 130, 196, 0.4);
 }
 
 /* Estágio: card na coluna 3, centralizado sob Vida Acadêmica */
@@ -2726,11 +2745,13 @@ body:not(.editing) [data-editable] a::before {
 .cv-branch-validacao::before {
     content: '';
     position: absolute;
-    left: calc(50% - 1px);
+    left: calc(50% - 1.5px);
     top: -22px;
-    width: 2px;
+    width: 3px;
     height: 24px;
-    background: var(--border-color);
+    background: #3b82c4;
+    border-radius: 3px;
+    box-shadow: 0 1px 2px rgba(59, 130, 196, 0.4);
 }
 
 /* Realização: card abaixo da Validação */
@@ -2745,11 +2766,30 @@ body:not(.editing) [data-editable] a::before {
 .cv-branch-realizacao::before {
     content: '';
     position: absolute;
-    left: calc(50% - 1px);
+    left: calc(50% - 1.5px);
     top: -22px;
-    width: 2px;
+    width: 3px;
     height: 24px;
-    background: var(--border-color);
+    background: #3b82c4;
+    border-radius: 3px;
+    box-shadow: 0 1px 2px rgba(59, 130, 196, 0.4);
+}
+
+/* Pontos de junção: marcam de onde cada conector parte/chega */
+.cv-branch-estagio::after,
+.cv-branch-validacao::after,
+.cv-branch-realizacao::after {
+    content: '';
+    position: absolute;
+    left: calc(50% - 5px);
+    top: -5px;
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: #ffffff;
+    border: 3px solid #3b82c4;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.18);
+    z-index: 2;
 }
 
 /* Alta menor: compacta os cards da ramificação Estágio/Validação/Realização */
@@ -2769,7 +2809,7 @@ body:not(.editing) [data-editable] a::before {
 
 .cv-branch-resultados .cadeia-card-resultados {
     min-width: 0;
-    width: 100%;
+    width: 40%;
 }
 
 body.editing .cv-step strong,

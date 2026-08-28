@@ -73,7 +73,7 @@
         <header class="page-hero">
             <div class="hero-content">
                 <p class="hero-eyebrow">Universidade Tecnológica Federal do Paraná</p>
-                <h1 class="hero-title">Portfólio de Processos da Gestão de Estágio</h1>
+                <h1 class="hero-title">Portfólio de Processos de Estágio</h1>
                 <p class="hero-subtitle">Visão integrada dos atores, fluxos, documentos e mapeamento interativo do estágio externo e interno na UTFPR.</p>
                 <div class="hero-actions">
                     <a href="#cadeiaValueBox" class="btn-custom btn-custom-success">Explorar Conteúdo</a>
@@ -82,83 +82,10 @@
             </div>
         </header>
 
-        <!-- CADEIA DE VALOR: NAVEGAÇÃO -->
-        <div class="section-box" id="cadeiaValueBox">
-            <div class="section-header" onclick="toggleSection('cadeiaContent', 'cadeiaToggle')">
-                <span class="section-title-text">🔗 Cadeia de Valor</span>
-                <span id="cadeiaToggle" class="btn-custom btn-custom-outline" style="padding: 2px 8px;" aria-label="Ocultar ou expandir seção Cadeia de Valor">[−] Ocultar</span>
-            </div>
-            <div id="cadeiaContent" style="padding: 20px;">
-                <div class="cadeia-container" id="cadeiaContainer">
-                    <!-- Raia de Ensino: macroprocesso mãe + etapas (estilo nivel_2) -->
-                    <div class="cv-raia">
-                        <div class="cv-macro-mae" data-editable="true"><span>ENSINO</span></div>
-                        <div class="cv-macro-conteudo">
-                            <!-- Linha de chevrons: etapas principais do Ensino -->
-                            <div class="cv-floor">
-                                <div class="cv-step bg-gray-chevron">
-                                    <strong data-editable="true">Projeto de Curso</strong>
-                                </div>
-                                <div class="cv-step bg-gray-chevron">
-                                    <strong data-editable="true">Ingresso</strong>
-                                </div>
-                                <div class="cv-step bg-blue-mid">
-                                    <strong data-editable="true">Vida Acadêmica</strong>
-                                </div>
-                                <div class="cv-step bg-gray-chevron">
-                                    <strong data-editable="true">Conclusão</strong>
-                                </div>
-                                <div class="cv-step bg-gray-chevron">
-                                    <strong data-editable="true">Egresso</strong>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- Ramificação (fora da raia): Estágio -> Realização, alinhada sob Vida Acadêmica -->
-                    <div class="cv-branch-row">
-                        <div class="cv-branch-spacer"></div>
-                        <div class="cv-branch">
-                            <div class="cv-branch-estagio">
-                                <div class="cv-step bg-blue-mid">
-                                    <strong data-editable="true">Estágio</strong>
-                                    <span data-editable="true">(Realização)</span>
-                                </div>
-                            </div>
-                            <div class="cv-branch-validacao">
-                                <div class="cv-step bg-blue-mid">
-                                    <strong data-editable="true">Validação</strong>
-                                    <span data-editable="true">(Atividade Profissional, Bolsista ou Voluntário)</span>
-                                </div>
-                            </div>
-                            <div class="cv-branch-realizacao">
-                                <div class="cv-step bg-blue-mid">
-                                    <strong data-editable="true">Realização</strong>
-                                    <span data-editable="true">(Disponibilização, Seleção, Contratação, Vigência, Encerramento)</span>
-                                </div>
-                            </div>
-                            <div class="cv-branch-resultados">
-                                <div class="cadeia-card-resultados">
-                                    <div class="cadeia-card-titulo">Resultados</div>
-                                    <div class="cadeia-card-imagens">
-                                        <img src="https://cdn.jsdelivr.net/gh/thiagoo-honorio/Portfolio_Processos_UTFPR@master/paineis_resultados.png" alt="Painel de Resultados 1" onclick="abrirImgCadeia(this.src)">
-                                        <img src="https://cdn.jsdelivr.net/gh/thiagoo-honorio/Portfolio_Processos_UTFPR@master/paineis_resultados.png" alt="Painel de Resultados 2" onclick="abrirImgCadeia(this.src)">
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                </div>
-                <div class="edit-actor-bar">
-                    <button class="add-actor-btn" onclick="adicionarLinhaCadeia()" aria-label="Adicionar nova linha na cadeia de valor">+ Adicionar Linha</button>
-                </div>
-            </div>
-        </div>
-
         <!-- CONTEXTUALIZAÇÃO: ESTÁGIO -->
         <div class="section-box" id="contextBox">
             <div class="section-header" onclick="toggleSection('contextContent', 'contextToggle')">
-                <span class="section-title-text">📋 Contextualização</span>
+                <span class="section-title-text">📋 Contextualização e Hierarquia de Processo</span>
                 <span id="contextToggle" class="btn-custom btn-custom-outline" style="padding: 2px 8px;" aria-label="Ocultar ou expandir Contextualização">[−] Ocultar</span>
             </div>
             <div id="contextContent">
@@ -266,6 +193,70 @@
                             <div class="roof-btn" contenteditable="false" data-editable="true">Administração</div>
                         </div>
                     </div>
+                </div>
+
+                <!-- Cadeia de Valor (Hierarquia de Processo) dentro da Contextualização -->
+                <div class="cadeia-container" id="cadeiaContainer">
+                    <!-- Raia de Ensino: macroprocesso mãe + etapas (estilo nivel_2) -->
+                    <div class="cv-raia">
+                        <div class="cv-macro-mae" data-editable="true"><span>ENSINO</span></div>
+                        <div class="cv-macro-conteudo">
+                            <!-- Linha de chevrons: etapas principais do Ensino -->
+                            <div class="cv-floor">
+                                <div class="cv-step bg-gray-chevron">
+                                    <strong data-editable="true">Projeto de Curso</strong>
+                                </div>
+                                <div class="cv-step bg-gray-chevron">
+                                    <strong data-editable="true">Ingresso</strong>
+                                </div>
+                                <div class="cv-step bg-blue-mid">
+                                    <strong data-editable="true">Vida Acadêmica</strong>
+                                </div>
+                                <div class="cv-step bg-gray-chevron">
+                                    <strong data-editable="true">Conclusão</strong>
+                                </div>
+                                <div class="cv-step bg-gray-chevron">
+                                    <strong data-editable="true">Egresso</strong>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Ramificação (fora da raia): Estágio -> Validação -> Realização, alinhada sob Vida Acadêmica -->
+                    <div class="cv-branch-row">
+                        <div class="cv-branch-spacer"></div>
+                        <div class="cv-branch">
+                            <div class="cv-branch-estagio">
+                                <div class="cv-step bg-blue-mid">
+                                    <strong data-editable="true">Estágio</strong>
+                                    <span data-editable="true">(Realização)</span>
+                                </div>
+                            </div>
+                            <div class="cv-branch-validacao">
+                                <div class="cv-step bg-blue-mid">
+                                    <strong data-editable="true">Validação</strong>
+                                    <span data-editable="true">(Atividade Profissional, Bolsista ou Voluntário)</span>
+                                </div>
+                            </div>
+                            <div class="cv-branch-realizacao">
+                                <div class="cv-step bg-blue-mid">
+                                    <strong data-editable="true">Realização</strong>
+                                    <span data-editable="true">(Disponibilização, Seleção, Contratação, Vigência, Encerramento)</span>
+                                </div>
+                            </div>
+                            <div class="cv-branch-resultados">
+                                <div class="cadeia-card-resultados">
+                                    <div class="cadeia-card-titulo">Resultados</div>
+                                    <div class="cadeia-card-imagens">
+                                        <img src="https://cdn.jsdelivr.net/gh/thiagoo-honorio/Portfolio_Processos_UTFPR@master/paineis_resultados.png" alt="Painel de Resultados 1" onclick="abrirImgCadeia(this.src)">
+                                        <img src="https://cdn.jsdelivr.net/gh/thiagoo-honorio/Portfolio_Processos_UTFPR@master/paineis_resultados.png" alt="Painel de Resultados 2" onclick="abrirImgCadeia(this.src)">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="edit-actor-bar">
+                    <button class="add-actor-btn" onclick="adicionarLinhaCadeia()" aria-label="Adicionar nova linha na cadeia de valor">+ Adicionar Linha</button>
                 </div>
             </div>
         </div>
