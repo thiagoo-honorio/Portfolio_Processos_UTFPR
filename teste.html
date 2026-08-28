@@ -90,25 +90,53 @@
             </div>
             <div id="cadeiaContent" style="padding: 20px;">
                 <div class="cadeia-container" id="cadeiaContainer">
+                    <!-- Raia de Ensino: macroprocesso mãe + etapas (estilo nivel_2) -->
+                    <div class="cv-raia">
+                        <div class="cv-macro-mae" data-editable="true"><span>ENSINO</span></div>
+                        <div class="cv-macro-conteudo">
+                            <!-- Linha de chevrons: etapas principais do Ensino -->
+                            <div class="cv-floor">
+                                <div class="cv-step bg-blue-light">
+                                    <strong data-editable="true">Projeto de Curso</strong>
+                                    <span data-editable="true">(PPC, Credenciamento, Parcerias, Oferta, Avaliação)</span>
+                                </div>
+                                <div class="cv-step bg-blue-light">
+                                    <strong data-editable="true">Ingresso</strong>
+                                    <span data-editable="true">(Seleção, Registro)</span>
+                                </div>
+                                <div class="cv-step bg-blue-light">
+                                    <strong data-editable="true">Vida Acadêmica</strong>
+                                    <span data-editable="true">(Matrícula, Acompanhamento, Avaliação, Estágio, Monitoria, Registro Acadêmico)</span>
+                                </div>
+                                <div class="cv-step bg-blue-light">
+                                    <strong data-editable="true">Conclusão</strong>
+                                    <span data-editable="true">(Formatura, Certificação, Titulação, Diplomação)</span>
+                                </div>
+                                <div class="cv-step bg-blue-light">
+                                    <strong data-editable="true">Egresso</strong>
+                                    <span data-editable="true">(Acompanhamento, Perfil, Networking, Interação)</span>
+                                </div>
+                            </div>
+                            <!-- Ramificação: Estágio (a partir de Vida Acadêmica) -> Realização -->
+                            <div class="cv-branch">
+                                <div class="cv-branch-estagio">
+                                    <div class="cv-step bg-blue-mid">
+                                        <strong data-editable="true">Estágio</strong>
+                                        <span data-editable="true">(Realização)</span>
+                                    </div>
+                                </div>
+                                <div class="cv-branch-realizacao">
+                                    <div class="cv-step bg-blue-mid">
+                                        <strong data-editable="true">Realização</strong>
+                                        <span data-editable="true">(Disponibilização, Seleção, Contratação, Vigência, Encerramento)</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Card de Resultados -->
                     <div class="cadeia-row" data-level="0">
-                        <div class="cadeia-step bg-blue-light">
-                            <span class="cadeia-step-titulo" data-editable="true">Vida Acadêmica</span>
-                            <span class="cadeia-step-sub" data-editable="true">(Matrícula, Acompanhamento, Avaliação, Estágio, Monitoria, Registro Acadêmico)</span>
-                        </div>
-                    </div>
-                    <div class="cadeia-row" data-level="1">
-                        <div class="cadeia-step bg-blue-mid">
-                            <span class="cadeia-step-titulo" data-editable="true">Estágio</span>
-                            <span class="cadeia-step-sub" data-editable="true">(Realização)</span>
-                        </div>
-                    </div>
-                    <div class="cadeia-row" data-level="2">
-                        <div class="cadeia-step bg-blue-mid">
-                            <span class="cadeia-step-titulo" data-editable="true">Realização</span>
-                            <span class="cadeia-step-sub" data-editable="true">(Disponibilização, Seleção, Contratação, Vigência, Encerramento)</span>
-                        </div>
-                    </div>
-                    <div class="cadeia-row" data-level="2">
                         <div class="cadeia-card-resultados">
                             <div class="cadeia-card-titulo">Resultados</div>
                             <div class="cadeia-card-imagens">

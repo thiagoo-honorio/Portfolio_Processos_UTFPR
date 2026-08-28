@@ -2566,3 +2566,174 @@ body:not(.editing) [data-editable] a::before {
     color: #94a3b8;
     font-size: 1.1rem;
 }
+/* ===== Cadeia de Valor: layout estilo nivel_2 (linha de chevrons + ramificação) ===== */
+.cv-raia {
+    display: grid;
+    grid-template-columns: 130px 1fr;
+    gap: 18px;
+    align-items: stretch;
+    background: #ffffff;
+    border-radius: 12px;
+    padding: 16px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+    border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.cv-macro-mae {
+    background: #474a4e;
+    color: #ffffff;
+    font-weight: 800;
+    font-size: 16px;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+    letter-spacing: 1px;
+    padding: 10px;
+    text-transform: uppercase;
+}
+
+.cv-macro-mae span {
+    writing-mode: vertical-rl;
+    transform: rotate(180deg);
+}
+
+.cv-macro-conteudo {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    min-width: 0;
+}
+
+.cv-floor {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 8px;
+    align-items: stretch;
+}
+
+.cv-step {
+    color: #ffffff;
+    padding: 12px 15px 12px 25px;
+    font-size: 13px;
+    position: relative;
+    clip-path: polygon(0% 0%, calc(100% - 15px) 0%, 100% 50%, calc(100% - 15px) 100%, 0% 100%, 15px 50%);
+    min-height: 90px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.cv-step:first-child {
+    clip-path: polygon(0% 0%, calc(100% - 15px) 0%, 100% 50%, calc(100% - 15px) 100%, 0% 100%);
+    padding-left: 15px;
+    border-radius: 6px 0 0 6px;
+}
+
+.cv-step:last-child {
+    border-radius: 0 6px 6px 0;
+}
+
+.cv-step strong {
+    font-size: 13px;
+    color: #ffffff;
+    display: block;
+    margin-bottom: 4px;
+    line-height: 1.2;
+}
+
+.cv-step span {
+    font-size: 11px;
+    color: rgba(255, 255, 255, 0.9);
+    line-height: 1.3;
+}
+
+/* Ramificação em árvore: Estágio (a partir de Vida Acadêmica) -> Realização */
+.cv-branch {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 8px;
+    margin-top: 4px;
+    position: relative;
+}
+
+/* Conector vertical a partir do centro da coluna 3 do cv-floor (Vida Acadêmica) */
+.cv-branch::before {
+    content: '';
+    position: absolute;
+    left: calc(50% - 1px);
+    top: -14px;
+    width: 2px;
+    height: 14px;
+    background: var(--border-color);
+}
+
+/* Estágio: card na coluna 3, centralizado sob Vida Acadêmica */
+.cv-branch-estagio {
+    grid-column: 3 / 4;
+    justify-self: stretch;
+    position: relative;
+}
+
+/* Realização: card abaixo do Estágio, ramificando dele */
+.cv-branch-realizacao {
+    grid-column: 3 / 4;
+    justify-self: stretch;
+    margin-top: 30px;
+    position: relative;
+}
+
+/* Vertical descendo do centro do Estágio até o Realização */
+.cv-branch-realizacao::before {
+    content: '';
+    position: absolute;
+    left: calc(50% - 1px);
+    top: -30px;
+    width: 2px;
+    height: 32px;
+    background: var(--border-color);
+}
+
+body.editing .cv-step strong,
+body.editing .cv-step span {
+    cursor: text;
+    outline: 1px dashed rgba(255, 255, 255, 0.5);
+    outline-offset: 2px;
+    border-radius: 3px;
+}
+
+/* ===== Cadeia de Valor: responsividade (layout nivel_2) ===== */
+@media (max-width: 992px) {
+    .cv-floor {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+    }
+    .cv-step,
+    .cv-step:first-child,
+    .cv-step:last-child {
+        clip-path: none !important;
+        padding: 14px !important;
+        border-radius: 8px !important;
+        min-height: auto;
+    }
+}
+
+@media (max-width: 768px) {
+    .cv-raia {
+        grid-template-columns: 1fr;
+    }
+    .cv-macro-mae span {
+        writing-mode: horizontal-tb;
+        transform: none;
+    }
+    .cv-branch,
+    .cv-branch-estagio,
+    .cv-branch-realizacao {
+        grid-template-columns: 1fr;
+        grid-column: auto;
+        justify-self: stretch;
+        max-width: none;
+    }
+}
