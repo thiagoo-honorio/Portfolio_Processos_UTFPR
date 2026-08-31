@@ -270,7 +270,6 @@ body {
 }
 
 /* Ajusta âncoras para compensar o menu fixo (2 linhas: links + botões) */
-#cadeiaValueBox,
 #contextBox,
 #sec3Box,
 #sec1Box,
@@ -320,7 +319,6 @@ body {
         font-size: 1.5rem;
     }
 
-    #cadeiaValueBox,
     #contextBox,
     #sec3Box,
     #sec1Box,
@@ -2414,6 +2412,13 @@ body:not(.editing) [data-editable] a::before {
     margin: 6px 0 0 0;
 }
 
+.sup-logo-sei {
+    height: 52px;
+    width: auto;
+    flex: 0 0 auto;
+    object-fit: contain;
+}
+
 .sup-controls {
     display: flex;
     flex-direction: column;
@@ -2529,21 +2534,31 @@ body:not(.editing) [data-editable] a::before {
     margin: 0 0 15px 0;
 }
 
-.sup-card-meta {
-    font-size: 0.85rem;
-    color: #64748b;
-    margin-bottom: 18px;
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
+/* Caixa de texto editável: contexto explicativo de cada processo/documento */
+.sup-card-contexto {
+    flex: 1;
+    width: 100%;
+    min-height: 96px;
+    font-size: 0.9rem;
+    line-height: 1.5;
+    color: #1e293b;
     background: #f8fafc;
-    padding: 10px;
+    border: 1px solid #cbd5e1;
     border-radius: 6px;
+    padding: 10px;
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
 }
 
-.sup-card-meta div {
-    display: flex;
-    justify-content: space-between;
+.sup-card-contexto:focus {
+    border-color: #116a70;
+    box-shadow: 0 0 0 3px rgba(17, 106, 112, 0.15);
+}
+
+.sup-card-contexto[data-placeholder]:empty::before {
+    content: attr(data-placeholder);
+    color: #94a3b8;
+    pointer-events: none;
 }
 
 .sup-btn-link {
@@ -2573,23 +2588,25 @@ body:not(.editing) [data-editable] a::before {
 }
 /* ===== Cadeia de Valor: layout estilo nivel_2 (linha de chevrons + ramificação) ===== */
 .cv-raia {
-    display: grid;
-    grid-template-columns: 110px 1fr;
-    gap: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
     align-items: stretch;
     background: #ffffff;
     border-radius: 12px;
-    padding: 10px;
+    padding: 14px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
     border: 1px solid rgba(0, 0, 0, 0.05);
 }
 
+/* Raíz: ENSINO no topo, ocupando a largura total da hierarquia */
 .cv-macro-mae {
     background: linear-gradient(180deg, #1d5f8e, #143f60);
     color: #ffffff;
     font-weight: 800;
-    font-size: 17px;
+    font-size: 18px;
     text-align: center;
+    align-self: stretch;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -2598,10 +2615,24 @@ body:not(.editing) [data-editable] a::before {
         0 10px 24px rgba(20, 63, 96, 0.45),
         inset 0 1px 0 rgba(255, 255, 255, 0.18);
     letter-spacing: 1.5px;
-    padding: 10px;
+    padding: 14px;
     text-transform: uppercase;
     border: 1px solid rgba(255, 255, 255, 0.12);
     transition: transform 0.2s ease, box-shadow 0.2s ease;
+    position: relative;
+}
+
+/* Conector vertical da raiz (ENSINO) descendo até a linha de etapas */
+.cv-macro-mae::after {
+    content: '';
+    position: absolute;
+    left: 50%;
+    top: 100%;
+    width: 3px;
+    height: 11px;
+    background: #3b82c4;
+    border-radius: 3px;
+    box-shadow: 0 1px 2px rgba(59, 130, 196, 0.4);
 }
 
 /* Efeito de botão: eleva ao passar o mouse */
@@ -2615,6 +2646,37 @@ body:not(.editing) [data-editable] a::before {
 .cv-macro-mae span {
     writing-mode: horizontal-tb;
     transform: none;
+}
+
+/* Rótulo do nível intermediário entre a raiz e as etapas */
+.cv-root-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.6px;
+    text-transform: uppercase;
+    color: #5f7d99;
+    padding: 4px 10px;
+    position: relative;
+    align-self: center;
+    background: rgba(59, 130, 196, 0.08);
+    border-radius: 999px;
+    border: 1px solid rgba(59, 130, 196, 0.28);
+}
+
+/* Conector vertical do rótulo descendo até a linha de etapas */
+.cv-root-link::after {
+    content: '';
+    position: absolute;
+    left: 50%;
+    top: 100%;
+    width: 3px;
+    height: 19px;
+    background: #3b82c4;
+    border-radius: 3px;
+    box-shadow: 0 1px 2px rgba(59, 130, 196, 0.4);
 }
 
 .cv-macro-conteudo {
@@ -2696,17 +2758,14 @@ body:not(.editing) [data-editable] a::before {
 /* Ramificação em árvore (fora da raia): alinhada sob a raia de Ensino */
 .cv-branch-row {
     display: grid;
-    grid-template-columns: 110px 1fr;
-    gap: 12px;
-    margin-top: 10px;
+    grid-template-columns: 1fr;
 }
 
 .cv-branch-spacer {
-    grid-column: 1 / 2;
+    display: none;
 }
 
 .cv-branch {
-    grid-column: 2 / 3;
     display: grid;
     grid-template-columns: repeat(5, 1fr);
     gap: 8px;
@@ -2809,7 +2868,7 @@ body:not(.editing) [data-editable] a::before {
 
 .cv-branch-resultados .cadeia-card-resultados {
     min-width: 0;
-    width: 40%;
+    width: 34%;
 }
 
 body.editing .cv-step strong,
