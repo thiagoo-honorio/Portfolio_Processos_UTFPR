@@ -2632,98 +2632,44 @@ body:not(.editing) [data-editable] a::before {
     border: 1px solid rgba(0, 0, 0, 0.05);
 }
 
-/* Raíz: ENSINO no topo, ocupando a largura total da hierarquia */
-.cv-macro-mae {
-    background: linear-gradient(180deg, #1d5f8e, #143f60);
-    color: #ffffff;
-    font-weight: 800;
-    font-size: 18px;
-    text-align: center;
-    align-self: stretch;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 10px;
-    box-shadow:
-        0 10px 24px rgba(20, 63, 96, 0.45),
-        inset 0 1px 0 rgba(255, 255, 255, 0.18);
-    letter-spacing: 1.5px;
-    padding: 14px;
-    text-transform: uppercase;
-    border: 1px solid rgba(255, 255, 255, 0.12);
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
-    position: relative;
-}
-
-/* Conector vertical da raiz (ENSINO) descendo até a linha de etapas */
-.cv-macro-mae::after {
-    content: '';
-    position: absolute;
-    left: 50%;
-    top: 100%;
-    width: 3px;
-    height: 11px;
-    background: #3b82c4;
-    border-radius: 3px;
-    box-shadow: 0 1px 2px rgba(59, 130, 196, 0.4);
-}
-
-/* Efeito de botão: eleva ao passar o mouse */
-.cv-macro-mae:hover {
-    transform: translateY(-2px);
-    box-shadow:
-        0 14px 32px rgba(20, 63, 96, 0.55),
-        inset 0 1px 0 rgba(255, 255, 255, 0.22);
-}
-
-.cv-macro-mae span {
-    writing-mode: horizontal-tb;
-    transform: none;
-}
-
-/* Rótulo do nível intermediário entre a raiz e as etapas */
-.cv-root-link {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 0.72rem;
-    font-weight: 700;
-    letter-spacing: 0.6px;
-    text-transform: uppercase;
-    color: #5f7d99;
-    padding: 4px 10px;
-    position: relative;
-    align-self: center;
-    background: rgba(59, 130, 196, 0.08);
-    border-radius: 999px;
-    border: 1px solid rgba(59, 130, 196, 0.28);
-}
-
-/* Conector vertical do rótulo descendo até a linha de etapas */
-.cv-root-link::after {
-    content: '';
-    position: absolute;
-    left: 50%;
-    top: 100%;
-    width: 3px;
-    height: 19px;
-    background: #3b82c4;
-    border-radius: 3px;
-    box-shadow: 0 1px 2px rgba(59, 130, 196, 0.4);
-}
-
-.cv-macro-conteudo {
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-    min-width: 0;
-}
-
 .cv-floor {
     display: grid;
-    grid-template-columns: repeat(5, 1fr);
+    grid-template-columns: repeat(6, 1fr);
     gap: 8px;
     align-items: stretch;
+}
+
+/* ENSINO: macroprocesso na mesma raia, com aparência de botão */
+.cv-macro-ensino {
+    background: linear-gradient(180deg, #1d5f8e, #143f60);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    box-shadow: 0 6px 16px rgba(20, 63, 96, 0.4);
+    clip-path: none !important;
+    border-radius: 12px !important;
+    padding: 14px 20px !important;
+    padding-left: 20px !important;
+    min-height: auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease;
+    margin-right: 4px;
+    position: relative;
+}
+
+.cv-macro-ensino:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 24px rgba(20, 63, 96, 0.5);
+    filter: brightness(1.08);
+}
+
+.cv-macro-ensino strong {
+    color: #ffffff;
+    font-size: 0.95rem;
+    letter-spacing: 1px;
+    margin: 0;
 }
 
 .cv-step {
@@ -2799,109 +2745,97 @@ body:not(.editing) [data-editable] a::before {
 }
 
 .cv-branch {
+    position: relative;
     display: grid;
-    grid-template-columns: repeat(5, 1fr);
-    gap: 8px;
-    position: relative;
+    grid-template-columns: repeat(6, 1fr);
+    grid-template-rows: auto auto auto;
+    gap: 26px 14px;
+    align-items: center;
 }
 
-/* Conector vertical da base da raia (Vida Acadêmica) até o card Estágio */
-.cv-branch::before {
-    content: '';
-    position: absolute;
-    left: calc(50% - 1.5px);
-    top: -10px;
-    width: 3px;
-    height: 10px;
-    background: #3b82c4;
-    border-radius: 3px;
-    box-shadow: 0 1px 2px rgba(59, 130, 196, 0.4);
-}
-
-/* Estágio: card na coluna 3, centralizado sob Vida Acadêmica */
+/* ------ NÍVEL 1: Estágio (logo abaixo de Vida Acadêmica, alinhado) ------ */
 .cv-branch-estagio {
-    grid-column: 3 / 4;
-    justify-self: stretch;
+    grid-column: 4 / 5;
+    grid-row: 1 / 2;
+    justify-self: center;
     position: relative;
+    width: 95%;
+    z-index: 1;
 }
 
-/* Validação: card abaixo do Estágio */
+/* ------ NÍVEL 2: Validação e Realização (degrau à direita do Estágio) ------ */
 .cv-branch-validacao {
-    grid-column: 3 / 4;
-    justify-self: stretch;
-    margin-top: 22px;
+    grid-column: 5 / 6;
+    grid-row: 2 / 3;
+    justify-self: center;
     position: relative;
+    width: 95%;
+    z-index: 1;
+    transform: translateX(12px);
 }
 
-/* Vertical descendo do centro do Estágio até a Validação */
-.cv-branch-validacao::before {
-    content: '';
-    position: absolute;
-    left: calc(50% - 1.5px);
-    top: -22px;
-    width: 3px;
-    height: 24px;
-    background: #3b82c4;
-    border-radius: 3px;
-    box-shadow: 0 1px 2px rgba(59, 130, 196, 0.4);
-}
-
-/* Realização: card abaixo da Validação */
 .cv-branch-realizacao {
-    grid-column: 3 / 4;
-    justify-self: stretch;
-    margin-top: 22px;
+    grid-column: 5 / 6;
+    grid-row: 3 / 4;
+    justify-self: center;
     position: relative;
+    width: 95%;
+    z-index: 1;
+    transform: translateX(12px);
 }
 
-/* Vertical descendo do centro da Validação até o Realização */
-.cv-branch-realizacao::before {
-    content: '';
+/* Conectores da árvore desenhados por script (desenharArvore) */
+.cv-tree-lines {
     position: absolute;
-    left: calc(50% - 1.5px);
-    top: -22px;
-    width: 3px;
-    height: 24px;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+}
+
+.cv-tree-lines i {
+    position: absolute;
     background: #3b82c4;
+    line-height: 0;
+    font-style: normal;
+    font-size: 0;
+    display: block;
     border-radius: 3px;
-    box-shadow: 0 1px 2px rgba(59, 130, 196, 0.4);
+    box-shadow: 0 0 0 0 rgba(59, 130, 196, 0);
 }
 
-/* Pontos de junção: marcam de onde cada conector parte/chega */
-.cv-branch-estagio::after,
-.cv-branch-validacao::after,
-.cv-branch-realizacao::after {
-    content: '';
-    position: absolute;
-    left: calc(50% - 5px);
-    top: -5px;
-    width: 9px;
-    height: 9px;
-    border-radius: 50%;
-    background: #ffffff;
-    border: 3px solid #3b82c4;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.18);
-    z-index: 2;
-}
-
-/* Alta menor: compacta os cards da ramificação Estágio/Validação/Realização */
+/* Compacta os cards da ramificação */
 .cv-branch .cv-step {
-    min-height: 60px;
-    padding: 8px 12px 8px 20px;
+    min-height: 56px;
+    padding: 12px 16px;
+    justify-content: center;
+    text-align: center;
+    box-shadow: 0 4px 10px rgba(46, 120, 162, 0.25);
+    border-radius: 10px;
+    clip-path: none;
 }
 
-/* Resultados ao lado da Realização (colunas 4-5, mesma linha) */
+.cv-branch .cv-step strong {
+    font-size: 0.9rem;
+    margin-bottom: 2px;
+}
+
+.cv-branch .cv-step span {
+    font-size: 0.7rem;
+    opacity: 0.95;
+}
+
+/* ------ RESULTADOS: ao lado da Realização (col 6) ------ */
 .cv-branch-resultados {
-    grid-column: 4 / 6;
-    grid-row: 3;
-    justify-self: stretch;
+    grid-column: 6 / 7;
+    grid-row: 3 / 4;
+    justify-self: center;
     align-self: center;
     min-width: 0;
 }
 
 .cv-branch-resultados .cadeia-card-resultados {
     min-width: 0;
-    width: 34%;
+    width: 100%;
 }
 
 body.editing .cv-step strong,
@@ -2938,10 +2872,6 @@ body.editing .cv-step.bg-gray-chevron span {
     .cv-branch-row {
         grid-template-columns: 1fr;
     }
-    .cv-macro-mae span {
-        writing-mode: horizontal-tb;
-        transform: none;
-    }
     .cv-branch-spacer {
         display: none;
     }
@@ -2955,5 +2885,8 @@ body.editing .cv-step.bg-gray-chevron span {
         grid-row: auto;
         justify-self: stretch;
         max-width: none;
+    }
+    .cv-tree-lines {
+        display: none;
     }
 }

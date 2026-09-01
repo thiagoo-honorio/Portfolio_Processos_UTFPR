@@ -76,7 +76,7 @@
                 <p class="hero-subtitle">Visão integrada dos atores, fluxos, documentos e mapeamento interativo do estágio externo e interno na UTFPR.</p>
                 <div class="hero-actions">
                     <a href="#contextBox" class="btn-custom btn-custom-success">Explorar Conteúdo</a>
-                    <a href="#sec2Box" class="btn-custom btn-custom-outline hero-btn-outline">Ver Mapa Interativo</a>
+                    <a href="#sec2Box" class="btn-custom btn-custom-success">Ver Mapa Interativo</a>
                 </div>
             </div>
         </header>
@@ -196,36 +196,33 @@
 
                 <!-- Cadeia de Valor (Hierarquia de Processo) dentro da Contextualização -->
                 <div class="cadeia-container" id="cadeiaContainer">
-                    <!-- Raia de Ensino: macroprocesso mãe + etapas (estilo nivel_2) -->
+                    <!-- Raia: ENSINO (macroprocesso) e as etapas principais, na mesma linha -->
                     <div class="cv-raia">
-                        <!-- RAÍZ: ENSINO (macroprocesso-mãe) no topo da hierarquia -->
-                        <div class="cv-macro-mae" data-editable="true" title="Nível 1 – Macroprocesso (raiz)"><span>ENSINO</span></div>
-                        <!-- Conector vertical: da raiz desce para as etapas -->
-                        <div class="cv-root-link"><span>Nível 2 – Processos</span></div>
-                        <div class="cv-macro-conteudo">
-                            <!-- Linha de chevrons: etapas principais do Ensino -->
-                            <div class="cv-floor">
-                                <div class="cv-step bg-gray-chevron">
-                                    <strong data-editable="true">Projeto de Curso</strong>
-                                </div>
-                                <div class="cv-step bg-gray-chevron">
-                                    <strong data-editable="true">Ingresso</strong>
-                                </div>
-                                <div class="cv-step bg-blue-mid">
-                                    <strong data-editable="true">Vida Acadêmica</strong>
-                                </div>
-                                <div class="cv-step bg-gray-chevron">
-                                    <strong data-editable="true">Conclusão</strong>
-                                </div>
-                                <div class="cv-step bg-gray-chevron">
-                                    <strong data-editable="true">Egresso</strong>
-                                </div>
+                        <div class="cv-floor">
+                            <div class="cv-step cv-macro-ensino" title="Macroprocesso">
+                                <strong data-editable="true">ENSINO</strong>
+                            </div>
+                            <div class="cv-step bg-gray-chevron">
+                                <strong data-editable="true">Projeto de Curso</strong>
+                            </div>
+                            <div class="cv-step bg-gray-chevron">
+                                <strong data-editable="true">Ingresso</strong>
+                            </div>
+                            <div class="cv-step bg-blue-mid">
+                                <strong data-editable="true">Vida Acadêmica</strong>
+                            </div>
+                            <div class="cv-step bg-gray-chevron">
+                                <strong data-editable="true">Conclusão</strong>
+                            </div>
+                            <div class="cv-step bg-gray-chevron">
+                                <strong data-editable="true">Egresso</strong>
                             </div>
                         </div>
                         <!-- Ramificação: Estágio -> Validação -> Realização, descendendo de Vida Acadêmica -->
                         <div class="cv-branch-row">
                         <div class="cv-branch-spacer" style="display:none;"></div>
                         <div class="cv-branch">
+                            <div class="cv-tree-lines"></div>
                             <div class="cv-branch-estagio">
                                 <div class="cv-step bg-blue-mid">
                                     <strong data-editable="true">Estágio</strong>

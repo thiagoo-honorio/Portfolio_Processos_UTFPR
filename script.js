@@ -2124,7 +2124,6 @@ const FALLBACK_IMAGENS = {
                 renderCards();
             }
         }
-
         if (document.getElementById('processGrid')) {
             if (document.readyState === 'loading') {
                 document.addEventListener('DOMContentLoaded', inicializarSuporteTecnologico, { once: true });
@@ -2132,3 +2131,64 @@ const FALLBACK_IMAGENS = {
                 inicializarSuporteTecnologico();
             }
         }
+
+        // ===== Desenha os conectores em árvore da Hierarquia de Processo =====
+        function desenharArvore() {
+            const branch = document.querySelector('.cv-branch');
+            const wrap = branch && branch.querySelector('.cv-tree-lines');
+            if (!branch || !wrap || window.innerWidth <= 768) return;
+            const vida = document.querySelector('.cv-floor .cv-step.bg-blue-mid');
+            const est = branch.querySelector('.cv-branch-estagio');
+            const val = branch.querySelector('.cv-branch-validacao');
+            const rel = branch.querySelector('.cv-branch-realizacao');
+            if (!vida || !est || !val || !rel) return;
+            wrap.innerHTML = '';
+            const cor = '#3b82c4';
+            const hb = branch.getBoundingClientRect();
+            const pos = (el) => {
+                const r = el.getBoundingClientRect();
+                return {
+                    left: r.left - hb.left, right: r.right - hb.left,
+                    top: r.top - hb.top, bottom: r.bottom - hb.top,
+                    cx: r.left - hb.left + r.width / 2, cy: r.top - hb.top + r.height / 2
+                };
+            };
+            const vidaP = pos(vida), estP = pos(est), valP = pos(val), relP = pos(rel);
+            const el = (x, y, w, h) => {
+                const d = document.createElement('i');
+                d.style.left = Math.round(x) + 'px';
+                d.style.top = Math.round(y) + 'px';
+                d.style.width = Math.max(1, Math.round(w)) + 'px';
+                d.style.height = Math.max(1, Math.round(h)) + 'px';
+                d.style.background = cor;
+                wrap.appendChild(d);
+            };
+            // 1) Vida Acadêmica -> Estágio (linha vertical reta)
+            const esgCx = (estP.cx + vidaP.cx) / 2;
+            el(esgCx - 1, vidaP.bottom, 3, estP.top - vidaP.bottom);
+            // 2) Estágio -> Validação e Realização (garfo: estação sai da direita do Estágio e desce para os irmãos abaixo)
+            const esqFilho = Math.min(valP.left, relP.left);
+            const trunkX = (estP.right + esqFilho) / 2;
+            el(estP.right - 1, estP.cy - 1, trunkX - estP.right + 4, 3);
+            const topT = Math.min(valP.cy, relP.cy);
+            const botT = Math.max(valP.cy, relP.cy);
+            el(trunkX - 1, Math.min(estP.cy, topT), 3, botT - Math.min(estP.cy, topT));
+            el(trunkX - 1, valP.cy - 1, valP.left - trunkX + 3, 3);
+            el(trunkX - 1, relP.cy - 1, relP.left - trunkX + 3, 3);
+        }
+
+        function iniciarArvore() {
+            if (!document.querySelector('.cv-branch')) return;
+            desenharArvore();
+            window.addEventListener('resize', desenharArvore);
+            window.addEventListener('load', desenharArvore);
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', desenharArvore, { once: true });
+            }
+        }
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', iniciarArvore, { once: true });
+        } else {
+            iniciarArvore();
+        }
+    
