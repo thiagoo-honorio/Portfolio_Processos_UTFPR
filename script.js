@@ -1273,12 +1273,27 @@ const FALLBACK_IMAGENS = {
             ['#editorToolbar', '#propertiesPanel', '#searchContainer'].forEach(sel => {
                 cloneDoc.querySelectorAll(sel).forEach(el => el.remove());
             });
+            // Remove toda a interface de edição para que o usuário do arquivo exportado
+            // não veja nem consiga ativar o modo Editar (botão da navbar, pilha lateral de
+            // ações, toolbar flutuante e o input de arquivo de imagem).
+            ['#btnToggleEdit', '#globalActionsBar', '#editFloatToolbar', '#inputFileImagem'].forEach(sel => {
+                cloneDoc.querySelectorAll(sel).forEach(el => el.remove());
+            });
+            // Esconde o contêiner de ações da navbar (que abrigava o botão "Editar") mesmo
+            // quando o seletor acima não bater (ex.: estruturas remotas/hospedadas).
+            cloneDoc.querySelectorAll('.nav-actions').forEach(el => el.remove());
+            // Remove a classe 'editing' por segurança, garantindo que nenhum controle de
+            // edição residual seja exibido no arquivo exportado.
+            const cloneBody = cloneDoc.querySelector('body');
+            if (cloneBody) cloneBody.classList.remove('editing');
             // Expande todas as seções colapsáveis no clone (equivalente ao que o PDF faz com
             // toggleSection/secsAd), para que o exportado exiba o conteúdo completo.
+            // O clone é document.documentElement.cloneNode(true) (um Element, não um Document),
+            // então NÃO use cloneDoc.getElementById(id) — use querySelector('#' + id).
             ['contextContent', 'suporteContent', 'sec1bContent', 'sec1Content', 'sec2Content', 'sec3Content'].forEach(id => {
-                const el = cloneDoc.getElementById(id);
+                const el = cloneDoc.querySelector('#' + id);
                 if (el) el.style.display = '';
-                const tg = cloneDoc.getElementById(id.replace('Content', 'Toggle'));
+                const tg = cloneDoc.querySelector('#' + id.replace('Content', 'Toggle'));
                 if (tg && tg.textContent && /expandir/i.test(tg.textContent)) tg.textContent = '[−] Colapsar';
             });
 
@@ -1290,6 +1305,13 @@ const FALLBACK_IMAGENS = {
             cloneDoc.querySelectorAll('[id$="Toggle"]').forEach(el => {
                 if (/expandir/i.test(el.textContent || '')) el.textContent = '[−] Ocultar';
             });
+            // Remove os toggles/prévias de ator já injetados no DOM vivo. Como o clone
+            // copia os botões (.ator-toggle-btn) e prévias (.ator-preview) que existem em
+            // cada .actor-row durante a edição, e o script embutido re-executa instalarToggleAtor()
+            // ao abrir (com um WeakSet novo), sem a remoção o exportado ficaria com os controles
+            // DUPLICADOS: "(-) (-)" ou "(+) Imagem (+) Imagem". Deixar o clone "cru" faz o
+            // exportado injetar exatamente um toggle e uma prévia por ator.
+            cloneDoc.querySelectorAll('.ator-toggle-btn, .ator-preview').forEach(el => el.remove());
         }
 
         async function gerarHTMLCompleto() {
@@ -1395,10 +1417,12 @@ const FALLBACK_IMAGENS = {
             const propertiesPanel = document.getElementById('propertiesPanel');
             const searchContainer = document.getElementById('searchContainer');
             const workspace = document.getElementById('editorWorkspace');
+            const navActions = document.querySelector('.site-nav .nav-actions');
             if (globalBar) globalBar.style.display = 'none';
             if (toolbar) toolbar.style.display = 'none';
             if (propertiesPanel) propertiesPanel.style.display = 'none';
             if (searchContainer) searchContainer.style.display = 'none';
+            if (navActions) navActions.style.display = 'none';
             const prevGrid = workspace ? workspace.style.gridTemplateColumns : '';
             if (workspace) workspace.style.gridTemplateColumns = '1fr';
 
@@ -1450,6 +1474,7 @@ const FALLBACK_IMAGENS = {
                 if (toolbar) toolbar.style.display = 'flex';
                 if (propertiesPanel) propertiesPanel.style.display = 'flex';
                 if (searchContainer) searchContainer.style.display = 'block';
+                if (navActions) navActions.style.display = 'flex';
                 if (workspace) workspace.style.gridTemplateColumns = prevGrid;
                 secsAd.forEach(id => { const el = document.getElementById(id); if (el && secsAdEstados[id]) el.style.display = 'none'; });
                 if (sec1WasHidden) toggleSection('sec1Content', 'sec1Toggle');
@@ -1483,6 +1508,18 @@ const FALLBACK_IMAGENS = {
                 if (!css) css = coletarCSSLocal();
                 try { const r = await fetch('script.js'); if (r.ok) jsTexto = await r.text(); } catch (e) {}
                 if (!jsTexto) jsTexto = await lerScriptApp();
+
+                // Coleta ANTES de embutir, a partir do DOM vivo, os caminhos das imagens
+                // locais de imagens/ (que ainda estão como "imagens/diagrama_*.png" tanto em
+                // data-img quanto em img[src]). Assim a pasta imagens/ é SEMPRE incluída no
+                // .zip, mesmo quando o embutimento (base64) por baixo também as converte.
+                const caminhosImagens = new Set();
+                document.querySelectorAll('[data-img], img[src]').forEach(el => {
+                    const src = el.tagName === 'IMG' ? el.getAttribute('src') : el.getAttribute('data-img');
+                    if (src && /^imagens\/[^/]+\.png$/i.test(src) && !src.startsWith('data:')) {
+                        caminhosImagens.add(src);
+                    }
+                });
 
                 // Monta o HTML de referência (sem embutir CSS/JS inline)
                 const cloneDoc = document.documentElement.cloneNode(true);
@@ -1541,14 +1578,8 @@ const FALLBACK_IMAGENS = {
                 // Inclui as imagens locais (imagens/) no pacote. Elas garantem que o
                 // index.html continue exibindo os diagramas mesmo se o embutim (base64)
                 // não tiver sido possível (ex.: Chrome em file:// bloqueia a leitura).
-                // Mapeia os caminhos relativos usados no HTML para os nomes no ZIP.
-                const caminhosImagens = new Set();
-                cloneDoc.querySelectorAll('[data-img], img[src]').forEach(el => {
-                    const src = el.tagName === 'IMG' ? el.getAttribute('src') : el.getAttribute('data-img');
-                    if (src && /^imagens\/[^/]+\.png$/i.test(src) && !src.startsWith('data:')) {
-                        caminhosImagens.add(src);
-                    }
-                });
+                // Os caminhos foram coletados do DOM vivo ANTES do embutimento (acima),
+                // para que a pasta imagens/ entre sempre no .zip com os PNGs originais.
                 const imgsFaltando = [];
                 for (const caminho of caminhosImagens) {
                     const blob = await lerArquivoBlob(caminho);

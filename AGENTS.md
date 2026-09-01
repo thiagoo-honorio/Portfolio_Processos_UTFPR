@@ -27,7 +27,7 @@
 - `exportarComoPacote` — ZIP via JSZip: index.html + style.css + script.js **+ pasta `imagens/`** (as PNGs dos diagramas referenciadas por caminho relativo são lidas via `lerArquivoBlob` e adicionadas ao pacote).
 - `exportarJSON` — estado completo.
 - As exportações **forçam todos os atores expandidos** (`expandirTodosAtores`) e o estado `expandido` de cada ator é salvo no JSON (`capturarAtores`/`criarLinhaAtorHTML`).
-- `limparCloneParaExportacao` (usada por HTML e Pacote) além de remover a UI de edição (`#editorToolbar`, `#propertiesPanel`, `#searchContainer`, botões de edição…) **expande todas as seções colapsáveis** (`contextContent`, `suporteContent`, `sec1bContent`, `sec1Content`, `sec2Content`, `sec3Content`) para que o exportado contenha o conteúdo completo.
+- `limparCloneParaExportacao` (usada por HTML e Pacote) além de remover a UI de edição (`#editorToolbar`, `#propertiesPanel`, `#searchContainer`, botões de edição…) **expande todas as seções colapsáveis** (`contextContent`, `suporteContent`, `sec1bContent`, `sec1Content`, `sec2Content`, `sec3Content`) para que o exportado contenha o conteúdo completo. **IMPORTANTE:** o clone é `document.documentElement.cloneNode(true)` (um `Element`, não um `Document`), então NÃO use `cloneDoc.getElementById(id)` (lança `TypeError`); use `cloneDoc.querySelector('#' + id)`.
 - `paraDataUrlBase64`/`lerArquivoBlob` tentam `fetch` primeiro (http e Firefox em file://) com fallback para XHR/arraybuffer; em Chrome em file:// a leitura é bloqueada e mantém-se o caminho relativo.
 
 ## Validar código JavaScript
