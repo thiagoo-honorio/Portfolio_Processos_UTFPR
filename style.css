@@ -770,6 +770,13 @@ body.editing .nav-actions {
     color: var(--text-primary);
 }
 
+.section-title-text .section-title-icon {
+    width: 20px;
+    height: 20px;
+    flex-shrink: 0;
+    color: var(--primary);
+}
+
 .editor-toolbar {
     padding: 10px 16px;
     background: #f8fafc;
