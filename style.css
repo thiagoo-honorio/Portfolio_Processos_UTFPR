@@ -2399,17 +2399,11 @@ body:not(.editing) [data-editable] a::before {
     gap: 15px;
 }
 
-.sup-header-title h1 {
-    color: #116a70;
-    font-size: 1.6rem;
-    font-weight: 700;
-    margin: 0;
-}
-
 .sup-header-title p {
-    color: #64748b;
-    font-size: 0.95rem;
-    margin: 6px 0 0 0;
+    color: #116a70;
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin: 0;
 }
 
 .sup-logo-sei {
@@ -2474,33 +2468,64 @@ body:not(.editing) [data-editable] a::before {
 }
 
 .sup-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-    gap: 20px;
-}
-
-.sup-card {
-    background: #ffffff;
-    border: 1px solid #e2e8f0;
-    border-radius: 10px;
-    padding: 20px;
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
-    transition: transform 0.2s, box-shadow 0.2s;
+    gap: 12px;
 }
 
-.sup-card:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
-}
-
-.sup-card-header {
+.sup-list-item {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-left: 5px solid #116a70;
+    border-radius: 8px;
+    padding: 16px 20px;
     display: flex;
-    justify-content: space-between;
     align-items: flex-start;
-    margin-bottom: 12px;
-    gap: 10px;
+    gap: 16px;
+    transition: box-shadow 0.2s, border-left-color 0.2s;
+}
+
+.sup-list-item:hover {
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.06);
+}
+
+.sup-list-num {
+    flex: 0 0 auto;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background: #116a70;
+    color: #ffffff;
+    font-weight: 700;
+    font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 2px;
+}
+
+.sup-list-main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    min-width: 0;
+}
+
+.sup-list-top {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+.sup-list-title {
+    flex: 1;
+    font-size: 1.05rem;
+    font-weight: 600;
+    color: #0f172a;
+    line-height: 1.4;
+    margin: 0;
 }
 
 .sup-category-tag {
@@ -2538,16 +2563,20 @@ body:not(.editing) [data-editable] a::before {
 .sup-card-contexto {
     flex: 1;
     width: 100%;
-    min-height: 96px;
-    font-size: 0.9rem;
-    line-height: 1.5;
+    min-height: auto;
+    font-size: 0.92rem;
+    line-height: 1.55;
     color: #1e293b;
     background: #f8fafc;
-    border: 1px solid #cbd5e1;
+    border: 1px solid #e2e8f0;
     border-radius: 6px;
-    padding: 10px;
+    padding: 12px 14px;
     outline: none;
     transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.sup-list-contexto:empty {
+    min-height: 20px;
 }
 
 .sup-card-contexto:focus {
@@ -2561,16 +2590,21 @@ body:not(.editing) [data-editable] a::before {
     pointer-events: none;
 }
 
+.sup-list-footer {
+    display: flex;
+    justify-content: flex-end;
+}
+
 .sup-btn-link {
-    display: block;
+    display: inline-block;
     text-align: center;
     background-color: #116a70;
     color: #ffffff;
     text-decoration: none;
-    padding: 10px;
+    padding: 8px 18px;
     border-radius: 6px;
     font-weight: 600;
-    font-size: 0.9rem;
+    font-size: 0.85rem;
     transition: background-color 0.2s;
 }
 
@@ -2581,7 +2615,6 @@ body:not(.editing) [data-editable] a::before {
 
 .sup-empty-message {
     text-align: center;
-    grid-column: 1 / -1;
     padding: 40px;
     color: #94a3b8;
     font-size: 1.1rem;

@@ -2043,7 +2043,7 @@ const FALLBACK_IMAGENS = {
             let searchTerm = '';
 
             function aplicarEstadoCards() {
-                document.querySelectorAll('.sup-card [data-editable="true"]').forEach(el => {
+                document.querySelectorAll('.sup-list-item [data-editable="true"]').forEach(el => {
                     el.contentEditable = editMode ? 'true' : 'false';
                 });
             }
@@ -2077,22 +2077,25 @@ const FALLBACK_IMAGENS = {
                     return;
                 }
 
-                filtered.forEach(p => {
-                    const card = document.createElement('div');
-                    card.className = 'sup-card';
-                    card.innerHTML = `
-                        <div>
-                            <div class="sup-card-header">
+                filtered.forEach((p, idx) => {
+                    const item = document.createElement('div');
+                    item.className = 'sup-list-item';
+                    item.innerHTML = `
+                        <div class="sup-list-num">${idx + 1}</div>
+                        <div class="sup-list-main">
+                            <div class="sup-list-top">
                                 <span class="sup-category-tag sup-tag-${p.categoria}" data-editable="true">${p.categoriaNome}</span>
+                                <h3 class="sup-list-title" data-editable="true">${p.descricao}</h3>
                                 <span class="sup-sei-badge" data-editable="true" title="ID do Tipo de Processo SEI">SEI ${p.seiId}</span>
                             </div>
-                            <h3 class="sup-card-title" data-editable="true">${p.descricao}</h3>
+                            <div class="sup-card-contexto sup-list-contexto" data-editable="true" data-contexto="${p.idAtual}" role="textbox" aria-multiline="true" data-placeholder="Escreva aqui o contexto explicativo deste processo/documento...">${carregarContextoSuporte(p.idAtual)}</div>
+                            <div class="sup-list-footer">
+                                ${p.link ? `<a class="sup-btn-link" href="${p.link}" target="_blank" rel="noopener noreferrer">Abrir no SEI</a>` : ''}
+                            </div>
                         </div>
-                        <div class="sup-card-contexto" data-editable="true" data-contexto="${p.idAtual}" role="textbox" aria-multiline="true" data-placeholder="Escreva aqui o contexto explicativo deste processo/documento...">${carregarContextoSuporte(p.idAtual)}</div>
-                        ${p.link ? `<a class="sup-btn-link" href="${p.link}" target="_blank" rel="noopener noreferrer">Abrir no SEI</a>` : ''}
                     `;
-                    grid.appendChild(card);
-                    ligarCard(card, p.idAtual);
+                    grid.appendChild(item);
+                    ligarCard(item, p.idAtual);
                 });
                 aplicarEstadoCards();
             }
@@ -2113,9 +2116,9 @@ const FALLBACK_IMAGENS = {
                 });
             });
 
-            const jaTemCards = grid.querySelectorAll('.sup-card').length > 0;
+            const jaTemCards = grid.querySelectorAll('.sup-list-item').length > 0;
             if (ehExportado && jaTemCards) {
-                grid.querySelectorAll('.sup-card').forEach(card => ligarCard(card, ''));
+                grid.querySelectorAll('.sup-list-item').forEach(card => ligarCard(card, ''));
                 aplicarEstadoCards();
             } else {
                 renderCards();
