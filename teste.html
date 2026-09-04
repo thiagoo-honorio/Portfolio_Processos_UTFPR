@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="pt-br">
 
 <head>
@@ -260,7 +260,7 @@
             </div>
         </div>
 
-        <!-- SEÇÃO 3: FLUXO DO ESTÁGIO -->
+        <!-- SEÇÃO 3: MACRO PROCESSO -->
         <div class="section-box" id="sec3Box">
             <div class="section-header" onclick="toggleSection('sec3Content', 'sec3Toggle')">
                 <span class="section-title-text"><svg class="section-title-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="7" height="7" rx="1"></rect><rect x="14" y="5" width="7" height="7" rx="1"></rect><rect x="3" y="16" width="7" height="4" rx="1"></rect><rect x="14" y="16" width="7" height="4" rx="1"></rect><path d="M10 8.5h4"></path><path d="M10 18h4"></path></svg> Macro Processo</span>
@@ -426,8 +426,49 @@
                             <p data-editable="true">Bases de Conhecimento &amp; Tipos de Processos no SEI</p>
                         </div>
                     </div>
+
+                    <!-- DUPLICATA VISUAL DO MACRO PROCESSO (SEÇÃO 3) -->
+                    <div class="dup-block" style="margin-top: 20px;">
+                        <h3 class="dup-title">Macro Processo (Estágio Externo)</h3>
+                        <div class="dup-map">
+                            <div class="dup-side">
+                                <svg class="dup-side-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
+                                    <circle cx="9" cy="7" r="4"></circle>
+                                    <path d="M22 21v-2a4 4 0 0 0-3-3.87"></path>
+                                    <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                                </svg>
+                                <h2 class="dup-side-title">Estágio Externo</h2>
+                            </div>
+                            <div class="dup-flow">
+                                <div class="dup-pipeline">
+                                    <div class="dup-chevron dup-disponibilizacao">
+                                        <span class="dup-step-title">Disponibilização</span>
+                                        <span class="dup-step-desc">(UCE, Oferta, Homologação)</span>
+                                    </div>
+                                    <div class="dup-chevron dup-contratacao">
+                                        <span class="dup-step-title">Contratação</span>
+                                        <span class="dup-step-desc">(PE, TCE, Estudante, IE, Obrigatório, Não Obrigatório)</span>
+                                    </div>
+                                    <div class="dup-chevron dup-vigencia">
+                                        <span class="dup-step-title">Vigência</span>
+                                        <span class="dup-step-desc">(Visita orientador, renovação, TA, Relatório Parcial)</span>
+                                    </div>
+                                    <div class="dup-chevron dup-encerramento">
+                                        <span class="dup-step-title">Encerramento</span>
+                                        <span class="dup-step-desc">(Conclusão, Avaliação, Relatório Final, Registro Acadêmico, Certificado)</span>
+                                    </div>
+                                </div>
+                                <div class="dup-bar">
+                                    <span class="dup-step-title">Gestão do Estágio</span>
+                                    <span class="dup-step-desc">(UTFPR como UCE, Gestão da UCE, Acesso Acompanhamento da realização do estágio, Indicadores)</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                     <!-- Controles e Filtros -->
-                    <div class="sup-controls">
+                    <div class="sup-controls" style="margin-top: 32px;">
                         <div class="sup-search-bar">
                             <input type="text" id="searchInput" placeholder="Pesquisar por descrição, ID do SEI ou ID da Base de Conhecimento...">
                         </div>

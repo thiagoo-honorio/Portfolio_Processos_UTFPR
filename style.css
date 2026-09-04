@@ -2897,3 +2897,154 @@ body.editing .cv-step.bg-gray-chevron span {
         display: none;
     }
 }
+
+/* ============================================ */
+/* DUPLICATA VISUAL DO MACRO PROCESSO (SUPORTE) */
+/* ============================================ */
+.dup-block {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    color: #1e293b;
+}
+.dup-title {
+    font-size: 1rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    margin: 0 0 12px;
+    color: #1e293b;
+}
+.dup-map {
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+    background-color: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 24px;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+}
+.dup-side {
+    width: 220px;
+    min-width: 220px;
+    background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+    color: #ffffff;
+    border-radius: 10px;
+    padding: 24px 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    box-shadow: 0 4px 12px rgba(15, 23, 42, 0.15);
+}
+.dup-side-icon {
+    width: 42px;
+    height: 42px;
+    margin-bottom: 12px;
+    stroke: #38bdf8;
+}
+.dup-side-title {
+    font-size: 1.25rem;
+    font-weight: 700;
+    margin: 0;
+    line-height: 1.3;
+    letter-spacing: -0.02em;
+}
+.dup-flow {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    justify-content: center;
+}
+.dup-pipeline {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 8px;
+    width: 100%;
+}
+.dup-chevron {
+    position: relative;
+    padding: 16px 14px 16px 24px;
+    color: #ffffff;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    min-height: 85px;
+    box-sizing: border-box;
+    clip-path: polygon(0 0, calc(100% - 16px) 0, 100% 50%, calc(100% - 16px) 100%, 0 100%, 16px 50%);
+    margin-left: -10px;
+}
+.dup-chevron:first-child {
+    clip-path: polygon(0 0, calc(100% - 16px) 0, 100% 50%, calc(100% - 16px) 100%, 0 100%);
+    margin-left: 0;
+    border-top-left-radius: 8px;
+    border-bottom-left-radius: 8px;
+    padding-left: 18px;
+}
+.dup-chevron:last-child {
+    clip-path: polygon(0 0, calc(100% - 16px) 0, 100% 50%, calc(100% - 16px) 100%, 0 100%, 16px 50%);
+    border-top-right-radius: 8px;
+    border-bottom-right-radius: 8px;
+}
+.dup-disponibilizacao { background-color: #737478; }
+.dup-contratacao { background-color: #1bb193; }
+.dup-vigencia { background-color: #5f3377; }
+.dup-encerramento { background-color: #833075; }
+.dup-step-title {
+    font-size: 0.95rem;
+    font-weight: 700;
+    line-height: 1.2;
+    margin-bottom: 4px;
+    display: block;
+}
+.dup-step-desc {
+    font-size: 0.75rem;
+    opacity: 0.9;
+    line-height: 1.25;
+    font-weight: 400;
+    display: block;
+}
+.dup-bar {
+    background-color: #57585c;
+    color: #ffffff;
+    padding: 14px 20px 14px 30px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    clip-path: polygon(0 0, calc(100% - 16px) 0, 100% 50%, calc(100% - 16px) 100%, 0 100%, 16px 50%);
+}
+@media (max-width: 992px) {
+    .dup-map {
+        flex-direction: column;
+    }
+    .dup-side {
+        width: 100%;
+        min-width: unset;
+        padding: 16px;
+    }
+    .dup-pipeline {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+    }
+    .dup-chevron,
+    .dup-chevron:first-child,
+    .dup-chevron:last-child {
+        margin-left: 0;
+        clip-path: none;
+        padding-left: 14px;
+        border-radius: 8px;
+    }
+    .dup-bar {
+        clip-path: none;
+        padding-left: 20px;
+        border-radius: 8px;
+    }
+}
+@media (max-width: 576px) {
+    .dup-pipeline {
+        grid-template-columns: 1fr;
+    }
+}

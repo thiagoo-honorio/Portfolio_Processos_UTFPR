@@ -808,13 +808,20 @@
         }
 
         function capturarEtapas() {
-            const itens = Array.from(document.querySelectorAll('.flow-wrapper .chevron-item')).map(item => ({
-                stepKey: item.dataset.step || '',
-                cor: item.dataset.color || rgbToHex(getComputedStyle(item).backgroundColor),
-                titulo: item.querySelector('.step-title').innerText,
-                desc: item.querySelector('.step-desc').innerText,
-                img: item.getAttribute('data-img') || ''
-            }));
+            const vistos = new Set();
+            const itens = [];
+            document.querySelectorAll('.flow-wrapper .chevron-item').forEach(item => {
+                const stepKey = item.dataset.step || '';
+                if (stepKey && vistos.has(stepKey)) return;
+                if (stepKey) vistos.add(stepKey);
+                itens.push({
+                    stepKey: stepKey,
+                    cor: item.dataset.color || rgbToHex(getComputedStyle(item).backgroundColor),
+                    titulo: item.querySelector('.step-title').innerText,
+                    desc: item.querySelector('.step-desc').innerText,
+                    img: item.getAttribute('data-img') || ''
+                });
+            });
             const barra = document.querySelector('.management-bar');
             const gestao = barra ? {
                 cor: barra.dataset.color || rgbToHex(getComputedStyle(barra).backgroundColor),
@@ -1007,13 +1014,26 @@
                 instalarTogglesAtores();
             }
             if (parsed.etapas && Array.isArray(parsed.etapas.itens) && parsed.etapas.itens.length) {
+                // Deduplica por stepKey: estados salvos corrompidos podem conter etapas
+                // repetidas (ex.: acúmulo no autosave) e são corrigidos ao restaurar.
+                const vistos = new Set();
+                const itensUnicos = [];
+                for (const it of parsed.etapas.itens) {
+                    const chave = it && it.stepKey ? it.stepKey : '';
+                    if (chave && vistos.has(chave)) continue;
+                    if (chave) vistos.add(chave);
+                    itensUnicos.push(it);
+                }
+                if (itensUnicos.length !== parsed.etapas.itens.length) {
+                    console.warn('Macro Processo: ' + (parsed.etapas.itens.length - itensUnicos.length) + ' etapa(s) duplicada(s) removida(s) ao restaurar.');
+                }
                 // Remove as linhas antigas de etapas (fora da pipeline desde a mudança do arraste)
                 const flowEl = document.querySelector('.flow-wrapper');
                 if (flowEl) {
                     flowEl.querySelectorAll(':scope > .etapa-linha:not(.etapa-linha-gestao)').forEach(l => l.remove());
                     flowEl.querySelectorAll(':scope > .chevron-item').forEach(c => c.remove());
                 }
-                document.getElementById('chevronPipeline').innerHTML = parsed.etapas.itens.map(criarEtapaHTML).join('');
+                document.getElementById('chevronPipeline').innerHTML = itensUnicos.map(criarEtapaHTML).join('');
                 if (parsed.etapas.gestao) {
                     const antiga = document.querySelector('.management-bar');
                     if (antiga) antiga.outerHTML = criarGestaoHTML(parsed.etapas.gestao);
