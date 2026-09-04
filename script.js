@@ -78,7 +78,7 @@
             document.querySelectorAll('[data-editable="true"]').forEach(el => {
                 el.contentEditable = editMode ? 'true' : 'false';
             });
-            document.querySelectorAll('.chevron-item, .management-bar').forEach(item => {
+            document.querySelectorAll('#etapasList3 .etapa-ator').forEach(item => {
                 item.draggable = editMode;
             });
             try { instalarPreviewsEtapas(); } catch (err) { console.error('Prévias das etapas:', err); }
@@ -170,31 +170,36 @@
         }
 
         function mudarCorEtapa(input, stepKey) {
-            const item = input.closest('.chevron-item') || input.closest('.management-bar');
+            const item = input.closest('.etapa-ator');
             if (item) {
-                item.style.backgroundColor = input.value;
-                item.dataset.color = input.value;
+                const cor = input.value;
+                item.dataset.color = cor;
+                const card = item.querySelector('.actor-card');
+                if (card) { card.style.borderColor = cor; card.style.color = cor; }
+                const desc = item.querySelector('.actor-description');
+                if (desc) desc.style.backgroundColor = corParaFundo(cor, 0.15);
             }
         }
 
         function removerEtapa(btn) {
             if (!confirm('Remover esta etapa?')) return;
-            const item = btn.closest('.chevron-item');
+            const item = btn.closest('.etapa-ator');
             if (!item) return;
-            // O card agora vive dentro de uma .etapa-linha, que também contém a
-            // prévia da imagem. Remover a linha inteira evita sobras (wrapper vazio
-            // e preview órfão) quando a etapa é apagada.
-            const linha = item.closest('.etapa-linha');
-            if (linha && linha.parentNode === document.querySelector('.flow-wrapper')) linha.remove();
-            else item.remove();
+            if (item.dataset.step === 'gestao') return;
+            item.remove();
             salvarHistorico();
         }
 
         function adicionarEtapa() {
             const id = gerarId('step');
             const html = criarEtapaHTML({ stepKey: id, cor: '#6366f1', titulo: 'Nova Etapa', desc: '(Descrição)', img: '' });
-            document.getElementById('chevronPipeline').insertAdjacentHTML('beforeend', html);
+            const list = document.getElementById('etapasList3');
+            if (!list) return;
+            const editBar = list.querySelector('.edit-step-bar');
+            if (editBar) editBar.insertAdjacentHTML('beforebegin', html);
+            else list.insertAdjacentHTML('beforeend', html);
             aplicarEstadoEditavel();
+            instalarTogglesEtapas();
 
         }
 
@@ -203,7 +208,7 @@
         ================================================ */
         function filterActors() {
             const filter = normalizarBusca(document.getElementById('filterInput').value);
-            const rows = document.getElementsByClassName('actor-row');
+            const rows = document.querySelectorAll('#actorsList .actor-row');
             for (let i = 0; i < rows.length; i++) {
                 const card = rows[i].querySelector('.actor-card');
                 const desc = rows[i].querySelector('.actor-description');
@@ -280,9 +285,20 @@
             document.querySelectorAll('#actorsList .actor-row').forEach(instalarToggleAtor);
         }
 
+        function instalarTogglesEtapas() {
+            document.querySelectorAll('#etapasList3 .etapa-ator').forEach(instalarToggleAtor);
+        }
+
         // Expande todos os atores (usado nas exportações para incluir o texto completo)
         function expandirTodosAtores(escopo) {
             escopo.querySelectorAll('#actorsList .actor-row').forEach(row => {
+                row.classList.add('expandido');
+                const span = row.querySelector('.ator-toggle-btn span');
+                if (span) span.innerText = '(−)';
+                const btn = row.querySelector('.ator-toggle-btn');
+                if (btn) btn.setAttribute('aria-expanded', 'true');
+            });
+            escopo.querySelectorAll('#etapasList3 .etapa-ator').forEach(row => {
                 row.classList.add('expandido');
                 const span = row.querySelector('.ator-toggle-btn span');
                 if (span) span.innerText = '(−)';
@@ -807,125 +823,97 @@
                 </div>`;
         }
 
+        function obterDescricaoPura(div) {
+            const clone = div.cloneNode(true);
+            clone.querySelectorAll('.jornada-link, .jornada-caption, br').forEach(el => el.remove());
+            const strong = clone.querySelector('strong');
+            if (strong) strong.remove();
+            return clone.innerText.trim();
+        }
+
         function capturarEtapas() {
             const vistos = new Set();
             const itens = [];
-            document.querySelectorAll('.flow-wrapper .chevron-item').forEach(item => {
+            let gestao = null;
+            document.querySelectorAll('#etapasList3 .etapa-ator').forEach(item => {
                 const stepKey = item.dataset.step || '';
                 if (stepKey && vistos.has(stepKey)) return;
                 if (stepKey) vistos.add(stepKey);
-                itens.push({
+                const card = item.querySelector('.actor-card');
+                const descDiv = item.querySelector('.actor-description > div');
+                const novo = {
                     stepKey: stepKey,
-                    cor: item.dataset.color || rgbToHex(getComputedStyle(item).backgroundColor),
-                    titulo: item.querySelector('.step-title').innerText,
-                    desc: item.querySelector('.step-desc').innerText,
+                    cor: item.dataset.color || (card ? rgbToHex(getComputedStyle(card).borderColor) : '#6366f1'),
+                    titulo: card ? card.innerText.trim() : '',
+                    desc: descDiv ? obterDescricaoPura(descDiv) : '',
                     img: item.getAttribute('data-img') || ''
-                });
+                };
+                if (stepKey === 'gestao') gestao = novo;
+                else itens.push(novo);
             });
-            const barra = document.querySelector('.management-bar');
-            const gestao = barra ? {
-                cor: barra.dataset.color || rgbToHex(getComputedStyle(barra).backgroundColor),
-                titulo: barra.querySelector('.step-title').innerText,
-                desc: barra.querySelector('.step-desc').innerText,
-                img: barra.getAttribute('data-img') || ''
-            } : null;
             return { itens: itens, gestao: gestao };
         }
 
         function criarEtapaHTML(et) {
             const key = escaparHTML(et.stepKey);
+            const cor = et.cor || '#6366f1';
+            const fundo = corParaFundo(cor, 0.15);
             return `
-                <div class="chevron-item" tabindex="0" role="button" style="background-color:${et.cor};" data-step="${key}" data-color="${et.cor}" data-img="${(et.img || '').replace(/"/g, '&quot;')}"
-                    onclick="abrirCardDetalhesEl(this)"
-                    onkeydown="tratarTeclado3(event, this)">
-                    <div class="step-edit-controls">
-                        <button class="edit-ctrl-btn color-btn" title="Cor da etapa"><input type="color" value="${et.cor}" onchange="mudarCorEtapa(this,'${key}')"></button>
+                <div class="actor-row etapa-ator" data-step="${key}" data-color="${cor}" data-img="${(et.img || '').replace(/"/g, '&quot;')}" data-nome="${escaparHTML(et.titulo)}">
+                    <div class="edit-controls">
+                        <button class="edit-ctrl-btn color-btn" title="Cor da etapa"><input type="color" value="${cor}" onchange="mudarCorEtapa(this,'${key}')"></button>
                         <button class="edit-ctrl-btn delete" title="Remover etapa" onclick="event.stopPropagation();removerEtapa(this)">✕</button>
                     </div>
-                    <span class="step-title" contenteditable="false" data-editable="true">${escaparHTML(et.titulo)}</span>
-                    <span class="step-desc" contenteditable="false" data-editable="true">${escaparHTML(et.desc)}</span>
+                    <div class="actor-card" contenteditable="false" data-editable="true" style="border-color:${cor};color:${cor};">${escaparHTML(et.titulo)}</div>
+                    <div class="actor-description" style="background-color:${fundo};">
+                        <div contenteditable="false" data-editable="true">
+                            <strong>${escaparHTML(et.titulo)}:</strong> ${escaparHTML(et.desc)}
+                            ${et.img ? `<br><a href="#" class="jornada-link" onclick="openJornada(event); return false;" title="Clique para ampliar"><img src="${(et.img || '').replace(/"/g, '&quot;')}" alt="Mapeamento da etapa ${escaparHTML(et.titulo)}" class="jornada-thumb"></a><div class="jornada-caption">Clique na imagem para ampliar</div>` : ''}
+                        </div>
+                    </div>
                 </div>`;
         }
 
         function criarGestaoHTML(g) {
+            const cor = g.cor || '#57585c';
+            const fundo = corParaFundo(cor, 0.15);
             return `
-                <div class="management-bar" tabindex="0" role="button" data-step="gestao" data-color="${g.cor}" style="background-color:${g.cor};" data-img="${(g.img || '').replace(/"/g, '&quot;')}"
-                    onclick="abrirCardDetalhesEl(this)"
-                    onkeydown="tratarTeclado3(event, this)">
-                    <div class="step-edit-controls">
-                        <button class="edit-ctrl-btn color-btn" title="Cor da barra"><input type="color" value="${g.cor}" onchange="mudarCorEtapa(this,'gestao')"></button>
+                <div class="actor-row etapa-ator etapa-gestao" data-step="gestao" data-color="${cor}" data-img="${(g.img || '').replace(/"/g, '&quot;')}" data-nome="${escaparHTML(g.titulo)}">
+                    <div class="edit-controls">
+                        <button class="edit-ctrl-btn color-btn" title="Cor da barra"><input type="color" value="${cor}" onchange="mudarCorEtapa(this,'gestao')"></button>
                     </div>
-                    <span class="step-title" contenteditable="false" data-editable="true">${escaparHTML(g.titulo)}</span>
-                    <span class="step-desc" contenteditable="false" data-editable="true">${escaparHTML(g.desc)}</span>
+                    <div class="actor-card" contenteditable="false" data-editable="true" style="border-color:${cor};color:${cor};">${escaparHTML(g.titulo)}</div>
+                    <div class="actor-description" style="background-color:${fundo};">
+                        <div contenteditable="false" data-editable="true">
+                            <strong>${escaparHTML(g.titulo)}:</strong> ${escaparHTML(g.desc)}
+                            ${g.img ? `<br><a href="#" class="jornada-link" onclick="openJornada(event); return false;" title="Clique para ampliar"><img src="${(g.img || '').replace(/"/g, '&quot;')}" alt="Mapeamento da ${escaparHTML(g.titulo)}" class="jornada-thumb"></a><div class="jornada-caption">Clique na imagem para ampliar</div>` : ''}
+                        </div>
+                    </div>
                 </div>`;
         }
 
         /* ================================================
            SEÇÃO 3: PRÉVIAS DE IMAGEM + REORDENAR (ARRASTAR)
         ================================================ */
-        function anexarPreview(container, item) {
-            const imgSrc = item.getAttribute('data-img');
-            let preview = item.nextElementSibling;
-            const existe = preview && preview.classList.contains('etapa-preview');
-            if (!imgSrc) {
-                if (existe) preview.style.display = 'none';
-                return;
-            }
-            if (!existe) {
-                preview = document.createElement('div');
-                preview.className = 'etapa-preview';
-                preview.title = 'Clique na imagem para ampliar';
-                const img = document.createElement('img');
-                img.alt = 'Prévia do fluxo da etapa';
-                preview.appendChild(img);
-                if (item.nextSibling) container.insertBefore(preview, item.nextSibling);
-                else container.appendChild(preview);
-            }
-            preview.querySelector('img').src = imgSrc;
-            preview.style.display = '';
-            // Re-acopla o listener mesmo quando o preview já existe (cloneNode não copia listeners;
-            // o WeakSet em memória não sobrevive ao clone, então os clones re-anexam aqui).
-            if (!previewsEtapasVinculados.has(preview)) {
-                previewsEtapasVinculados.add(preview);
-                preview.addEventListener('click', (e) => { e.stopPropagation(); openJornada(e); });
-            }
-        }
-
         function instalarPreviewsEtapas() {
-            const flow = document.querySelector('.flow-wrapper');
-            if (!flow) return;
-            // 1) Embrulha cards soltos (ainda sem linha) no próprio lugar
-            flow.querySelectorAll('.chevron-item, .management-bar').forEach(card => {
-                if (card.closest('.etapa-linha')) return;
-                const linha = document.createElement('div');
-                linha.className = 'etapa-linha' + (card.classList.contains('management-bar') ? ' etapa-linha-gestao' : '');
-                card.parentNode.insertBefore(linha, card);
-                linha.appendChild(card);
-            });
-            // 2) Achata: todas as linhas viram filhas diretas do flow-wrapper (mesmo nível => todas arrastáveis)
-            const todasLinhas = Array.from(flow.querySelectorAll('.etapa-linha'));
-            todasLinhas.forEach(linha => flow.appendChild(linha));
-            // 3) Prévia de imagem ao lado de cada linha
-            todasLinhas.forEach(linha => {
-                const alvo = linha.querySelector('.chevron-item') || linha.querySelector('.management-bar');
-                if (alvo) anexarPreview(linha, alvo);
-            });
+            // No layout em estilo ator, a prévia (imagem ao lado do card) e o botão de
+            // expandir/recolher são criados por instalarTogglesEtapas, que reaproveita a
+            // mesma mecânica dos atores. Aqui só garantimos que as etapas sem toggle ainda
+            // recebam o tratamento (WeakSet evita duplicações).
+            document.querySelectorAll('#etapasList3 .etapa-ator').forEach(instalarToggleAtor);
         }
 
         function iniciarDragEtapas() {
-            const flow = document.querySelector('.flow-wrapper');
+            const flow = document.getElementById('etapasList3');
             if (!flow || flow.dataset.dragBound) return;
             flow.dataset.dragBound = '1';
             let arrastandoLinha = null, ordemInicial = '';
-            const linhas = () => Array.from(flow.querySelectorAll(':scope > .etapa-linha'));
-            const ordemAtual = () => linhas().map(l => {
-                const el = l.querySelector('.chevron-item') || l.querySelector('.management-bar');
-                return el ? (el.dataset.step || '') : '?';
-            }).join('|');
+            const linhas = () => Array.from(flow.querySelectorAll(':scope > .etapa-ator'));
+            const ordemAtual = () => linhas().map(el => el.dataset.step || '').join('|');
             flow.addEventListener('dragstart', (e) => {
-                const card = e.target.closest ? e.target.closest('.chevron-item, .management-bar') : null;
+                const card = e.target.closest ? e.target.closest('.etapa-ator') : null;
                 if (!editMode || !card || !flow.contains(card)) { e.preventDefault(); return; }
-                arrastandoLinha = card.closest('.etapa-linha');
+                arrastandoLinha = card;
                 ordemInicial = ordemAtual();
                 card.classList.add('arrastando');
                 e.dataTransfer.effectAllowed = 'move';
@@ -935,13 +923,12 @@
                 if (!editMode || !arrastandoLinha) return;
                 e.preventDefault();
                 e.dataTransfer.dropEffect = 'move';
-                const alvoCard = e.target.closest ? e.target.closest('.chevron-item, .management-bar') : null;
+                const alvoCard = e.target.closest ? e.target.closest('.etapa-ator') : null;
                 if (!alvoCard) return;
-                const alvoLinha = alvoCard.closest('.etapa-linha');
-                if (!alvoLinha || alvoLinha === arrastandoLinha || alvoLinha.parentNode !== flow) return;
-                const rect = alvoLinha.getBoundingClientRect();
+                if (alvoCard === arrastandoLinha || alvoCard.parentNode !== flow) return;
+                const rect = alvoCard.getBoundingClientRect();
                 const antes = (e.clientY - rect.top) / rect.height < 0.5;
-                flow.insertBefore(arrastandoLinha, antes ? alvoLinha : alvoLinha.nextSibling);
+                flow.insertBefore(arrastandoLinha, antes ? alvoCard : alvoCard.nextSibling);
             });
             flow.addEventListener('drop', (e) => { if (arrastandoLinha) e.preventDefault(); });
             flow.addEventListener('dragend', () => {
@@ -952,7 +939,7 @@
         }
 
         function vincularCliquesAtores() {
-            document.querySelectorAll('.actor-row').forEach(row => {
+            document.querySelectorAll('#actorsList .actor-row').forEach(row => {
                 if (atoresVinculados.has(row)) return;
                 atoresVinculados.add(row);
                 row.addEventListener('dblclick', (e) => {
@@ -1027,17 +1014,34 @@
                 if (itensUnicos.length !== parsed.etapas.itens.length) {
                     console.warn('Macro Processo: ' + (parsed.etapas.itens.length - itensUnicos.length) + ' etapa(s) duplicada(s) removida(s) ao restaurar.');
                 }
-                // Remove as linhas antigas de etapas (fora da pipeline desde a mudança do arraste)
-                const flowEl = document.querySelector('.flow-wrapper');
-                if (flowEl) {
-                    flowEl.querySelectorAll(':scope > .etapa-linha:not(.etapa-linha-gestao)').forEach(l => l.remove());
-                    flowEl.querySelectorAll(':scope > .chevron-item').forEach(c => c.remove());
+                // Remove as etapas antigas (mantém a barra de edição da lista)
+                const list = document.getElementById('etapasList3');
+                if (list) {
+                    list.querySelectorAll(':scope > .etapa-ator').forEach(et => et.remove());
+                    const editBar = list.querySelector('.edit-step-bar');
+                    itensUnicos.forEach(htmlEtapa => {
+                        const tmp = document.createElement('div');
+                        tmp.innerHTML = criarEtapaHTML(htmlEtapa);
+                        const node = tmp.firstElementChild;
+                        if (!node) return;
+                        if (editBar) editBar.insertAdjacentElement('beforebegin', node);
+                        else list.appendChild(node);
+                    });
                 }
-                document.getElementById('chevronPipeline').innerHTML = itensUnicos.map(criarEtapaHTML).join('');
                 if (parsed.etapas.gestao) {
-                    const antiga = document.querySelector('.management-bar');
-                    if (antiga) antiga.outerHTML = criarGestaoHTML(parsed.etapas.gestao);
+                    const antiga = document.querySelector('#etapasList3 .etapa-ator[data-step="gestao"]');
+                    const nova = criarGestaoHTML(parsed.etapas.gestao);
+                    if (antiga) antiga.outerHTML = nova;
+                    else {
+                        const list2 = document.getElementById('etapasList3');
+                        if (list2) {
+                            const editBar2 = list2.querySelector('.edit-step-bar');
+                            if (editBar2) editBar2.insertAdjacentHTML('beforebegin', nova);
+                            else list2.insertAdjacentHTML('beforeend', nova);
+                        }
+                    }
                 }
+                try { instalarTogglesEtapas(); } catch (err) { console.error('Toggles das etapas:', err); }
             }
             if (parsed.textos) aplicarTextosEditaveis(parsed.textos);
             if (parsed.secoes) aplicarSecoes(parsed.secoes);
@@ -1667,6 +1671,16 @@ const FALLBACK_IMAGENS_CDN_404 = {
             return "#" + ((1 << 24) + (parseInt(m[0]) << 16) + (parseInt(m[1]) << 8) + parseInt(m[2])).toString(16).slice(1);
         }
 
+        function corParaFundo(cor, alfa) {
+            const hex = rgbToHex(cor);
+            if (!/^#[0-9a-fA-F]{3}$/.test(hex) && !/^#[0-9a-fA-F]{6}$/.test(hex)) return 'rgba(0,0,0,0.06)';
+            const h = hex.length === 4 ? hex.slice(1).split('').map(c => c + c).join('') : hex.slice(1);
+            const r = parseInt(h.slice(0, 2), 16);
+            const g = parseInt(h.slice(2, 4), 16);
+            const b = parseInt(h.slice(4, 6), 16);
+            return `rgba(${r}, ${g}, ${b}, ${alfa})`;
+        }
+
         /* ================================================
            INICIALIZAÇÃO
         ================================================ */
@@ -1694,13 +1708,14 @@ const FALLBACK_IMAGENS_CDN_404 = {
             salvarHistorico(); renderizarMapa();
             vincularCliquesAtores();
             instalarTogglesAtores();
+            instalarTogglesEtapas();
             atualizarSelectAtores();
             try { iniciarDragEtapas(); } catch (err) { console.error('Arraste das etapas:', err); }
             try { instalarPreviewsEtapas(); } catch (err) { console.error('Prévias das etapas:', err); }
 
             document.addEventListener('click', (e) => {
                 if (!editMode) return;
-                const editable = e.target.closest('.chevron-item [contenteditable="true"], .management-bar [contenteditable="true"]');
+                const editable = e.target.closest('.etapa-ator [contenteditable="true"]');
                 if (editable) e.stopPropagation();
             }, true);
 
@@ -1840,11 +1855,11 @@ const FALLBACK_IMAGENS_CDN_404 = {
             };
 
             window.abrirCardDetalhesEl = function (el) {
-                const tituloEl = el.querySelector('.step-title');
-                const descEl = el.querySelector('.step-desc');
-                const titulo = tituloEl ? tituloEl.innerText.trim() : '';
-                const desc = descEl ? descEl.innerText.trim().replace(/^\(/, '').replace(/\)$/, '') : '';
-                const cor = el.dataset.color || rgbToHex(getComputedStyle(el).backgroundColor);
+                const card = el.querySelector('.actor-card');
+                const descDiv = el.querySelector('.actor-description > div');
+                const titulo = card ? card.innerText.trim() : '';
+                const desc = descDiv ? descDiv.innerText.trim() : '';
+                const cor = el.dataset.color || (card ? rgbToHex(getComputedStyle(card).borderColor) : '#6366f1');
                 abrirCardDetalhes3(titulo, desc, cor, el.getAttribute('data-img') || '');
             };
 

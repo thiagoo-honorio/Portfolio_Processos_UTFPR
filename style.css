@@ -3048,3 +3048,76 @@ body.editing .cv-step.bg-gray-chevron span {
         grid-template-columns: 1fr;
     }
 }
+
+/* ============================================ */
+/* SEÇÃO 3: MACRO PROCESSO EM ESTILO ATOR       */
+/* ============================================ */
+.etapas-atores-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.etapa-ator {
+    cursor: pointer;
+}
+
+.etapa-ator .actor-card {
+    flex: 0 0 220px;
+    border-width: 3px;
+    border-radius: 2px;
+    font-weight: 700;
+    font-size: 15px;
+}
+
+.etapa-ator .actor-description {
+    flex: 1;
+    padding: 12px 18px;
+    border-radius: 2px;
+    font-size: 13.5px;
+    line-height: 1.5;
+    color: #000000;
+    display: none;
+    align-items: center;
+    text-align: justify;
+}
+
+.etapa-ator.expandido .actor-description {
+    display: flex;
+}
+
+/* Cores das etapas (mesmo padrão dos atores: borda/texto vivo + fundo pastel) */
+.etapa-ator[data-step="disponibilizacao"] .actor-card { border-color: #0070c0; color: #0070c0; }
+.etapa-ator[data-step="disponibilizacao"] .actor-description { background-color: #d9e8f5; }
+.etapa-ator[data-step="contratacao"] .actor-card { border-color: #1bb193; color: #1bb193; }
+.etapa-ator[data-step="contratacao"] .actor-description { background-color: #d6f1e9; }
+.etapa-ator[data-step="vigencia"] .actor-card { border-color: #7030a0; color: #7030a0; }
+.etapa-ator[data-step="vigencia"] .actor-description { background-color: #ebdcf5; }
+.etapa-ator[data-step="encerramento"] .actor-card { border-color: #c00000; color: #c00000; }
+.etapa-ator[data-step="encerramento"] .actor-description { background-color: #f9e1e1; }
+.etapa-ator[data-step="gestao"] .actor-card { border-color: #d88e00; color: #d88e00; }
+.etapa-ator[data-step="gestao"] .actor-description { background-color: #fef0cb; }
+
+body.editing .etapa-ator {
+    cursor: grab;
+}
+
+body.editing .etapa-ator.arrastando {
+    opacity: 0.45;
+    cursor: grabbing;
+}
+
+@media (max-width: 600px) {
+    .etapa-ator {
+        flex-direction: column;
+        gap: 5px;
+    }
+    .etapa-ator .actor-card {
+        flex: none;
+        width: 100%;
+        padding: 10px;
+    }
+    .etapa-ator .actor-description {
+        text-align: left;
+    }
+}

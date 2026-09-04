@@ -267,89 +267,84 @@
                 <span id="sec3Toggle" class="btn-custom btn-custom-outline" style="padding: 2px 8px;" aria-label="Ocultar ou expandir Seção 3">[−] Ocultar</span>
             </div>
             <div id="sec3Content">
-                <div class="process-map-container" id="processMapSection3">
-                    <div class="side-card">
-                        <svg class="side-card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                            stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
-                            <circle cx="9" cy="7" r="4"></circle>
-                            <path d="M22 21v-2a4 4 0 0 0-3-3.87"></path>
-                            <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
-                        </svg>
-                        <h2 class="side-card-title" contenteditable="false" data-editable="true" data-field="sideTitle">
-                            Estágio Externo</h2>
+                <div class="etapas-atores-list" id="etapasList3">
+
+                    <div class="actor-row etapa-ator" data-step="disponibilizacao" data-color="#0070c0" data-img="imagens/diagrama_disponibilizacao.png" data-nome="Disponibilização">
+                        <div class="edit-controls">
+                            <button class="edit-ctrl-btn color-btn" title="Cor da etapa"><input type="color" value="#0070c0" onchange="mudarCorEtapa(this,'disponibilizacao')"></button>
+                            <button class="edit-ctrl-btn delete" title="Remover etapa" onclick="event.stopPropagation();removerEtapa(this)">✕</button>
+                        </div>
+                        <div class="actor-card" contenteditable="false" data-editable="true">Disponibilização</div>
+                        <div class="actor-description">
+                            <div contenteditable="false" data-editable="true">
+                                <strong>Disponibilização:</strong> Etapa em que a UCE oferta a vaga de estágio e a UTFPR a homologue, habilitando a contratação.
+                                <br><a href="#" class="jornada-link" onclick="openJornada(event); return false;" title="Clique para ampliar"><img src="imagens/diagrama_disponibilizacao.png" alt="Mapeamento da etapa de Disponibilização" class="jornada-thumb"></a>
+                                <div class="jornada-caption">Clique na imagem para ampliar</div>
+                            </div>
+                        </div>
                     </div>
-                    <div class="flow-wrapper">
-                        <div class="chevron-pipeline" id="chevronPipeline">
-                            <div class="chevron-item step-disponibilizacao"
-                                data-step="disponibilizacao" data-color="#737478"
-                                data-img="imagens/diagrama_disponibilizacao.png">
-                                <div class="step-edit-controls">
-                                    <button class="edit-ctrl-btn color-btn" title="Cor da etapa"><input type="color"
-                                            value="#737478" onchange="mudarCorEtapa(this,'disponibilizacao')"></button>
-                                    <button class="edit-ctrl-btn delete" title="Remover etapa"
-                                        onclick="event.stopPropagation();removerEtapa(this)">✕</button>
-                                </div>
-                                <span class="step-title" contenteditable="false"
-                                    data-editable="true">Disponibilização</span>
-                                <span class="step-desc" contenteditable="false" data-editable="true">(UCE, Oferta,
-                                    Homologação)</span>
-                            </div>
-                            <div class="chevron-item step-contratacao"
-                                data-step="contratacao" data-color="#1bb193"
-                                data-img="imagens/diagrama_contratacao.png">
-                                <div class="step-edit-controls">
-                                    <button class="edit-ctrl-btn color-btn" title="Cor da etapa"><input type="color"
-                                            value="#1bb193" onchange="mudarCorEtapa(this,'contratacao')"></button>
-                                    <button class="edit-ctrl-btn delete" title="Remover etapa"
-                                        onclick="event.stopPropagation();removerEtapa(this)">✕</button>
-                                </div>
-                                <span class="step-title" contenteditable="false" data-editable="true">Contratação</span>
-                                <span class="step-desc" contenteditable="false" data-editable="true">(PE, TCE,
-                                    Estudante, IE, Obrigatório, Não Obrigatório)</span>
-                            </div>
-                            <div class="chevron-item step-vigencia"                                 data-step="vigencia"
-                                data-color="#5f3377"
-                                data-img="imagens/diagrama_vigencia.png">
-                                <div class="step-edit-controls">
-                                    <button class="edit-ctrl-btn color-btn" title="Cor da etapa"><input type="color"
-                                            value="#5f3377" onchange="mudarCorEtapa(this,'vigencia')"></button>
-                                    <button class="edit-ctrl-btn delete" title="Remover etapa"
-                                        onclick="event.stopPropagation();removerEtapa(this)">✕</button>
-                                </div>
-                                <span class="step-title" contenteditable="false" data-editable="true">Vigência</span>
-                                <span class="step-desc" contenteditable="false" data-editable="true">(Visita orientador,
-                                    renovação, TA, Relatório Parcial)</span>
-                            </div>
-                            <div class="chevron-item step-encerramento"
-                                data-step="encerramento" data-color="#833075"
-                                data-img="imagens/diagrama_encerramento.png">
-                                <div class="step-edit-controls">
-                                    <button class="edit-ctrl-btn color-btn" title="Cor da etapa"><input type="color"
-                                            value="#833075" onchange="mudarCorEtapa(this,'encerramento')"></button>
-                                    <button class="edit-ctrl-btn delete" title="Remover etapa"
-                                        onclick="event.stopPropagation();removerEtapa(this)">✕</button>
-                                </div>
-                                <span class="step-title" contenteditable="false"
-                                    data-editable="true">Encerramento</span>
-                                <span class="step-desc" contenteditable="false" data-editable="true">(Conclusão,
-                                    Avaliação, Relatório Final, Registro Acadêmico, Certificado)</span>
+
+                    <div class="actor-row etapa-ator" data-step="contratacao" data-color="#1bb193" data-img="imagens/diagrama_contratacao.png" data-nome="Contratação">
+                        <div class="edit-controls">
+                            <button class="edit-ctrl-btn color-btn" title="Cor da etapa"><input type="color" value="#1bb193" onchange="mudarCorEtapa(this,'contratacao')"></button>
+                            <button class="edit-ctrl-btn delete" title="Remover etapa" onclick="event.stopPropagation();removerEtapa(this)">✕</button>
+                        </div>
+                        <div class="actor-card" contenteditable="false" data-editable="true">Contratação</div>
+                        <div class="actor-description">
+                            <div contenteditable="false" data-editable="true">
+                                <strong>Contratação:</strong> Formalização do estágio pela emissão do Termo de Compromisso de Estágio (TCE) entre a IE, a UCE e o estudante.
+                                <br><a href="#" class="jornada-link" onclick="openJornada(event); return false;" title="Clique para ampliar"><img src="imagens/diagrama_contratacao.png" alt="Mapeamento da etapa de Contratação" class="jornada-thumb"></a>
+                                <div class="jornada-caption">Clique na imagem para ampliar</div>
                             </div>
                         </div>
-                        <div class="management-bar" data-step="gestao" data-color="#57585c"
-                            data-img="imagens/diagrama_gestao.png">
-                            <div class="step-edit-controls">
-                                <button class="edit-ctrl-btn color-btn" title="Cor da barra"><input type="color"
-                                        value="#57585c" onchange="mudarCorEtapa(this,'gestao')"></button>
+                    </div>
+
+                    <div class="actor-row etapa-ator" data-step="vigencia" data-color="#7030a0" data-img="imagens/diagrama_vigencia.png" data-nome="Vigência">
+                        <div class="edit-controls">
+                            <button class="edit-ctrl-btn color-btn" title="Cor da etapa"><input type="color" value="#7030a0" onchange="mudarCorEtapa(this,'vigencia')"></button>
+                            <button class="edit-ctrl-btn delete" title="Remover etapa" onclick="event.stopPropagation();removerEtapa(this)">✕</button>
+                        </div>
+                        <div class="actor-card" contenteditable="false" data-editable="true">Vigência</div>
+                        <div class="actor-description">
+                            <div contenteditable="false" data-editable="true">
+                                <strong>Vigência:</strong> Período de realização do estágio, com acompanhamento do orientador, possíveis renovações via Termos Aditivos (TA) e relatórios parciais.
+                                <br><a href="#" class="jornada-link" onclick="openJornada(event); return false;" title="Clique para ampliar"><img src="imagens/diagrama_vigencia.png" alt="Mapeamento da etapa de Vigência" class="jornada-thumb"></a>
+                                <div class="jornada-caption">Clique na imagem para ampliar</div>
                             </div>
-                            <span class="step-title" contenteditable="false" data-editable="true">Gestão do
-                                Estágio</span>
-                            <span class="step-desc" contenteditable="false" data-editable="true">(UTFPR como UCE, Gestão
-                                da UCE, Acesso Acompanhamento da realização do estágio, Indicadores)</span>
                         </div>
-                        <div class="edit-step-bar">
-                            <button class="add-actor-btn" onclick="adicionarEtapa()" aria-label="Adicionar nova etapa ao fluxo">+ Adicionar Etapa</button>
+                    </div>
+
+                    <div class="actor-row etapa-ator" data-step="encerramento" data-color="#c00000" data-img="imagens/diagrama_encerramento.png" data-nome="Encerramento">
+                        <div class="edit-controls">
+                            <button class="edit-ctrl-btn color-btn" title="Cor da etapa"><input type="color" value="#c00000" onchange="mudarCorEtapa(this,'encerramento')"></button>
+                            <button class="edit-ctrl-btn delete" title="Remover etapa" onclick="event.stopPropagation();removerEtapa(this)">✕</button>
                         </div>
+                        <div class="actor-card" contenteditable="false" data-editable="true">Encerramento</div>
+                        <div class="actor-description">
+                            <div contenteditable="false" data-editable="true">
+                                <strong>Encerramento:</strong> Conclusão do estágio com avaliação final, registro acadêmico e emissão de certificado.
+                                <br><a href="#" class="jornada-link" onclick="openJornada(event); return false;" title="Clique para ampliar"><img src="imagens/diagrama_encerramento.png" alt="Mapeamento da etapa de Encerramento" class="jornada-thumb"></a>
+                                <div class="jornada-caption">Clique na imagem para ampliar</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="actor-row etapa-ator etapa-gestao" data-step="gestao" data-color="#d88e00" data-img="imagens/diagrama_gestao.png" data-nome="Gestão do Estágio">
+                        <div class="edit-controls">
+                            <button class="edit-ctrl-btn color-btn" title="Cor da barra"><input type="color" value="#d88e00" onchange="mudarCorEtapa(this,'gestao')"></button>
+                        </div>
+                        <div class="actor-card" contenteditable="false" data-editable="true">Gestão do Estágio</div>
+                        <div class="actor-description">
+                            <div contenteditable="false" data-editable="true">
+                                <strong>Gestão do Estágio:</strong> Acompanhamento institucional do estágio (UTFPR como UCE, gestão da UCE, acesso e indicadores).
+                                <br><a href="#" class="jornada-link" onclick="openJornada(event); return false;" title="Clique para ampliar"><img src="imagens/diagrama_gestao.png" alt="Mapeamento da Gestão do Estágio" class="jornada-thumb"></a>
+                                <div class="jornada-caption">Clique na imagem para ampliar</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="edit-step-bar">
+                        <button class="add-actor-btn" onclick="adicionarEtapa()" aria-label="Adicionar nova etapa ao fluxo">+ Adicionar Etapa</button>
                     </div>
                 </div>
             </div>
