@@ -1058,6 +1058,7 @@
 
         function renderizarMapa() {
             const container = document.getElementById('nodesContainer');
+            if (!container) return;
             container.innerHTML = '';
             state.nodes.forEach(node => {
                 const el = document.createElement('div');
@@ -4421,6 +4422,7 @@ const FALLBACK_IMAGENS_CDN_404 = {
             });
 
             const canvas = document.getElementById('canvasContainer');
+            if (canvas) {
             canvas.addEventListener('mousedown', (e) => {
                 if (e.target.id === 'canvasContainer' || e.target.id === 'svgLayer' || e.target.id === 'canvasWorld') {
                     isPanning = true; startPanX = e.clientX - panX; startPanY = e.clientY - panY; selecionarNode(null);
@@ -4477,6 +4479,7 @@ const FALLBACK_IMAGENS_CDN_404 = {
                 renderizarMapa(); selecionarNode(id, false);
 
             });
+            }
 
             // Atalhos: Ctrl+S salva (grava no teste.html) · Ctrl+Shift+S explica onde salvou · Ctrl+Z/Y desfaz/refaz · Del exclui nó · Esc cancela conexão
             document.addEventListener('keydown', (e) => {

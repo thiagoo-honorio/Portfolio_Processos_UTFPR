@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="pt-BR" data-build="dev">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Construtor de páginas</title>
+    <meta name="description" content="Página em branco para criar novas páginas pelo construtor.">
+    <meta name="robots" content="noindex, nofollow">
+    <link rel="stylesheet" href="builder.css">
+    <style>
+        html, body { height: 100%; }
+        body {
+            margin: 0;
+            background: #f8fafc;
+            color: #0f172a;
+            font-family: 'Open Sans', system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif;
+            -webkit-font-smoothing: antialiased;
+        }
+        .apb-cru {
+            min-height: 100%;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 14px;
+            padding: 32px 24px;
+            text-align: center;
+        }
+        .apb-cru h1 { margin: 0; font-size: 1.45rem; letter-spacing: -.01em; }
+        .apb-cru p { margin: 0; max-width: 36em; color: #475569; line-height: 1.6; }
+        .nav-actions { display: flex; gap: 8px; justify-content: center; margin-top: 4px; }
+        #apbAbrirBtn, #apbReparar {
+            appearance: none;
+            border: 1px solid #2563eb;
+            background: #fff;
+            color: #2563eb;
+            border-radius: 8px;
+            padding: 10px 20px;
+            font: inherit;
+            font-weight: 600;
+            cursor: pointer;
+        }
+        #apbAbrirBtn:hover, #apbReparar:hover { background: #eff6ff; }
+        #apbAbrirBtn:focus-visible, #apbReparar:focus-visible { outline: 2px solid #2563eb; outline-offset: 2px; }
+        #apbAbrirBtn:disabled { opacity: .65; cursor: wait; }
+        .apb-erro {
+            box-sizing: border-box;
+            width: min(620px, calc(100% - 32px));
+            margin: 0 auto 32px;
+            padding: 18px 20px;
+            border: 1px solid #fecaca;
+            border-radius: 12px;
+            background: #fef2f2;
+            color: #7f1d1d;
+            text-align: left;
+        }
+        .apb-erro[hidden] { display: none; }
+        .apb-erro h2 { margin: 0 0 8px; font-size: 1.05rem; }
+        .apb-erro p { margin: 0 0 12px; color: #991b1b; line-height: 1.55; word-break: break-word; }
+        .apb-erro .apb-erro-meta { margin-bottom: 10px; font-size: .88rem; }
+        .apb-erro-pilha {
+            box-sizing: border-box;
+            margin: 0 0 12px;
+            padding: 10px 12px;
+            max-height: 190px;
+            overflow: auto;
+            border: 1px solid #fecaca;
+            border-radius: 8px;
+            background: #fff;
+            color: #7f1d1d;
+            font: 12px/1.5 Consolas, 'Courier New', monospace;
+            white-space: pre-wrap;
+            word-break: break-word;
+        }
+        .apb-erro-pilha[hidden] { display: none; }
+        .apb-erro .nav-actions { justify-content: flex-start; }
+        .apb-erro #apbReparar { border-color: #b91c1c; color: #b91c1c; }
+        .apb-erro #apbReparar:hover { background: #fee2e2; }
+    </style>
+</head>
+<body>
+    <main class="apb-cru">
+        <h1>Página em branco</h1>
+        <p>Use o construtor para criar o conteúdo e novas páginas. O trabalho é salvo automaticamente neste navegador.</p>
+        <div class="nav-actions">
+            <button id="apbAbrirBtn" class="apb-nav-btn" type="button">Construtor</button>
+        </div>
+    </main>
+    <section id="apbErroInicio" class="apb-erro" hidden>
+        <h2>Não foi possível abrir o construtor</h2>
+        <p id="apbErroTexto">O editor não conseguiu iniciar neste navegador.</p>
+        <p id="apbErroMeta" class="apb-erro-meta"></p>
+        <pre id="apbErroPilha" class="apb-erro-pilha" hidden></pre>
+        <div class="nav-actions">
+            <button id="apbReparar" type="button">Limpar dados e recarregar</button>
+        </div>
+    </section>
+    <script>
+        (function () {
+            'use strict';
+
+            var CHAVE_RESET = 'utfpr_page_builder_reset_cru';
+            var CHAVE_REPARO = 'utfpr_page_builder_reparo_auto';
+            var CHAVE_ABRIR = 'utfpr_page_builder_abrir_apos_reparo';
+            var CHAVES_PROJETO = ['utfpr_page_builder_v1', 'utfpr_page_builder_v1_backup'];
+
+            var fallbackTentado = false;
+            var reparoVerificado = false;
+
+            window.__apbErros = [];
+            window.__apbFallbackEmAndamento = false;
+
+            function semQuery(valor) {
+                return String(valor || '').split('#')[0].split('?')[0];
+            }
+
+            function urlDoDocumento() {
+                try { return semQuery(location.href); } catch (e) { return ''; }
+            }
+
+            function ehDocumentoAtual(nome) {
+                if (!nome) return false;
+                var alvo = semQuery(nome);
+                if (alvo === urlDoDocumento()) return true;
+                try {
+                    var a = new URL(alvo, location.href);
+                    var b = new URL(location.href);
+                    return a.protocol === b.protocol &&
+                        a.host === b.host &&
+                        decodeURIComponent(a.pathname) === decodeURIComponent(b.pathname);
+                } catch (e) {
+                    return false;
+                }
+            }
+
+            function ehArquivoBuilder(nome) {
+                if (!nome) return false;
+                var alvo = semQuery(nome);
+                try { alvo = decodeURIComponent(alvo); } catch (e) { /* mantém o valor original */ }
+                return /(^|[\/\\])builder\.js$/i.test(alvo);
+            }
+
+            function classificarOrigem(nome, pilha) {
+                if (ehDocumentoAtual(nome)) return 'documento';
+                if (ehArquivoBuilder(nome)) return 'builder';
+                if (!nome && pilha && /(^|[\/\\])builder\.js(\?|#|:|\s|$)/i.test(String(pilha))) return 'builder';
+                return 'desconhecida';
+            }
+
+            function ehErroDeSintaxe(item) {
+                if (!item) return false;
+                if (item.nome === 'SyntaxError') return true;
+                return /SyntaxError/i.test(String(item.mensagem || ''));
+            }
+
+            function registrarErro(e) {
+                var erro = e && e.error;
+                var nome = erro && erro.name ? String(erro.name) : '';
+                var mensagem = e && e.message
+                    ? String(e.message)
+                    : (erro && erro.message ? String(erro.message) : 'Erro de script');
+                var pilha = erro && erro.stack ? String(erro.stack) : '';
+                var nomeArquivo = e && e.filename ? String(e.filename) : '';
+                var item = {
+                    mensagem: mensagem,
+                    nome: nome,
+                    filename: nomeArquivo,
+                    lineno: e && e.lineno ? Number(e.lineno) : 0,
+                    colno: e && e.colno ? Number(e.colno) : 0,
+                    pilha: pilha,
+                    origem: classificarOrigem(nomeArquivo, pilha),
+                    sintaxe: false,
+                    em: new Date().toISOString()
+                };
+                item.sintaxe = ehErroDeSintaxe(item);
+                window.__apbErros.push(item);
+            }
+
+            window.addEventListener('error', registrarErro);
+            window.addEventListener('unhandledrejection', function (e) {
+                var motivo = e && e.reason;
+                var pilha = motivo && motivo.stack ? String(motivo.stack) : '';
+                var item = {
+                    mensagem: 'Promessa rejeitada: ' + (motivo && motivo.message ? motivo.message : String(motivo || '')),
+                    nome: motivo && motivo.name ? String(motivo.name) : '',
+                    filename: '',
+                    lineno: 0,
+                    colno: 0,
+                    pilha: pilha,
+                    origem: classificarOrigem('', pilha),
+                    sintaxe: false,
+                    em: new Date().toISOString()
+                };
+                item.sintaxe = ehErroDeSintaxe(item);
+                window.__apbErros.push(item);
+            });
+
+            function ler(chave) {
+                try { return localStorage.getItem(chave); } catch (e) { return null; }
+            }
+            function gravar(chave, valor) {
+                try { localStorage.setItem(chave, valor); return true; } catch (e) { return false; }
+            }
+            function remover(chave) {
+                try { localStorage.removeItem(chave); } catch (e) { /* sem armazenamento */ }
+            }
+
+            function temProjetoSalvo() {
+                try { return !!localStorage.getItem('utfpr_page_builder_v1'); } catch (e) { return false; }
+            }
+
+            function resetInicialSeSeguro() {
+                if (ler(CHAVE_RESET) === '1') return;
+                if (temErroDeSintaxe()) {
+                    gravar(CHAVE_RESET, '1');
+                    return;
+                }
+                limparProjeto();
+                gravar(CHAVE_RESET, '1');
+            }
+
+            function limparProjeto() {
+                var atual = null;
+                try { atual = localStorage.getItem('utfpr_page_builder_v1'); } catch (e) { /* sem armazenamento */ }
+                var alvos = CHAVES_PROJETO.slice();
+                try {
+                    var todas = [];
+                    for (var i = 0; i < localStorage.length; i += 1) {
+                        var chave = localStorage.key(i);
+                        if (chave) todas.push(chave);
+                    }
+                    todas.forEach(function (k) {
+                        if (k.indexOf('utfpr_page_builder_v1_corrompido_') === 0) alvos.push(k);
+                    });
+                } catch (e) { /* sem armazenamento */ }
+                alvos.forEach(remover);
+                if (atual) {
+                    try { localStorage.setItem('utfpr_page_builder_v1_corrompido_' + Date.now(), atual); } catch (e) { /* sem espaço */ }
+                }
+            }
+
+            function hashDoBuild() {
+                try {
+                    var h = document.documentElement.getAttribute('data-build');
+                    return h ? String(h) : 'desconhecido';
+                } catch (e) {
+                    return 'desconhecido';
+                }
+            }
+
+            function errosDoConstrutor() {
+                return window.__apbErros.filter(function (item) {
+                    return item.origem === 'documento' || item.origem === 'builder';
+                });
+            }
+
+            function errosDeOutraOrigem() {
+                return window.__apbErros.filter(function (item) {
+                    return item.origem === 'desconhecida';
+                });
+            }
+
+            function primeiroErroConstrutor() {
+                var lista = errosDoConstrutor();
+                return lista.length ? lista[0] : null;
+            }
+
+            function temErroDeSintaxe() {
+                return errosDoConstrutor().some(function (item) {
+                    return !!item.sintaxe;
+                });
+            }
+
+            function descreverLocal(item) {
+                if (!item) return '';
+                var partes = [];
+                if (item.filename) partes.push('Arquivo: ' + item.filename);
+                if (item.lineno) partes.push('linha ' + item.lineno);
+                if (item.colno) partes.push('coluna ' + item.colno);
+                return partes.join(', ');
+            }
+
+            function nomeDaOrigem(item) {
+                if (!item) return 'desconhecida';
+                if (item.origem === 'documento') return 'script da página';
+                if (item.origem === 'builder') return 'builder.js';
+                return 'desconhecida (navegador/extensão)';
+            }
+
+            function mostrarErro() {
+                var box = document.getElementById('apbErroInicio');
+                var texto = document.getElementById('apbErroTexto');
+                var meta = document.getElementById('apbErroMeta');
+                var pilhaEl = document.getElementById('apbErroPilha');
+                var btn = document.getElementById('apbAbrirBtn');
+                if (btn) { btn.disabled = false; btn.textContent = 'Construtor'; }
+                if (!box || !texto) return;
+
+                var inicio = window.__apbErroInicio;
+                var erroSintaxe = null;
+                var listaConstrutor = errosDoConstrutor();
+                for (var i = 0; i < listaConstrutor.length; i += 1) {
+                    if (listaConstrutor[i].sintaxe) { erroSintaxe = listaConstrutor[i]; break; }
+                }
+                var erro = erroSintaxe || inicio || primeiroErroConstrutor();
+                var sintaxe = !!erroSintaxe;
+                var detalhe = erro && erro.mensagem ? erro.mensagem : '';
+                var cabecalho;
+
+                if (sintaxe) gravar(CHAVE_RESET, '1');
+
+                if (sintaxe) {
+                    cabecalho = 'O editor não conseguiu iniciar porque o código da página tem um erro de sintaxe. O arquivo pode estar incompleto, corrompido ou desatualizado.';
+                } else if (inicio && inicio.tipo === 'carregamento') {
+                    cabecalho = 'O editor não conseguiu carregar o código do construtor (builder.js). O arquivo pode estar ausente ou bloqueado.';
+                } else if (inicio && inicio.tipo === 'abertura') {
+                    cabecalho = 'O editor encontrou uma falha ao abrir.';
+                } else if (inicio) {
+                    cabecalho = 'O editor não conseguiu iniciar por uma falha de inicialização ou de dados.';
+                } else {
+                    cabecalho = 'O editor não conseguiu iniciar neste navegador.';
+                }
+
+                texto.textContent = detalhe ? cabecalho + ' Detalhe: ' + detalhe : cabecalho;
+
+                if (meta) {
+                    var linhas = [];
+                    var local = descreverLocal(erro);
+                    if (local) linhas.push(local + '.');
+                    if (erro) linhas.push('Origem: ' + nomeDaOrigem(erro) + '.');
+                    linhas.push('Build: ' + hashDoBuild() + '.');
+                    var outros = errosDeOutraOrigem();
+                    if (outros.length) {
+                        linhas.push('Também há um erro de outra origem (navegador/extensão), que não é do construtor: ' + outros[0].mensagem);
+                    }
+                    meta.textContent = linhas.join(' ');
+                }
+
+                if (pilhaEl) {
+                    var pilha = erro && erro.pilha ? String(erro.pilha) : '';
+                    if (pilha) {
+                        pilhaEl.textContent = pilha;
+                        pilhaEl.hidden = false;
+                    } else {
+                        pilhaEl.textContent = '';
+                        pilhaEl.hidden = true;
+                    }
+                }
+
+                box.hidden = false;
+            }
+            window.__apbMostrarErro = mostrarErro;
+
+            if (ler(CHAVE_ABRIR) === '1') window.__apbQuerAbrir = true;
+
+            document.addEventListener('apb-iniciando', resetInicialSeSeguro);
+
+            document.addEventListener('apb-pronto', function () {
+                var btn = document.getElementById('apbAbrirBtn');
+                if (btn) { btn.disabled = false; btn.textContent = 'Construtor'; }
+                remover(CHAVE_REPARO);
+                remover(CHAVE_ABRIR);
+            });
+
+            document.addEventListener('apb-falha', mostrarErro);
+
+            function carregarBuilderExterno() {
+                if (fallbackTentado) return;
+                if (window.APB && window.APB.abrir) return;
+                if (window.__apbErroInicio) { mostrarErro(); return; }
+                fallbackTentado = true;
+                window.__apbFallbackEmAndamento = true;
+
+                var hash = hashDoBuild();
+                var consulta = (hash && hash !== 'dev' && hash !== 'desconhecido') ? hash : String(Date.now());
+                var script = document.createElement('script');
+                script.id = 'apb-builder-js-fallback';
+                script.src = 'builder.js?v=' + encodeURIComponent(consulta);
+                script.onload = function () {
+                    window.__apbFallbackEmAndamento = false;
+                    if (window.APB && window.APB.abrir) return;
+                    if (window.__apbErroInicio) { mostrarErro(); return; }
+                    mostrarErro();
+                };
+                script.onerror = function () {
+                    window.__apbFallbackEmAndamento = false;
+                    if (!window.__apbErroInicio) {
+                        window.__apbErroInicio = {
+                            mensagem: 'Não foi possível carregar builder.js como reserva. Verifique se o arquivo está na mesma pasta desta página.',
+                            nome: 'Error',
+                            filename: 'builder.js',
+                            lineno: 0,
+                            colno: 0,
+                            pilha: '',
+                            sintaxe: false,
+                            tipo: 'carregamento',
+                            origem: 'builder',
+                            em: new Date().toISOString()
+                        };
+                    }
+                    mostrarErro();
+                };
+                (document.body || document.documentElement).appendChild(script);
+            }
+
+            function verificarBuilder() {
+                if (window.APB && window.APB.abrir) return;
+                if (window.__apbErroInicio) { mostrarErro(); return; }
+                carregarBuilderExterno();
+            }
+
+            function falhaDeInicializacaoOuDados() {
+                var inicio = window.__apbErroInicio;
+                if (!inicio || inicio.sintaxe) return false;
+                return inicio.tipo === 'inicializacao';
+            }
+
+            function verificarFalhaFinal() {
+                if (window.APB && window.APB.abrir) return;
+                if (window.__apbFallbackEmAndamento) {
+                    setTimeout(verificarFalhaFinal, 3000);
+                    return;
+                }
+                if (reparoVerificado) return;
+                reparoVerificado = true;
+
+                if (temErroDeSintaxe()) { mostrarErro(); return; }
+                if (!falhaDeInicializacaoOuDados()) { mostrarErro(); return; }
+                if (!temProjetoSalvo()) { mostrarErro(); return; }
+                if (ler(CHAVE_REPARO) === '1') { mostrarErro(); return; }
+                if (!gravar(CHAVE_REPARO, '1')) { mostrarErro(); return; }
+
+                if (window.__apbQuerAbrir) gravar(CHAVE_ABRIR, '1');
+                limparProjeto();
+                location.reload();
+            }
+
+            var btn = document.getElementById('apbAbrirBtn');
+            if (btn) {
+                btn.addEventListener('click', function () {
+                    if (window.APB && window.APB.abrir) {
+                        try {
+                            window.APB.abrir();
+                            var raiz = document.getElementById('apbRoot');
+                            if (raiz && !raiz.classList.contains('apb-open')) {
+                                throw new Error('O editor não abriu. Recarregue a página.');
+                            }
+                        } catch (erro) {
+                            window.__apbErroInicio = {
+                                mensagem: erro && erro.message ? erro.message : String(erro),
+                                nome: erro && erro.name ? String(erro.name) : 'Error',
+                                filename: (function () {
+                                    try { return location.href; } catch (e) { return ''; }
+                                })(),
+                                lineno: 0,
+                                colno: 0,
+                                pilha: erro && erro.stack ? String(erro.stack) : '',
+                                sintaxe: !!(erro && (erro.name === 'SyntaxError' || /SyntaxError/.test(String(erro.message || '')))),
+                                tipo: 'abertura',
+                                origem: 'documento',
+                                em: new Date().toISOString()
+                            };
+                            mostrarErro();
+                        }
+                        return;
+                    }
+                    window.__apbQuerAbrir = true;
+                    btn.disabled = true;
+                    btn.textContent = 'Preparando...';
+                    setTimeout(verificarBuilder, 0);
+                });
+            }
+
+            var reparar = document.getElementById('apbReparar');
+            if (reparar) {
+                reparar.addEventListener('click', function () {
+                    limparProjeto();
+                    remover(CHAVE_REPARO);
+                    remover(CHAVE_ABRIR);
+                    location.reload();
+                });
+            }
+
+            if (document.readyState === 'complete') {
+                setTimeout(verificarBuilder, 0);
+            } else {
+                window.addEventListener('load', function () {
+                    setTimeout(verificarBuilder, 50);
+                });
+            }
+            setTimeout(verificarBuilder, 1500);
+            setTimeout(verificarFalhaFinal, 6000);
+        })();
+    </script>
+    <script src="builder.js"></script>
+</body>
+</html>
